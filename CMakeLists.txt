@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 # Note: update this to your new project's name and version
 project(
-  Greeter
+  NetlistX
   VERSION 1.0
   LANGUAGES CXX
 )
@@ -19,7 +19,7 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 # ---- Add dependencies via CPM ----
-# see https://github.com/TheLartians/CPM.cmake for more info
+# see https://github.com/luk036/CPM.cmake for more info
 
 include(cmake/CPM.cmake)
 

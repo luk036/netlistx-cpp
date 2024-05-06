@@ -1,11 +1,11 @@
 #include <fmt/format.h>
-#include <greeter/greeter.h>
+#include <netlistx/greeter.h>
 
-using namespace greeter;
+using namespace netlistx;
 
-Greeter::Greeter(std::string _name) : name(std::move(_name)) {}
+NetlistX::NetlistX(std::string _name) : name(std::move(_name)) {}
 
-std::string Greeter::greet(LanguageCode lang) const {
+std::string NetlistX::greet(LanguageCode lang) const {
   switch (lang) {
     default:
     case LanguageCode::EN:

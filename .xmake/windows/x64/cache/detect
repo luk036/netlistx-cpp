@@ -1,0 +1,109 @@
+{
+    find_program_fetch_package_xmake = {
+        cmake = false
+    },
+    find_program_msvc_arch_x64_plat_windows_checktoolld = {
+        ["link.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\link.exe]]
+    },
+    find_program = {
+        ["pkg-config"] = false,
+        ["7z"] = [[D:\scoop\apps\xmake\current\winenv\bin\7z]],
+        unzip = false,
+        ping = "ping",
+        gzip = false,
+        zig = false,
+        pkgconf = false,
+        nim = false,
+        git = "git",
+        curl = [[D:\scoop\apps\xmake\current\winenv\bin\curl]],
+        ["cl.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\cl.exe]],
+        ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\cl.exe]]
+    },
+    find_program_msvc_arch_x64_plat_windows_checktoolcc = {
+        ["cl.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\cl.exe]]
+    },
+    find_program_msvc_arch_x64_plat_windows_checktoolcxx = {
+        ["cl.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\cl.exe]]
+    },
+    find_package_windows_x64_fetch_package_system = {
+        boost_42bc035ccf474e208b3ed8ce756fe967_release_external = false
+    },
+    find_program_fetch_package_system = {
+        cmake = "cmake"
+    },
+    find_program_msvc_arch_x64_plat_windows_checktoolar = {
+        ["link.exe"] = [[C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64\link.exe]]
+    },
+    ["detect.sdks.find_vcpkgdir"] = false,
+    find_package_windows_x64_fetch_package_xmake = {
+        ["xmake::doctest_9d0176b985884cb69e6eea3c5e45917f_release_2.4.11_external"] = {
+            sysincludedirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\d\doctest\2.4.11\9d0176b985884cb69e6eea3c5e45917f\include]]
+            },
+            version = "2.4.11"
+        },
+        ["xmake::boost_42bc035ccf474e208b3ed8ce756fe967_release_1.85.0_external"] = {
+            version = "1.85.0",
+            sysincludedirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\include]]
+            },
+            libfiles = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_context-mt-s.lib]],
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_container-mt-s.lib]],
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_atomic-mt-s.lib]],
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_filesystem-mt-s.lib]]
+            },
+            defines = "BOOST_ALL_NO_LIB",
+            license = "BSL-1.0",
+            static = true,
+            links = {
+                "libboost_context-mt-s",
+                "libboost_container-mt-s",
+                "libboost_atomic-mt-s",
+                "libboost_filesystem-mt-s"
+            },
+            linkdirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib]]
+            }
+        },
+        ["xmake::fmt_088a4d95f5544b93b0ff558147d8f335_release_10.2.1_external"] = {
+            linkdirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\lib]]
+            },
+            libfiles = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\lib\fmt.lib]]
+            },
+            version = "10.2.1",
+            static = true,
+            links = {
+                "fmt"
+            },
+            sysincludedirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\include]]
+            }
+        },
+        ["xmake::microsoft-gsl_cc4533ab1d88423b98d8fbee7dce0557_release_v4.0.0_external"] = {
+            license = "MIT",
+            sysincludedirs = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\m\microsoft-gsl\v4.0.0\cc4533ab1d88423b98d8fbee7dce0557\include]]
+            },
+            version = "v4.0.0"
+        }
+    },
+    find_programver_fetch_package_system = {
+        cmake = "3.29.2"
+    },
+    find_programver = {
+        ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe"] = false,
+        ["D:\\scoop\\apps\\xmake\\current\\winenv\\bin\\curl"] = "8.2.1"
+    },
+    ["lib.detect.has_flags"] = {
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_-MT"] = true,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_cl_sourceDependencies"] = true,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_-DNDEBUG"] = true,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_-std:c++latest"] = true,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_-std:c++23"] = false,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx_cxflags_-nologo_cl_external_includedir"] = true,
+        ["windows_x64_C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe__cxx__-nologo_-O2"] = true
+    }
+}

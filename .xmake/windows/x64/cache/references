@@ -1,0 +1,8 @@
+{
+    packages = {
+        [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335]],
+        [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967]],
+        [[C:\Users\luk03\AppData\Local\.xmake\packages\d\doctest\2.4.11\9d0176b985884cb69e6eea3c5e45917f]],
+        [[C:\Users\luk03\AppData\Local\.xmake\packages\m\microsoft-gsl\v4.0.0\cc4533ab1d88423b98d8fbee7dce0557]]
+    }
+}

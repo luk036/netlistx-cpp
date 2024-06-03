@@ -1,0 +1,87 @@
+{
+    doctest = {
+        installdir = [[C:\Users\luk03\AppData\Local\.xmake\packages\d\doctest\2.4.11\9d0176b985884cb69e6eea3c5e45917f]],
+        sysincludedirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\d\doctest\2.4.11\9d0176b985884cb69e6eea3c5e45917f\include]],
+        __requireconfs = {
+            alias = "doctest"
+        },
+        __requirestr = "doctest",
+        version = "2.4.11",
+        envs = {
+            PATH = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\d\doctest\2.4.11\9d0176b985884cb69e6eea3c5e45917f\bin]]
+            }
+        },
+        __enabled = true
+    },
+    msgsl = {
+        installdir = [[C:\Users\luk03\AppData\Local\.xmake\packages\m\microsoft-gsl\v4.0.0\cc4533ab1d88423b98d8fbee7dce0557]],
+        sysincludedirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\m\microsoft-gsl\v4.0.0\cc4533ab1d88423b98d8fbee7dce0557\include]],
+        license = "MIT",
+        __requireconfs = {
+            alias = "msgsl"
+        },
+        __requirestr = "microsoft-gsl",
+        version = "v4.0.0",
+        envs = {
+            PATH = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\m\microsoft-gsl\v4.0.0\cc4533ab1d88423b98d8fbee7dce0557\bin]]
+            }
+        },
+        __enabled = true
+    },
+    fmt = {
+        libfiles = [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\lib\fmt.lib]],
+        links = "fmt",
+        __requirestr = "fmt",
+        version = "10.2.1",
+        static = true,
+        __enabled = true,
+        __requireconfs = {
+            alias = "fmt"
+        },
+        installdir = [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335]],
+        envs = {
+            PATH = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\bin]],
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\c\cmake\3.29.2\ae2ca291915949809139117c15e1db8a\bin]]
+            }
+        },
+        linkdirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\lib]],
+        sysincludedirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\f\fmt\10.2.1\088a4d95f5544b93b0ff558147d8f335\include]]
+    },
+    boost = {
+        installdir = [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967]],
+        links = {
+            "libboost_context-mt-s",
+            "libboost_container-mt-s",
+            "libboost_atomic-mt-s",
+            "libboost_filesystem-mt-s"
+        },
+        defines = "BOOST_ALL_NO_LIB",
+        __requirestr = "boost",
+        version = "1.85.0",
+        static = true,
+        __enabled = true,
+        sysincludedirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\include]],
+        __requireconfs = {
+            configs = {
+                context = true,
+                container = true
+            }
+        },
+        license = "BSL-1.0",
+        libfiles = {
+            [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_context-mt-s.lib]],
+            [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_container-mt-s.lib]],
+            [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_atomic-mt-s.lib]],
+            [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib\libboost_filesystem-mt-s.lib]]
+        },
+        linkdirs = [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\lib]],
+        envs = {
+            PATH = {
+                [[C:\Users\luk03\AppData\Local\.xmake\packages\b\boost\1.85.0\42bc035ccf474e208b3ed8ce756fe967\bin]]
+            }
+        }
+    }
+}

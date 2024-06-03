@@ -9,6 +9,7 @@ include(../cmake/tools.cmake)
 # ---- Dependencies ----
 
 include(../cmake/CPM.cmake)
+include(../cmake/specific.cmake)
 
 CPMAddPackage(
   GITHUB_REPOSITORY jarro2783/cxxopts
@@ -26,4 +27,4 @@ add_executable(${PROJECT_NAME} ${sources})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "NetlistX")
 
-target_link_libraries(${PROJECT_NAME} NetlistX::NetlistX cxxopts)
+target_link_libraries(${PROJECT_NAME} NetlistX::NetlistX ${SPECIFIC_LIBS} cxxopts)

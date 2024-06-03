@@ -46,8 +46,8 @@ auto main(int argc, char** argv) -> int {
     return 1;
   }
 
-  netlistx::NetlistX netlistx(name);
-  std::cout << netlistx.greet(langIt->second) << std::endl;
+  // netlistx::NetlistX netlistx(name);
+  // std::cout << netlistx.greet(langIt->second) << std::endl;
 
   return 0;
 }

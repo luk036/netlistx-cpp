@@ -1,4 +1,5 @@
 /build*
 /.vscode
 /cpm_modules
+/.xmake
 .DS_Store

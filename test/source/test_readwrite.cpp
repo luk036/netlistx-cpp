@@ -2,7 +2,7 @@
 #include <doctest/doctest.h>  // for ResultBuilder, CHECK, TestCase, TEST_CASE
 // #include <__config>            // for std
 #include <boost/utility/string_view.hpp>  // for boost::string_view
-#include <netlistx/netlist.hpp>             // for Netlist, SimpleNetlist
+#include <netlistx/netlist.hpp>           // for Netlist, SimpleNetlist
 
 using namespace std;
 
@@ -11,40 +11,40 @@ extern void readAre(SimpleNetlist &hyprgraph, boost::string_view areFileName);
 extern void writeJSON(boost::string_view jsonFileName, const SimpleNetlist &hyprgraph);
 
 TEST_CASE("Test Read Dwarf") {
-    auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
-    readAre(hyprgraph, "../../testcases/dwarf1.are");
+  auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
+  readAre(hyprgraph, "../../testcases/dwarf1.are");
 
-    CHECK(hyprgraph.number_of_modules() == 7);
-    CHECK(hyprgraph.number_of_nets() == 5);
-    // CHECK(hyprgraph.number_of_pins() == 13);
-    CHECK(hyprgraph.get_max_degree() == 3);
-    CHECK(hyprgraph.get_max_net_degree() == 3);
-    CHECK(!hyprgraph.has_fixed_modules);
-    CHECK(hyprgraph.get_module_weight(1) == 2);
+  CHECK(hyprgraph.number_of_modules() == 7);
+  CHECK(hyprgraph.number_of_nets() == 5);
+  // CHECK(hyprgraph.number_of_pins() == 13);
+  CHECK(hyprgraph.get_max_degree() == 3);
+  CHECK(hyprgraph.get_max_net_degree() == 3);
+  CHECK(!hyprgraph.has_fixed_modules);
+  CHECK(hyprgraph.get_module_weight(1) == 2);
 }
 
 TEST_CASE("Test Read p1") {
-    const auto hyprgraph = readNetD("../../testcases/p1.net");
+  const auto hyprgraph = readNetD("../../testcases/p1.net");
 
-    CHECK(hyprgraph.number_of_modules() == 833);
-    CHECK(hyprgraph.number_of_nets() == 902);
-    // CHECK(hyprgraph.number_of_pins() == 2908);
-    CHECK(hyprgraph.get_max_degree() == 9);
-    CHECK(hyprgraph.get_max_net_degree() == 18);
-    CHECK(!hyprgraph.has_fixed_modules);
-    CHECK(hyprgraph.get_module_weight(1) == 1);
+  CHECK(hyprgraph.number_of_modules() == 833);
+  CHECK(hyprgraph.number_of_nets() == 902);
+  // CHECK(hyprgraph.number_of_pins() == 2908);
+  CHECK(hyprgraph.get_max_degree() == 9);
+  CHECK(hyprgraph.get_max_net_degree() == 18);
+  CHECK(!hyprgraph.has_fixed_modules);
+  CHECK(hyprgraph.get_module_weight(1) == 1);
 }
 
 TEST_CASE("Test Read ibm01") {
-    const auto hyprgraph = readNetD("../../testcases/ibm01.net");
+  const auto hyprgraph = readNetD("../../testcases/ibm01.net");
 
-    CHECK(hyprgraph.number_of_modules() == 12752);
-    CHECK(hyprgraph.number_of_nets() == 14111);
-    // CHECK(hyprgraph.number_of_pins() == 2908);
-    CHECK(hyprgraph.get_max_degree() == 39);
-    CHECK(hyprgraph.get_max_net_degree() == 42);
-    CHECK(!hyprgraph.has_fixed_modules);
-    CHECK(hyprgraph.get_module_weight(1) == 1);
+  CHECK(hyprgraph.number_of_modules() == 12752);
+  CHECK(hyprgraph.number_of_nets() == 14111);
+  // CHECK(hyprgraph.number_of_pins() == 2908);
+  CHECK(hyprgraph.get_max_degree() == 39);
+  CHECK(hyprgraph.get_max_net_degree() == 42);
+  CHECK(!hyprgraph.has_fixed_modules);
+  CHECK(hyprgraph.get_module_weight(1) == 1);
 }
 
 // TEST_CASE("Test Read ibm18") {
@@ -60,16 +60,16 @@ TEST_CASE("Test Read ibm01") {
 // }
 
 TEST_CASE("Test Write Dwarf") {
-    auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
-    readAre(hyprgraph, "../../testcases/dwarf1.are");
-    writeJSON("../../testcases/dwarf1.json", hyprgraph);
+  auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
+  readAre(hyprgraph, "../../testcases/dwarf1.are");
+  writeJSON("../../testcases/dwarf1.json", hyprgraph);
 
-    CHECK(hyprgraph.number_of_modules() == 7);
-    CHECK(hyprgraph.number_of_nets() == 5);
-    // CHECK(hyprgraph.number_of_pins() == 13);
+  CHECK(hyprgraph.number_of_modules() == 7);
+  CHECK(hyprgraph.number_of_nets() == 5);
+  // CHECK(hyprgraph.number_of_pins() == 13);
 }
 
 TEST_CASE("Test Write p1") {
-    const auto hyprgraph = readNetD("../../testcases/p1.net");
-    writeJSON("../../testcases/p1.json", hyprgraph);
+  const auto hyprgraph = readNetD("../../testcases/p1.net");
+  writeJSON("../../testcases/p1.json", hyprgraph);
 }

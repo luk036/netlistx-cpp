@@ -18,7 +18,7 @@ if is_mode("coverage") then
     add_cxflags("-ftest-coverage", "-fprofile-arcs", {force = true})
 end
 
-target("CkPttn")
+target("NetlistX")
     set_kind("static")
     add_includedirs("include", {public = true})
     add_includedirs("../py2cpp/include", {public = true})
@@ -26,9 +26,9 @@ target("CkPttn")
     add_files("source/*.cpp")
     add_packages("boost", "range-v3", "msgsl")
 
-target("test_ckpttn")
+target("test_netlistx")
     set_kind("binary")
-    add_deps("CkPttn")
+    add_deps("NetlistX")
     add_includedirs("include", {public = true})
     add_includedirs("../py2cpp/include", {public = true})
     add_includedirs("../xnetwork-cpp/include", {public = true})

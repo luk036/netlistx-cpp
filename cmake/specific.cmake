@@ -31,10 +31,4 @@ CPMAddPackage(
   OPTIONS "INSTALL_ONLY ON" # create an installable target
 )
 
-set(SPECIFIC_LIBS
-    XNetwork::XNetwork
-    Py2Cpp::Py2Cpp
-    Boost::boost
-    Threads::Threads
-    fmt::fmt
-)
+set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Boost::boost Threads::Threads fmt::fmt)

@@ -2,4 +2,5 @@
 /.vscode
 /cpm_modules
 /.xmake
+/.cache
 .DS_Store

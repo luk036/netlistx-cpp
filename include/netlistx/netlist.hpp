@@ -17,10 +17,21 @@
 // };
 
 /**
- * @brief Netlist
+ * @brief Represents a netlist, which is implemented using a graph-like data structure.
  *
- * Netlist is implemented by xnetwork::Graph, which is a networkx-like graph.
- *
+ * The `Netlist` struct contains various properties and data structures to represent the netlist,
+ * including:
+ * - `gr`: The underlying graph-like data structure used to represent the netlist.
+ * - `modules`: A view of the module nodes in the graph.
+ * - `nets`: A view of the net nodes in the graph.
+ * - `num_modules`: The number of module nodes in the netlist.
+ * - `num_nets`: The number of net nodes in the netlist.
+ * - `num_pads`: The number of pad nodes in the netlist.
+ * - `max_degree`: The maximum degree of any node in the netlist.
+ * - `max_net_degree`: The maximum degree of any net node in the netlist.
+ * - `module_weight`: A vector of weights for each module node.
+ * - `has_fixed_modules`: A flag indicating whether the netlist has any fixed module nodes.
+ * - `module_fixed`: A set of fixed module nodes.
  */
 template <typename graph_t> struct Netlist {
   using nodeview_t = typename graph_t::nodeview_t;
@@ -43,50 +54,50 @@ template <typename graph_t> struct Netlist {
 
 public:
   /**
-   * @brief Construct a new Netlist object
+   * @brief Constructs a new Netlist object.
    *
-   * Example:
-   * ```
-   * Netlist netlist(gr, modules, nets);
-   * ```
+   * This constructor initializes a Netlist object with the provided graph, module nodes, and net
+   * nodes.
    *
-   * @param[in] gr graph
-   * @param[in] modules module nodes
-   * @param[in] nets net nodes
+   * @param[in] gr The graph representing the netlist.
+   * @param[in] modules The module nodes in the netlist.
+   * @param[in] nets The net nodes in the netlist.
    */
   Netlist(graph_t gr, const nodeview_t &modules, const nodeview_t &nets);
 
   /**
    * @brief Construct a new Netlist object
    *
-   * @param[in] gr
-   * @param[in] numModules
-   * @param[in] numNets
+   * @param[in] gr The graph representing the netlist.
+   * @param[in] numModules The number of modules in the netlist.
+   * @param[in] numNets The number of nets in the netlist.
    */
   Netlist(graph_t gr, uint32_t numModules, uint32_t numNets);
 
+  /// Returns an iterator to the beginning of the modules nodeview.
   auto begin() const { return this->modules.begin(); }
 
+  /// Returns an iterator to the end of the modules nodeview.
   auto end() const { return this->modules.end(); }
 
   /**
-   * @brief Get the number of modules
+   * @brief Get the number of modules in the netlist.
    *
-   * @return size_t
+   * @return The number of modules in the netlist.
    */
   auto number_of_modules() const -> size_t { return this->num_modules; }
 
   /**
-   * @brief Get the number of nets
+   * @brief Get the number of nets in the netlist.
    *
-   * @return size_t
+   * @return The number of nets in the netlist.
    */
   auto number_of_nets() const -> size_t { return this->num_nets; }
 
   /**
-   * @brief Get the number of nodes
+   * @brief Get the number of nodes in the netlist graph.
    *
-   * @return size_t
+   * @return The number of nodes in the netlist graph.
    */
   auto number_of_nodes() const -> size_t { return this->gr.number_of_nodes(); }
 
@@ -99,24 +110,24 @@ public:
   // this->gr.number_of_edges(); }
 
   /**
-   * @brief Get the max degree
+   * @brief Get the maximum degree of any node in the netlist.
    *
-   * @return size_t
+   * @return The maximum degree of any node in the netlist.
    */
   auto get_max_degree() const -> size_t { return this->max_degree; }
 
   /**
    * @brief Get the max net degree
    *
-   * @return index_t
+   * @return size_t The maximum degree of any net in the netlist.
    */
   auto get_max_net_degree() const -> size_t { return this->max_net_degree; }
 
   /**
    * @brief Get the module weight
    *
-   * @param[in] v
-   * @return int
+   * @param[in] v The module node
+   * @return unsigned int The weight of the module
    */
   auto get_module_weight(const node_t &v) const -> unsigned int {
     return this->module_weight.empty() ? 1U : this->module_weight[v];
@@ -125,7 +136,8 @@ public:
   /**
    * @brief Get the net weight
    *
-   * @return int
+   * @param[in] net The net to get the weight for
+   * @return uint32_t The weight of the net
    */
   auto get_net_weight(const node_t & /*net*/) const -> uint32_t {
     // return this->net_weight.is_empty() ? 1
@@ -135,6 +147,17 @@ public:
   }
 };
 
+/**
+ * @brief Constructs a Netlist object from the given graph, module nodes, and net nodes.
+ *
+ * @param gr The graph representing the netlist.
+ * @param modules The module nodes in the netlist.
+ * @param nets The net nodes in the netlist.
+ *
+ * The constructor initializes the Netlist object with the provided graph, modules, and nets. It
+ * also calculates the maximum degree of the modules and nets, and sets flags indicating whether the
+ * modules have fixed positions.
+ */
 template <typename graph_t>
 Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_t &nets)
     : gr{std::move(gr)},

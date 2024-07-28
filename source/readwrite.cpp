@@ -21,7 +21,12 @@
 
 using namespace std;
 
-// Read the IBM .netD/.net format. Precondition: Netlist is empty.
+/**
+ * Writes a JSON representation of the given SimpleNetlist to the specified file.
+ *
+ * @param jsonFileName The path to the output JSON file.
+ * @param hyprgraph The SimpleNetlist to be written to the JSON file.
+ */
 void writeJSON(boost::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
   auto json = ofstream{jsonFileName.data()};
   if (json.fail()) {
@@ -61,7 +66,16 @@ void writeJSON(boost::string_view jsonFileName, const SimpleNetlist &hyprgraph) 
   json << "}\n";
 }
 
-// Read the IBM .netD/.net format. Precondition: Netlist is empty.
+/**
+ * Reads an IBM .netD/.net format file and returns a SimpleNetlist representation.
+ *
+ * This function reads an IBM .netD/.net format file and constructs a SimpleNetlist
+ * object from the data in the file. The SimpleNetlist contains information about
+ * the modules, nets, and pins in the design.
+ *
+ * @param netDFileName The path to the input .netD/.net file.
+ * @return A SimpleNetlist object representing the design in the input file.
+ */
 auto readNetD(boost::string_view netDFileName) -> SimpleNetlist {
   auto netD = ifstream{netDFileName.data()};
   if (netD.fail()) {
@@ -156,7 +170,13 @@ auto readNetD(boost::string_view netDFileName) -> SimpleNetlist {
   return hyprgraph;
 }
 
-// Read the IBM .are format
+/**
+ * Reads an IBM .are format file and populates a SimpleNetlist object with the
+ * module weights and other data.
+ *
+ * @param hyprgraph The SimpleNetlist object to populate with the .are file data.
+ * @param areFileName The path to the .are format file to read.
+ */
 void readAre(SimpleNetlist &hyprgraph, boost::string_view areFileName) {
   auto are = ifstream{areFileName.data()};
   if (are.fail()) {

@@ -4,18 +4,21 @@
 #include <tuple>
 
 /**
- * @brief minimum weighted vertex cover problem
+ * @brief Solves the minimum weighted vertex cover problem using the primal-dual paradigm.
  *
- *    This function solves minimum vertex cover problem
- *    using primal-dual paradigm:
+ * This function takes a hypergraph, a weight function, and a set of pre-covered vertices. It
+ * computes the minimum weighted vertex cover by iterating over the hypergraph's nets and
+ * selecting the vertex with the minimum weight gap to add to the cover set. The total primal
+ * and dual costs are computed and returned.
  *
- * @tparam Gnl
- * @tparam C1
- * @tparam C2
- * @param[in] hyprgraph
- * @param[in] weight
- * @param[in,out] coverset in: pre-covered vetrices, out: sol'n set
- * @return C1::mapped_type
+ * @tparam Gnl The type of the hypergraph.
+ * @tparam C1 The type of the weight function.
+ * @tparam C2 The type of the cover set.
+ * @param hyprgraph The input hypergraph.
+ * @param weight The weight function.
+ * @param[in,out] coverset The set of pre-covered vertices, which will be updated with the
+ *                         solution set.
+ * @return The total primal cost of the minimum weighted vertex cover.
  */
 template <typename Gnl, typename C1, typename C2>
 auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
@@ -48,19 +51,22 @@ auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
 }
 
 /**
- * @brief minimum weighted maximal matching problem
+ * @brief Solves the minimum weighted maximal matching problem using the primal-dual paradigm.
  *
- *    This function solves minimum maximal matching problem
- *    using primal-dual paradigm:
+ * This function takes a hypergraph, a weight function, and two output parameters: a matching set
+ * and a dependency set. It computes the minimum weighted maximal matching by iterating over the
+ * hypergraph's nets and greedily selecting the minimum-weight net that does not conflict with the
+ * current dependency set. The total primal cost of the minimum weighted maximal matching is
+ * returned.
  *
- * @tparam Gnl
- * @tparam C1
- * @tparam C2
- * @param[in] hyprgraph
- * @param[in] weight
- * @param[in,out] matchset
- * @param[in,out] dep
- * @return C1::value_type
+ * @tparam Gnl The type of the hypergraph.
+ * @tparam C1 The type of the weight function.
+ * @tparam C2 The type of the matching set and dependency set.
+ * @param hyprgraph The input hypergraph.
+ * @param weight The weight function.
+ * @param[in,out] matchset The output matching set.
+ * @param[in,out] dep The output dependency set.
+ * @return The total primal cost of the minimum weighted maximal matching.
  */
 template <typename Gnl, typename C1, typename C2>
 auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, C2 &dep) ->

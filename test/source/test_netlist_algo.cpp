@@ -20,14 +20,14 @@ extern void readAre(SimpleNetlist &hyprgraph, boost::string_view areFileName);
 using node_t = SimpleNetlist::node_t;
 
 TEST_CASE("Test min_vertex_cover dwarf") {
-  const auto hyprgraph = create_dwarf();
-  py::dict<node_t, int> weight{};
-  py::set<node_t> covset{};
-  for (auto node : hyprgraph) {
-    weight[node] = 1;
-    // covset[node] = false;
-  }
-  min_vertex_cover(hyprgraph, weight, covset);
+    const auto hyprgraph = create_dwarf();
+    py::dict<node_t, int> weight{};
+    py::set<node_t> covset{};
+    for (auto node : hyprgraph) {
+        weight[node] = 1;
+        // covset[node] = false;
+    }
+    min_vertex_cover(hyprgraph, weight, covset);
 }
 
 //
@@ -35,18 +35,18 @@ TEST_CASE("Test min_vertex_cover dwarf") {
 //
 
 TEST_CASE("Test min_maximal_matching dwarf") {
-  const auto hyprgraph = create_dwarf();
-  // const auto N = hyprgraph.number_of_nets();
-  py::dict<node_t, int> weight{};
-  py::set<node_t> matchset{};
-  py::set<node_t> dep{};
-  for (auto net : hyprgraph.nets) {
-    // matchset[net] = false;
-    weight[net] = 1;
-  }
-  // for (auto v : hyprgraph)
-  // {
-  //     dep[v] = false;
-  // }
-  min_maximal_matching(hyprgraph, weight, matchset, dep);
+    const auto hyprgraph = create_dwarf();
+    // const auto N = hyprgraph.number_of_nets();
+    py::dict<node_t, int> weight{};
+    py::set<node_t> matchset{};
+    py::set<node_t> dep{};
+    for (auto net : hyprgraph.nets) {
+        // matchset[net] = false;
+        weight[net] = 1;
+    }
+    // for (auto v : hyprgraph)
+    // {
+    //     dep[v] = false;
+    // }
+    min_maximal_matching(hyprgraph, weight, matchset, dep);
 }

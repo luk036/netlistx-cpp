@@ -1,8 +1,8 @@
 // -*- coding: utf-8 -*-
 #include <doctest/doctest.h>  // for ResultBuilder, CHECK, TestCase, TEST_CASE
 // #include <__config>            // for std
-#include <string_view>  // for std::string_view
-#include <netlistx/netlist.hpp>           // for Netlist, SimpleNetlist
+#include <netlistx/netlist.hpp>  // for Netlist, SimpleNetlist
+#include <string_view>           // for std::string_view
 
 using namespace std;
 

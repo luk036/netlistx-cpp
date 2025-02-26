@@ -1,7 +1,7 @@
 add_rules("mode.debug", "mode.release", "mode.coverage")
 add_requires("fmt", {alias = "fmt"})
-add_requires("boost", {configs = {context = true, container = true}})
 add_requires("doctest", {alias = "doctest"})
+-- add_requires("boost", {configs = {context = true, container = true}})
 -- add_requires("microsoft-gsl", {alias = "msgsl"})
 -- add_requires("conan::range-v3/0.11.0", {alias = "range-v3"})
 
@@ -24,7 +24,6 @@ target("NetlistX")
     add_includedirs("../py2cpp/include", {public = true})
     add_includedirs("../xnetwork-cpp/include", {public = true})
     add_files("source/*.cpp")
-    add_packages("boost", "range-v3")
 
 target("test_netlistx")
     set_kind("binary")
@@ -33,7 +32,7 @@ target("test_netlistx")
     add_includedirs("../py2cpp/include", {public = true})
     add_includedirs("../xnetwork-cpp/include", {public = true})
     add_files("test/source/*.cpp")
-    add_packages("fmt", "boost", "doctest", "range-v3")
+    add_packages("fmt", "doctest")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

@@ -1,13 +1,6 @@
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-find_package(Boost REQUIRED COMPONENTS container)
-if(Boost_FOUND)
-  message(STATUS "Found boost: ${Boost_LIBRARIES}")
-  # add_library(Boost::boost INTERFACE IMPORTED GLOBAL) target_include_directories(Boost::boost
-  # SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
-endif()
-
 CPMAddPackage(
   NAME fmt
   GIT_TAG 10.2.1
@@ -31,4 +24,4 @@ CPMAddPackage(
   OPTIONS "INSTALL_ONLY ON" # create an installable target
 )
 
-set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Boost::boost Threads::Threads fmt::fmt)
+set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt)

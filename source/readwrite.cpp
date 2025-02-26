@@ -10,7 +10,7 @@
 // #include <py2cpp/py2cpp.hpp>
 // #include <__config>      // for std
 // #include <__hash_table>  // for __hash_const_iterator, operator!=
-#include <boost/utility/string_view.hpp>  // for boost::string_view
+#include <string_view>  // for std::string_view
 #include <type_traits>                    // for move
 #include <vector>                         // for vector
 
@@ -27,7 +27,7 @@ using namespace std;
  * @param jsonFileName The path to the output JSON file.
  * @param hyprgraph The SimpleNetlist to be written to the JSON file.
  */
-void writeJSON(boost::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
+void writeJSON(std::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
     auto json = ofstream{jsonFileName.data()};
     if (json.fail()) {
         cerr << "Error: Can't open file " << jsonFileName << ".\n";
@@ -76,7 +76,7 @@ void writeJSON(boost::string_view jsonFileName, const SimpleNetlist &hyprgraph) 
  * @param netDFileName The path to the input .netD/.net file.
  * @return A SimpleNetlist object representing the design in the input file.
  */
-auto readNetD(boost::string_view netDFileName) -> SimpleNetlist {
+auto readNetD(std::string_view netDFileName) -> SimpleNetlist {
     auto netD = ifstream{netDFileName.data()};
     if (netD.fail()) {
         cerr << "Error: Can't open file " << netDFileName << ".\n";
@@ -177,7 +177,7 @@ auto readNetD(boost::string_view netDFileName) -> SimpleNetlist {
  * @param hyprgraph The SimpleNetlist object to populate with the .are file data.
  * @param areFileName The path to the .are format file to read.
  */
-void readAre(SimpleNetlist &hyprgraph, boost::string_view areFileName) {
+void readAre(SimpleNetlist &hyprgraph, std::string_view areFileName) {
     auto are = ifstream{areFileName.data()};
     if (are.fail()) {
         cerr << " Could not open " << areFileName << endl;

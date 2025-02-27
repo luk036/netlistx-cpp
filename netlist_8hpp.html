@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NetlistX</title>
+  <title>netlistx/netlist.hpp file | NetlistX</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -48,25 +48,54 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Modules</h1>
-        <ul class="m-doc">
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <span class="m-breadcrumb"><a href="dir_8b2dbcdf9bb557867053176bb1604f7c.html">netlistx</a>/</span>netlist.hpp <span class="m-thin">file</span>
+        </h1>
+        <p><span></span></p>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#typedef-members">Typedefs</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="structNetlist.html#a616ca78f9fdf8aac081166f8c1b28141" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a>&gt;</div>
+              struct <a href="structNetlist.html" class="m-doc">Netlist</a>
+            </dt>
+            <dd>Represents a netlist, which is implemented using a graph-like data structure.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename Node&gt;</div>
+              struct <a href="structSnapshot.html" class="m-doc">Snapshot</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="typedef-members">
+          <h2><a href="#typedef-members">Typedefs</a></h2>
+          <dl class="m-doc">
+            <dt id="abf8ac668235c649d61f393bab7d9d761">
+              using <a href="#abf8ac668235c649d61f393bab7d9d761" class="m-doc-self">graph_t</a> = xnetwork::SimpleGraph
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab41b824af8e088d090c0b9e60f536c9d">
+              using <a href="#ab41b824af8e088d090c0b9e60f536c9d" class="m-doc-self">index_t</a> = uint32_t
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab3f2eb4e24c39f06df0bf3f6df4ab4ad">
+              using <a href="#ab3f2eb4e24c39f06df0bf3f6df4ab4ad" class="m-doc-self">SimpleNetlist</a> = <a href="structNetlist.html" class="m-doc">Netlist</a>&lt;<a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a>&gt;
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
       </div>
     </div>
   </div>

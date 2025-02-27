@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NetlistX</title>
+  <title>transrangers::skip_last_copy struct | NetlistX</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -48,25 +48,109 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Modules</h1>
-        <ul class="m-doc">
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="transrangers__ext_8hpp.html">&lt;transrangers_ext.hpp&gt;</a></div>
+          <div class="m-doc-template">template&lt;typename Range&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacetransrangers.html">transrangers</a>::<wbr/></span>skip_last_copy <span class="m-thin">struct</span>
+        </h1>
+        <table class="m-table m-fullwidth m-flat">
+          <thead>
+            <tr><th colspan="2">Template parameters</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 1%">Range</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pub-attribs">Public variables</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a59ae6e379e2c371cda6fa2c054dbea4a">
+              using <a href="#a59ae6e379e2c371cda6fa2c054dbea4a" class="m-doc-self">ranger</a> = decltype(<a href="namespacetransrangers.html#af0f55658d6a60e869780e86c7a7f9ece" class="m-doc">skip_<wbr />last</a>(std::declval&lt;Range&amp;&gt;()))
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2e8d45c777b3f258e7d9f10ac1a8217a">
+              using <a href="#a2e8d45c777b3f258e7d9f10ac1a8217a" class="m-doc-self">cursor</a> = typename ranger::cursor
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename F&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#a55f944acd790518d7942b0da614f36bf" class="m-doc">operator()</a>(</span><span class="m-doc-wrap">const F&amp; p) -&gt; auto</span>
+            </dt>
+            <dd></dd>
+          </dl>
+        </section>
+        <section id="pub-attribs">
+          <h2><a href="#pub-attribs">Public variables</a></h2>
+          <dl class="m-doc">
+            <dt id="aebacc4784f9f19f5d7d9f1b8bc1c810b">
+              Range <a href="#aebacc4784f9f19f5d7d9f1b8bc1c810b" class="m-doc-self">rng</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a3abc59196620113f86c55619223eeba5">
+              <a href="structtransrangers_1_1skip__last__copy.html#a59ae6e379e2c371cda6fa2c054dbea4a" class="m-doc">ranger</a> <a href="#a3abc59196620113f86c55619223eeba5" class="m-doc-self">rgr</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a55f944acd790518d7942b0da614f36bf"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename Range&gt;
+                template&lt;typename F&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">auto transrangers::<wbr />skip_last_copy&lt;Range&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a55f944acd790518d7942b0da614f36bf" class="m-doc-self">operator()</a>(</span><span class="m-doc-wrap">const F&amp; p)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">F</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>p&nbsp;<span class="m-label m-flat m-info">in</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>auto</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+        </section>
       </div>
     </div>
   </div>

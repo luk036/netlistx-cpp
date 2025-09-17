@@ -28,12 +28,12 @@ jobs:
 
       - name: build and install library
         run: |
-          cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+          cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Wno-dev
           sudo cmake --build build --target install
           rm -rf build
 
       - name: configure
-        run: cmake -Sall -Bbuild -DTEST_INSTALLED_VERSION=1
+        run: cmake -Sall -Bbuild -DTEST_INSTALLED_VERSION=1 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Wno-dev
 
       - name: build
         run: cmake --build build --config Debug -j4

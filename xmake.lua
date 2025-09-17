@@ -7,6 +7,9 @@ set_languages("c++23")
 if is_plat("linux") then
     set_warnings("all", "error")
     add_cxflags("-Wconversion", { force = true })
+    -- add_cxflags("-nostdinc++", {force = true})
+    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
+    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
     add_cxflags("/W4 /WX /wd4127 /wd4996", { force = true })
 end
@@ -16,20 +19,21 @@ if is_mode("coverage") then
 end
 
 target("NetlistX")
-set_kind("static")
-add_includedirs("include", { public = true })
-add_includedirs("../py2cpp/include", { public = true })
-add_includedirs("../xnetwork-cpp/include", { public = true })
-add_files("source/*.cpp")
+    set_kind("static")
+    add_includedirs("include", { public = true })
+    add_includedirs("../py2cpp/include", { public = true })
+    add_includedirs("../xnetwork-cpp/include", { public = true })
+    add_files("source/*.cpp")
 
 target("test_netlistx")
-set_kind("binary")
-add_deps("NetlistX")
-add_includedirs("include", { public = true })
-add_includedirs("../py2cpp/include", { public = true })
-add_includedirs("../xnetwork-cpp/include", { public = true })
-add_files("test/source/*.cpp")
-add_packages("fmt", "doctest")
+    set_kind("binary")
+    add_deps("NetlistX")
+    add_includedirs("include", { public = true })
+    add_includedirs("../py2cpp/include", { public = true })
+    add_includedirs("../xnetwork-cpp/include", { public = true })
+    add_files("test/source/*.cpp")
+    add_packages("fmt", "doctest")
+    set_rundir("./build/linux/")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

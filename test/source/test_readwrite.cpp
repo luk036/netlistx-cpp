@@ -47,6 +47,33 @@ TEST_CASE("Test Read ibm01") {
     CHECK(hyprgraph.get_module_weight(1) == 1);
 }
 
+TEST_CASE("Test Read ibm02") {
+    auto hyprgraph = readNetD("../../testcases/ibm02.netD");
+    readAre(hyprgraph, "../../testcases/ibm02.are");
+
+    CHECK(hyprgraph.number_of_modules() == 19601);
+    CHECK(hyprgraph.number_of_nets() == 19584);
+    // CHECK(hyprgraph.number_of_pins() == 2908);
+    CHECK(hyprgraph.get_max_degree() == 69);
+    CHECK(hyprgraph.get_max_net_degree() == 134);
+    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK(hyprgraph.get_module_weight(1) == 64);
+}
+
+TEST_CASE("Test Read ibm03") {
+    auto hyprgraph = readNetD("../../testcases/ibm03.netD");
+    readAre(hyprgraph, "../../testcases/ibm03.are");
+
+    CHECK(hyprgraph.number_of_modules() == 23136);
+    CHECK(hyprgraph.number_of_nets() == 27401);
+    // CHECK(hyprgraph.number_of_pins() == 2908);
+    CHECK(hyprgraph.get_max_degree() == 100);
+    CHECK(hyprgraph.get_max_net_degree() == 55);
+    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK(hyprgraph.get_module_weight(1) == 96);
+}
+
+
 // TEST_CASE("Test Read ibm18") {
 //     const auto hyprgraph = readNetD("../../testcases/ibm18.net");
 //

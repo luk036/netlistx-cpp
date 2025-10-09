@@ -133,6 +133,13 @@ template <typename graph_t> struct Netlist {
         return this->module_weight.empty() ? 1U : this->module_weight[v];
     }
 
+    void set_module_weight(const node_t &v, unsigned int weight) {
+        if (this->module_weight.empty()) {
+            this->module_weight.resize(this->num_modules);
+        }
+        this->module_weight[v] = weight;
+    }
+
     /**
      * @brief Get the net weight
      *
@@ -167,32 +174,13 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
       num_nets(nets.size()) {
     this->has_fixed_modules = (!this->module_fixed.empty());
 
-    // Some compilers does not accept py::range()->iterator as a forward
-    // iterator auto deg_cmp = [this](const node_t& v, const node_t& w) ->
-    // index_t {
-    //     return this->gr.degree(v) < this->gr.degree(w);
-    // };
-    // const auto result1 =
-    //     std::max_element(this->modules.begin(), this->modules.end(),
-    //     deg_cmp);
-    // this->max_degree = this->gr.degree(*result1);
-    // const auto result2 =
-    //     std::max_element(this->nets.begin(), this->nets.end(), deg_cmp);
-    // this->max_net_degree = this->gr.degree(*result2);
-
-    this->max_degree = 0U;
-    for (const auto &v : this->modules) {
-        if (this->max_degree < this->gr.degree(v)) {
-            this->max_degree = this->gr.degree(v);
-        }
-    }
-
-    this->max_net_degree = 0U;
-    for (const auto &net : this->nets) {
-        if (this->max_net_degree < this->gr.degree(net)) {
-            this->max_net_degree = this->gr.degree(net);
-        }
-    }
+    auto deg_cmp = [this](const node_t &v, const node_t &w) {
+        return this->gr.degree(v) < this->gr.degree(w);
+    };
+    const auto result1 = std::max_element(this->modules.begin(), this->modules.end(), deg_cmp);
+    this->max_degree = this->gr.degree(*result1);
+    const auto result2 = std::max_element(this->nets.begin(), this->nets.end(), deg_cmp);
+    this->max_net_degree = this->gr.degree(*result2);
 }
 
 template <typename graph_t>

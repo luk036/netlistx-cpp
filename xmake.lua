@@ -34,6 +34,7 @@ target("test_netlistx")
     add_files("test/source/*.cpp")
     add_packages("fmt", "doctest")
     set_rundir("./build/linux/")
+    add_tests("default")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

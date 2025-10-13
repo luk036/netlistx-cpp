@@ -29,7 +29,7 @@ using namespace std;
  * @param jsonFileName The path to the output JSON file.
  * @param hyprgraph The SimpleNetlist to be written to the JSON file.
  */
-void writeJSON(std::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
+void writeJSON(const std::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
     auto json = ofstream{jsonFileName.data()};
     if (json.fail()) {
         cerr << "Error: Can't open file " << jsonFileName << ".\n";
@@ -78,7 +78,7 @@ void writeJSON(std::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
  * @param netDFileName The path to the input .netD/.net file.
  * @return A SimpleNetlist object representing the design in the input file.
  */
-auto readNetD(std::string_view netDFileName) -> SimpleNetlist {
+auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
     auto netD = ifstream{netDFileName.data()};
     if (netD.fail()) {
         cerr << "Error: Can't open file " << netDFileName << ".\n";
@@ -179,7 +179,7 @@ auto readNetD(std::string_view netDFileName) -> SimpleNetlist {
  * @param hyprgraph The SimpleNetlist object to populate with the .are file data.
  * @param areFileName The path to the .are format file to read.
  */
-void readAre(SimpleNetlist &hyprgraph, std::string_view areFileName) {
+void readAre(SimpleNetlist &hyprgraph, const std::string_view areFileName) {
     auto are = ifstream{areFileName.data()};
     if (are.fail()) {
         cerr << " Could not open " << areFileName << endl;

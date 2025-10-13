@@ -129,11 +129,11 @@ template <typename graph_t> struct Netlist {
      * @param[in] v The module node
      * @return unsigned int The weight of the module
      */
-    auto get_module_weight(const node_t &v) const -> unsigned int {
+    auto get_module_weight(node_t v) const -> unsigned int {
         return this->module_weight.empty() ? 1U : this->module_weight[v];
     }
 
-    void set_module_weight(const node_t &v, unsigned int weight) {
+    void set_module_weight(node_t v, unsigned int weight) {
         if (this->module_weight.empty()) {
             this->module_weight.resize(this->num_modules);
         }

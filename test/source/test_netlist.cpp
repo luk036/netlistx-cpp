@@ -6,7 +6,6 @@
 // #include <py2cpp/py2cpp.hpp>
 // #include <__config>     // for std
 #include <cstdint>      // for uint32_t
-#include <type_traits>  // for move
 #include <utility>      // for pair
 #include <vector>       // for vector
 

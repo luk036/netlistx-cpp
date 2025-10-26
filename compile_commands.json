@@ -1,0 +1,41 @@
+[
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\NetlistX\\windows\\x64\\release\\source\\netlist.cpp.obj", "source\\netlist.cpp"],
+  "file": "source\\netlist.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\NetlistX\\windows\\x64\\release\\source\\readwrite.cpp.obj", "source\\readwrite.cpp"],
+  "file": "source\\readwrite.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\main.cpp.obj", "test\\source\\main.cpp"],
+  "file": "test\\source\\main.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\test_netlist.cpp.obj", "test\\source\\test_netlist.cpp"],
+  "file": "test\\source\\test_netlist.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\test_netlist_algo.cpp.obj", "test\\source\\test_netlist_algo.cpp"],
+  "file": "test\\source\\test_netlist_algo.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\test_netlist_more.cpp.obj", "test\\source\\test_netlist_more.cpp"],
+  "file": "test\\source\\test_netlist_more.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\test_readwrite.cpp.obj", "test\\source\\test_readwrite.cpp"],
+  "file": "test\\source\\test_readwrite.cpp"
+},
+{
+  "directory": "D:\\github\\cpp\\netlistx-cpp",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++latest", "/Ibuild\\.gens\\test_netlistx\\windows\\x64\\release\\platform\\windows\\idl", "/Iinclude", "/I..\\py2cpp\\include", "/I..\\xnetwork-cpp\\include", "/Ibuild\\.gens\\NetlistX\\windows\\x64\\release\\platform\\windows\\idl", "/EHsc", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\f\\fmt\\11.2.0\\8fbd227aadf44e85872cf401a8e9f8f4\\include", "/IC:\\Users\\luk03\\AppData\\Local\\.xmake\\packages\\d\\doctest\\2.4.12\\96a7b7062b77491d833801df31cee76c\\include", "/utf-8", "/W4", "/WX", "/wd4127", "/wd4996", "/DNDEBUG", "/Fobuild\\.objs\\test_netlistx\\windows\\x64\\release\\test\\source\\test_transrangers_xnGraph.cpp.obj", "test\\source\\test_transrangers_xnGraph.cpp"],
+  "file": "test\\source\\test_transrangers_xnGraph.cpp"
+}]

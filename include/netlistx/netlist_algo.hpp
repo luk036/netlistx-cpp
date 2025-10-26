@@ -25,8 +25,7 @@ auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
     typename C1::mapped_type {
     using T = typename C1::mapped_type;
     auto in_coverset = [&](const auto &v) { return coverset.contains(v); };
-    auto total_dual_cost = T(0);
-    static_assert(sizeof total_dual_cost >= 0, "maybe unused");
+    [[maybe_unused]] auto total_dual_cost = T(0);
     auto total_primal_cost = T(0);
     auto gap = weight;
     for (const auto &net : hyprgraph.nets) {

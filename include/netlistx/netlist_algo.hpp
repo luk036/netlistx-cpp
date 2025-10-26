@@ -87,8 +87,7 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
     using T = typename C1::mapped_type;
 
     auto gap = weight;
-    auto total_dual_cost = T(0);
-    static_assert(sizeof total_dual_cost >= 0, "maybe unused");
+    [[maybe_unused]] auto total_dual_cost = T(0);
     auto total_primal_cost = T(0);
     for (const auto &net : hyprgraph.nets) {
         if (std::any_of(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(), in_dep)) {

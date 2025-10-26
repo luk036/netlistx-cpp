@@ -22,7 +22,7 @@ using namespace std;
  *
  * @return Netlist
  */
-auto create_dwarf() -> const SimpleNetlist {
+auto create_dwarf() -> SimpleNetlist {
     using Edge = pair<uint32_t, uint32_t>;
     const auto num_nodes = 13U;
     enum nodes { a0, a1, a2, a3, p1, p2, p3, n1, n2, n3, n4, n5, n6 };

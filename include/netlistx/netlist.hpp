@@ -190,7 +190,6 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
     // Find max element in modules
     auto it1 = this->modules.begin();
     if (it1 != this->modules.end()) {
-        auto max_it1 = it1;
         size_t max_deg1 = this->gr.degree(*it1);
         ++it1;
         for (; it1 != this->modules.end(); ++it1) {
@@ -208,7 +207,6 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
     // Find max element in nets
     auto it2 = this->nets.begin();
     if (it2 != this->nets.end()) {
-        auto max_it2 = it2;
         size_t max_deg2 = this->gr.degree(*it2);
         ++it2;
         for (; it2 != this->nets.end(); ++it2) {

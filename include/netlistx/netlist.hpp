@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>         // for max_element
 #include <cstddef>           // for size_t
 #include <cstdint>           // for uint32_t, uint8_t
 #include <py2cpp/dict.hpp>   // for dict

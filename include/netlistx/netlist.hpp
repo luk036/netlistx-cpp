@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>         // for max_element
+// #include <algorithm>         // for max_element
 #include <cstddef>           // for size_t
 #include <cstdint>           // for uint32_t, uint8_t
 #include <py2cpp/dict.hpp>   // for dict
@@ -175,13 +175,53 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
       num_nets(nets.size()) {
     this->has_fixed_modules = (!this->module_fixed.empty());
 
-    auto deg_cmp = [this](const node_t &v, const node_t &w) {
-        return this->gr.degree(v) < this->gr.degree(w);
-    };
-    const auto result1 = std::max_element(this->modules.begin(), this->modules.end(), deg_cmp);
-    this->max_degree = this->gr.degree(*result1);
-    const auto result2 = std::max_element(this->nets.begin(), this->nets.end(), deg_cmp);
-    this->max_net_degree = this->gr.degree(*result2);
+    // auto deg_cmp = [this](const node_t &v, const node_t &w) {
+    //     return this->gr.degree(v) < this->gr.degree(w);
+    // };
+    // const auto result1 = std::max_element(this->modules.begin(), this->modules.end(), deg_cmp);
+    // this->max_degree = this->gr.degree(*result1);
+    // const auto result2 = std::max_element(this->nets.begin(), this->nets.end(), deg_cmp);
+    // this->max_net_degree = this->gr.degree(*result2);
+
+    // For MacOS, an iterator requires satisfying the forward_iterator concept instead of the
+    // input_iterator concept for std::max_element(). The workaround is to implement the 
+    // functionality directly without using std::max_element().
+
+    // Find max element in modules
+    auto it1 = this->modules.begin();
+    if (it1 != this->modules.end()) {
+        auto max_it1 = it1;
+        size_t max_deg1 = this->gr.degree(*it1);
+        ++it1;
+        for (; it1 != this->modules.end(); ++it1) {
+            size_t current_deg = this->gr.degree(*it1);
+            if (max_deg1 < current_deg) {
+                max_deg1 = current_deg;
+            }
+        }
+        this->max_degree = max_deg1;
+    } else {
+        // Handle empty range case
+        this->max_degree = 0; // or some default value
+    }
+
+    // Find max element in nets
+    auto it2 = this->nets.begin();
+    if (it2 != this->nets.end()) {
+        auto max_it2 = it2;
+        size_t max_deg2 = this->gr.degree(*it2);
+        ++it2;
+        for (; it2 != this->nets.end(); ++it2) {
+            size_t current_deg = this->gr.degree(*it2);
+            if (max_deg2 < current_deg) {
+                max_deg2 = current_deg;
+            }
+        }
+        this->max_net_degree = max_deg2;
+    } else {
+        // Handle empty range case
+        this->max_net_degree = 0; // or some default value
+    }
 }
 
 template <typename graph_t>

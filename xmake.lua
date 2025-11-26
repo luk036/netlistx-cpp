@@ -1,15 +1,16 @@
 add_rules("mode.debug", "mode.release", "mode.coverage")
 add_requires("fmt", { alias = "fmt" })
 add_requires("doctest", { alias = "doctest" })
+add_requires("spdlog", { alias = "spdlog" })
 
 set_languages("c++23")
 
 if is_plat("linux") then
     set_warnings("all", "error")
     add_cxflags("-Wconversion", { force = true })
-    -- add_cxflags("-nostdinc++", {force = true})
-    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
-    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
+    add_cxflags("-nostdinc++", {force = true})
+    add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
+    add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
     add_cxflags("/W4 /WX /wd4127 /wd4996", { force = true })
 end
@@ -25,16 +26,21 @@ target("NetlistX")
     add_includedirs("../xnetwork-cpp/include", { public = true })
     add_files("source/*.cpp")
 
-target("test_netlistx")
+--target("test_netlistx")
+--    set_kind("binary")
+--    add_deps("NetlistX")
+--    add_includedirs("include", { public = true })
+--    add_includedirs("../py2cpp/include", { public = true })
+--    add_includedirs("../xnetwork-cpp/include", { public = true })
+--    add_files("test/source/*.cpp")
+--    add_packages("fmt", "doctest")
+--    set_rundir("./build/linux/")
+--    add_tests("default")
+
+target("standalone_spdlog_example")
     set_kind("binary")
-    add_deps("NetlistX")
-    add_includedirs("include", { public = true })
-    add_includedirs("../py2cpp/include", { public = true })
-    add_includedirs("../xnetwork-cpp/include", { public = true })
-    add_files("test/source/*.cpp")
-    add_packages("fmt", "doctest")
-    set_rundir("./build/linux/")
-    add_tests("default")
+    add_files("example/standalone_spdlog_example/source/*.cpp")
+    add_packages("spdlog")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

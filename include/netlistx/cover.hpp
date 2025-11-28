@@ -3,7 +3,11 @@
 #include <algorithm>
 #include <cassert>
 #include <deque>
+#include <functional>
+#include <iterator>
+#include <memory>
 #include <queue>
+#include <type_traits>
 #include <utility>
 #include <vector>
 

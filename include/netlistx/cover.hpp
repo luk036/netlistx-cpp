@@ -182,6 +182,7 @@ struct BFSInfo {
     
     BFSInfo(Node p, int d) : parent(p), depth(d) {}
     BFSInfo(const BFSInfo&) = default;
+    BFSInfo& operator=(const BFSInfo&) = default;
 };
 
 /**

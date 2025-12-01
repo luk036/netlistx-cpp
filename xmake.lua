@@ -11,7 +11,7 @@ if is_plat("linux") then
     -- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
     -- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
-    add_cxflags("/W4 /WX /wd4127 /wd4996", { force = true })
+    add_cxflags("/EHsc /W4 /WX", { force = true })
 end
 
 if is_mode("coverage") then
@@ -33,7 +33,11 @@ target("test_netlistx")
     add_includedirs("../xnetwork-cpp/include", { public = true })
     add_files("test/source/*.cpp")
     add_packages("fmt", "doctest")
-    set_rundir("./build/linux/")
+    if is_plat("linux") then
+        set_rundir("./build/linux/")
+    elseif is_plat("windows") then
+        set_rundir("./build/windows/")
+    end
     add_tests("default")
 
 --

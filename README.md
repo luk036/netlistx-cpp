@@ -108,6 +108,7 @@ open build/doc/doxygen/html/index.html
 
 To build the documentation locally, you will need Doxygen, jinja2 and Pygments installed on your system.
 
+<a name="build-everything-at-once"></a>
 ### Build everything at once
 
 The project also includes an `all` directory that allows building all targets at the same time.
@@ -127,6 +128,7 @@ cmake --build build --target fix-format
 cmake --build build --target GenerateDocs
 ```
 
+<a name="additional-tools"></a>
 ### Additional tools
 
 The test and standalone subprojects include the [tools.cmake](cmake/tools.cmake) file which is used to import additional tools on-demand through CMake configuration arguments.

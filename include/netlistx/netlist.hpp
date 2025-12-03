@@ -143,7 +143,6 @@ template <typename graph_t> struct Netlist {
     /**
      * @brief Get the net weight
      *
-     * @param[in] net The net to get the weight for
      * @return uint32_t The weight of the net
      */
     auto get_net_weight(const node_t & /*net*/) const -> uint32_t {
@@ -156,10 +155,6 @@ template <typename graph_t> struct Netlist {
 
 /**
  * @brief Constructs a Netlist object from the given graph, module nodes, and net nodes.
- *
- * @param gr The graph representing the netlist.
- * @param modules The module nodes in the netlist.
- * @param nets The net nodes in the netlist.
  *
  * The constructor initializes the Netlist object with the provided graph, modules, and nets. It
  * also calculates the maximum degree of the modules and nets, and sets flags indicating whether the

@@ -5,7 +5,7 @@
 /**
  * @file netlist_algo.hpp
  * @brief Netlist-specific algorithms for hypergraph optimization
- * 
+ *
  * This file contains algorithms specifically designed for netlist hypergraph optimization
  * problems, including minimum weighted vertex cover and maximum weighted matching.
  * These algorithms are commonly used in VLSI CAD tools for partitioning, placement,
@@ -69,14 +69,14 @@ auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
  * and greedily selects nets that do not share vertices with already selected nets (maintained
  * in the dependency set). For each candidate net, it considers alternative nets that share
  * vertices and selects the one with minimum gap value (modified weight).
- * 
+ *
  * The algorithm maintains:
  * - A gap function representing the dual variables
  * - A matchset containing the selected nets
  * - A dependency set containing vertices covered by selected nets
- * 
+ *
  * Time complexity: O(|V| * |E|^2) where V is the set of vertices and E is the set of nets
- * 
+ *
  * @tparam Gnl The type of the hypergraph.
  * @tparam C1 The type of the weight function (must support [] operator and mapped_type).
  * @tparam C2 The type of the matching set and dependency set.

@@ -178,7 +178,7 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
     // this->max_net_degree = this->gr.degree(*result2);
 
     // For MacOS, an iterator requires satisfying the forward_iterator concept instead of the
-    // input_iterator concept for std::max_element(). The workaround is to implement the 
+    // input_iterator concept for std::max_element(). The workaround is to implement the
     // functionality directly without using std::max_element().
 
     // Find max element in modules

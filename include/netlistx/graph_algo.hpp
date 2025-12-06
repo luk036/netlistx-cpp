@@ -7,9 +7,9 @@
 
 /**
  * @brief Performs minimum weighted vertex cover using a primal-dual approximation algorithm
- * 
+ *
  * This function implements a primal-dual algorithm for minimum weighted vertex cover on a graph.
- * 
+ *
  * @tparam Graph The graph type
  * @tparam WeightMap The weight map type (mutable mapping from node to weight)
  * @tparam CoverSet The cover set type
@@ -23,12 +23,12 @@ auto min_vertex_cover_fast(
     const Graph& ugraph,
     WeightMap& weight,
     CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-    
+
     using T = typename WeightMap::mapped_type;
-    
+
     // Create a copy of weights for the gap values
     auto gap = weight;
-    
+
     T total_dual_cost = 0;
     T total_prml_cost = 0;
 
@@ -36,15 +36,15 @@ auto min_vertex_cover_fast(
     for (const auto& edge : ugraph.edges()) {
         auto utx = edge.first;
         auto vtx = edge.second;
-        
+
         if (coverset.contains(utx) || coverset.contains(vtx)) {
             continue;
         }
-        
+
         if (gap[utx] < gap[vtx]) {
             std::swap(utx, vtx);
         }
-        
+
         coverset.insert(vtx);
         total_dual_cost += gap[vtx];
         total_prml_cost += weight[vtx];
@@ -63,16 +63,16 @@ template <typename Graph, typename WeightMap>
 auto min_vertex_cover_fast(
     const Graph& ugraph,
     WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-    
+
     py::set<typename Graph::node_t> coverset{};
     return min_vertex_cover_fast(ugraph, weight, coverset);
 }
 
 /**
  * @brief Performs minimum weighted maximal independent set using primal-dual algorithm
- * 
+ *
  * This function implements a primal-dual algorithm for minimum weighted maximal independent set.
- * 
+ *
  * @tparam Graph The graph type
  * @tparam WeightMap The weight map type
  * @tparam IndSet The independent set type
@@ -89,10 +89,10 @@ auto min_maximal_independant_set(
     WeightMap& weight,
     IndSet& indset,
     DepSet& dep) -> std::pair<IndSet, typename WeightMap::mapped_type> {
-    
+
     using node_t = typename Graph::node_t;
     using T = typename WeightMap::mapped_type;
-    
+
     // Helper function to mark a vertex and its neighbors as dependent
     auto coverset = [&](node_t utx) {
         dep.insert(utx);
@@ -113,10 +113,10 @@ auto min_maximal_independant_set(
         if (indset.contains(utx)) {  // pre-defined independent
             continue;
         }
-        
+
         T min_val = gap[utx];
         node_t min_vtx = utx;
-        
+
         // Find the minimum gap vertex among neighbors
         for (const auto& vtx : ugraph[utx]) {
             if (dep.contains(vtx)) {
@@ -127,16 +127,16 @@ auto min_maximal_independant_set(
                 min_vtx = vtx;
             }
         }
-        
+
         indset.insert(min_vtx);
         coverset(min_vtx);
         total_prml_cost += weight[min_vtx];
         total_dual_cost += min_val;
-        
+
         if (min_vtx == utx) {
             continue;
         }
-        
+
         // Update gaps for neighbors
         for (const auto& vtx : ugraph[utx]) {
             gap[vtx] -= min_val;
@@ -154,7 +154,7 @@ template <typename Graph, typename WeightMap>
 auto min_maximal_independant_set(
     const Graph& ugraph,
     WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-    
+
     py::set<typename Graph::node_t> indset{};
     py::set<typename Graph::node_t> dep{};
     return min_maximal_independant_set(ugraph, weight, indset, dep);

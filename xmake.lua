@@ -7,6 +7,13 @@ set_languages("c++23")
 if is_plat("linux") then
     set_warnings("all", "error")
     add_cxflags("-Wconversion", { force = true })
+    add_cxflags("-Wno-unused-command-line-argument", {force = true})
+    -- Check if we're on Termux/Android
+    local termux_prefix = os.getenv("PREFIX")
+    if termux_prefix then
+        add_sysincludedirs(termux_prefix .. "/include/c++/v1", {public = true})
+        add_sysincludedirs(termux_prefix .. "/include", {public = true})
+    end
     -- add_cxflags("-nostdinc++", {force = true})
     -- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
     -- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})

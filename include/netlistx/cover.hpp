@@ -31,18 +31,18 @@ auto pd_cover(
     WeightMap& weight,
     SolutionSet& soln) -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
 
-    using T = typename WeightMap::mapped_type;
+    using CostType = typename WeightMap::mapped_type;
 
-    T total_prml_cost = 0;
-    T total_dual_cost = 0;
+    CostType total_prml_cost = 0;
+    CostType total_dual_cost = 0;
     auto gap = weight; // copy weights
 
     // Iterate through violate sets
-    for (const auto& S : violate()) {
-        if (S.empty()) continue;
+    for (const auto& violateSet : violate()) {
+        if (violateSet.empty()) continue;
 
         // Find vertex with minimum gap in the set
-        auto min_vtx = *std::min_element(S.begin(), S.end(),
+        auto min_vtx = *std::min_element(violateSet.begin(), violateSet.end(),
             [&](const auto& v1, const auto& v2) { return gap[v1] < gap[v2]; });
         auto min_val = gap[min_vtx];
 
@@ -51,7 +51,7 @@ auto pd_cover(
         total_dual_cost += min_val;
 
         // Update gaps for all vertices in the set
-        for (const auto& vtx : S) {
+        for (const auto& vtx : violateSet) {
             gap[vtx] -= min_val;
         }
     }
@@ -218,11 +218,11 @@ auto _construct_cycle(
         depth_b = info_parent.depth;
     }
 
-    std::deque<Node> S;
+    std::deque<Node> path;
 
     // Build path from node_a up to same depth as node_b
     while (depth_a < depth_b) {
-        S.push_back(node_a);
+        path.push_back(node_a);
         const auto& next_info = info.at(node_a);
         node_a = next_info.parent;
         depth_a = next_info.depth;
@@ -230,8 +230,8 @@ auto _construct_cycle(
 
     // Move both nodes up until they meet
     while (node_a != node_b) {
-        S.push_back(node_a);
-        S.push_front(node_b);
+        path.push_back(node_a);
+        path.push_front(node_b);
 
         const auto& info_a = info.at(node_a);
         const auto& info_b = info.at(node_b);
@@ -240,8 +240,8 @@ auto _construct_cycle(
         node_b = info_b.parent;
     }
 
-    S.push_front(node_b);
-    return S;
+    path.push_front(node_b);
+    return path;
 }
 
 /**

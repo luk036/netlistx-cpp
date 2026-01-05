@@ -24,14 +24,14 @@ using namespace std;
 auto create_dwarf() -> SimpleNetlist {
     using Edge = pair<uint32_t, uint32_t>;
     const auto num_nodes = 13U;
-    enum nodes { a0, a1, a2, a3, p1, p2, p3, n1, n2, n3, n4, n5, n6 };
-    // static vector<nodes> module_name_list = {a1, a2, a3};
-    // static vector<nodes> net__name_list = {n1, n2, n3};
+    enum nodes { mod0, mod1, mod2, mod3, pad1, pad2, pad3, net1, net2, net3, net4, net5, net6 };
+    // static vector<nodes> module_name_list = {mod1, mod2, mod3};
+    // static vector<nodes> net__name_list = {net1, net2, net3};
 
     // char name[] = "ABCDE";
-    vector<Edge> edge_array{Edge(p1, n1), Edge(a0, n1), Edge(a1, n1), Edge(a0, n2), Edge(a2, n2),
-                            Edge(a3, n2), Edge(a1, n3), Edge(a2, n3), Edge(a3, n3), Edge(a2, n4),
-                            Edge(p2, n4), Edge(a3, n5), Edge(p3, n5), Edge(a0, n6)};
+    vector<Edge> edge_array{Edge(pad1, net1), Edge(mod0, net1), Edge(mod1, net1), Edge(mod0, net2), Edge(mod2, net2),
+                            Edge(mod3, net2), Edge(mod1, net3), Edge(mod2, net3), Edge(mod3, net3), Edge(mod2, net4),
+                            Edge(pad2, net4), Edge(mod3, net5), Edge(pad3, net5), Edge(mod0, net6)};
     // index_t indices[] = {0, 1, 2, 3, 4, 5};
     // int num_arcs = sizeof(edge_array) / sizeof(Edge);
     // auto R = py::range(num_nodes);
@@ -67,11 +67,11 @@ auto create_dwarf() -> SimpleNetlist {
 auto create_test_netlist() -> SimpleNetlist {
     using Edge = pair<uint32_t, uint32_t>;
     auto num_nodes = 6U;
-    enum nodes { a1, a2, a3, n1, n2, n3 };
+    enum nodes { mod1, mod2, mod3, net1, net2, net3 };
 
     // char name[] = "ABCDE";
-    auto edge_array = vector<Edge>{Edge(a1, n1), Edge(a1, n2), Edge(a2, n1),
-                                   Edge(a2, n2), Edge(a3, n2), Edge(a1, n3)};
+    auto edge_array = vector<Edge>{Edge(mod1, net1), Edge(mod1, net2), Edge(mod2, net1),
+                                   Edge(mod2, net2), Edge(mod3, net2), Edge(mod1, net3)};
     // index_t indices[] = {0, 1, 2, 3, 4, 5};
     // auto num_arcs = sizeof(edge_array) / sizeof(Edge);
     // auto g = graph_t{edge_array, edge_array + num_arcs, num_nodes};

@@ -87,13 +87,13 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
 
     using node_t = uint32_t;
 
-    char t = 0;
+    char tmp = 0;
     uint32_t numPins = 0;
     uint32_t numNets = 0;
     uint32_t numModules = 0;
     index_t padOffset = 0;
 
-    netD >> t;  // eat 1st 0
+    netD >> tmp;  // eat 1st 0
     netD >> numPins >> numNets >> numModules >> padOffset;
 
     // using Edge = pair<int, int>;
@@ -106,59 +106,59 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
     char lineBuffer[bufferSize];  // Does it work for other compiler?
     netD.getline(lineBuffer, bufferSize);
 
-    node_t w = 0;
-    index_t e = numModules - 1;
-    char c = 0;
-    uint32_t i = 0;
-    for (; i < numPins; ++i) {
+    node_t node = 0;
+    index_t edgeIdx = numModules - 1;
+    char ch = 0;
+    uint32_t idx = 0;
+    for (; idx < numPins; ++idx) {
         if (netD.eof()) {
             cerr << "Warning: Unexpected end of file.\n";
             break;
         }
         do {
-            netD.get(c);
-        } while ((isspace(c) != 0));
-        if (c == '\n') {
+            netD.get(ch);
+        } while ((isspace(ch) != 0));
+        if (ch == '\n') {
             continue;
         }
-        if (c == 'a') {
-            netD >> w;
-        } else if (c == 'p') {
-            netD >> w;
-            w += padOffset;
+        if (ch == 'a') {
+            netD >> node;
+        } else if (ch == 'p') {
+            netD >> node;
+            node += padOffset;
         }
         do {
-            netD.get(c);
-        } while ((isspace(c) != 0));
-        if (c == 's') {
-            ++e;
+            netD.get(ch);
+        } while ((isspace(ch) != 0));
+        if (ch == 's') {
+            ++edgeIdx;
         }
 
-        // edge_array[i] = Edge(w, e);
-        g.add_edge(w, e);
+        // edge_array[idx] = Edge(node, edgeIdx);
+        g.add_edge(node, edgeIdx);
 
         do {
-            netD.get(c);
-        } while ((isspace(c) != 0) && c != '\n');
-        // switch (c) {
+            netD.get(ch);
+        } while ((isspace(ch) != 0) && ch != '\n');
+        // switch (ch) {
         // case 'O': aPin.setDirection(Pin::OUTPUT); break;
         // case 'I': aPin.setDirection(Pin::INPUT); break;
         // case 'B': aPin.setDirection(Pin::BIDIR); break;
         // }
-        if (c != '\n') {
+        if (ch != '\n') {
             netD.getline(lineBuffer, bufferSize);
         }
     }
 
-    e -= numModules - 1;
-    if (e < numNets) {
+    edgeIdx -= numModules - 1;
+    if (edgeIdx < numNets) {
         cerr << "Warning: number of nets is not " << numNets << ".\n";
-        numNets = e;
-    } else if (e > numNets) {
+        numNets = edgeIdx;
+    } else if (edgeIdx > numNets) {
         cerr << "Error: number of nets is not " << numNets << ".\n";
         exit(1);
     }
-    if (i < numPins) {
+    if (idx < numPins) {
         cerr << "Error: number of pins is not " << numPins << ".\n";
         exit(1);
     }
@@ -190,8 +190,8 @@ void readAre(SimpleNetlist &hyprgraph, const std::string_view areFileName) {
     constexpr index_t bufferSize = 100;
     char lineBuffer[bufferSize];
 
-    char c = 0;
-    node_t w = 0;
+    char ch = 0;
+    node_t node = 0;
     unsigned int weight = 0;
     // auto totalWeight = 0;
     // xxx index_t smallestWeight = UINT_MAX;
@@ -200,22 +200,22 @@ void readAre(SimpleNetlist &hyprgraph, const std::string_view areFileName) {
     auto module_weight = vector<unsigned int>(numModules);
 
     size_t lineno = 1;
-    for (size_t i = 0; i < numModules; i++) {
+    for (size_t idx = 0; idx < numModules; idx++) {
         if (are.eof()) {
             break;
         }
         do {
-            are.get(c);
-        } while ((isspace(c) != 0));
-        if (c == '\n') {
+            are.get(ch);
+        } while ((isspace(ch) != 0));
+        if (ch == '\n') {
             lineno++;
             continue;
         }
-        if (c == 'a') {
-            are >> w;
-        } else if (c == 'p') {
-            are >> w;
-            w += node_t(padOffset);
+        if (ch == 'a') {
+            are >> node;
+        } else if (ch == 'p') {
+            are >> node;
+            node += node_t(padOffset);
         } else {
             cerr << "Syntax error in line " << lineno << ":"
                  << R"(expect keyword "a" or "p")" << endl;
@@ -223,12 +223,12 @@ void readAre(SimpleNetlist &hyprgraph, const std::string_view areFileName) {
         }
 
         do {
-            are.get(c);
-        } while ((isspace(c) != 0));
-        if (isdigit(c) != 0) {
-            are.putback(c);
+            are.get(ch);
+        } while ((isspace(ch) != 0));
+        if (isdigit(ch) != 0) {
+            are.putback(ch);
             are >> weight;
-            module_weight[w] = weight;
+            module_weight[node] = weight;
         }
         are.getline(lineBuffer, bufferSize);
         lineno++;

@@ -24,13 +24,13 @@ auto min_vertex_cover_fast(
     WeightMap& weight,
     CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
 
-    using T = typename WeightMap::mapped_type;
+    using CostType = typename WeightMap::mapped_type;
 
     // Create a copy of weights for the gap values
     auto gap = weight;
 
-    T total_dual_cost = 0;
-    T total_prml_cost = 0;
+    CostType total_dual_cost = 0;
+    CostType total_prml_cost = 0;
 
     // Iterate through all edges in the graph
     for (const auto& edge : ugraph.edges()) {
@@ -91,7 +91,7 @@ auto min_maximal_independant_set(
     DepSet& dep) -> std::pair<IndSet, typename WeightMap::mapped_type> {
 
     using node_t = typename Graph::node_t;
-    using T = typename WeightMap::mapped_type;
+    using CostType = typename WeightMap::mapped_type;
 
     // Helper function to mark a vertex and its neighbors as dependent
     auto coverset = [&](node_t utx) {
@@ -102,8 +102,8 @@ auto min_maximal_independant_set(
     };
 
     auto gap = weight;
-    T total_prml_cost = 0;
-    T total_dual_cost = 0;
+    CostType total_prml_cost = 0;
+    CostType total_dual_cost = 0;
 
     // Iterate through all vertices in the graph
     for (const auto& utx : ugraph) {
@@ -114,7 +114,7 @@ auto min_maximal_independant_set(
             continue;
         }
 
-        T min_val = gap[utx];
+        CostType min_val = gap[utx];
         node_t min_vtx = utx;
 
         // Find the minimum gap vertex among neighbors

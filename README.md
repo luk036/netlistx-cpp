@@ -1,7 +1,6 @@
 [![Actions Status](https://github.com/luk036/netlistx-cpp/workflows/MacOS/badge.svg)](https://github.com/luk036/netlistx-cpp/actions)
 [![Actions Status](https://github.com/luk036/netlistx-cpp/workflows/Windows/badge.svg)](https://github.com/luk036/netlistx-cpp/actions)
 [![Actions Status](https://github.com/luk036/netlistx-cpp/workflows/Ubuntu/badge.svg)](https://github.com/luk036/netlistx-cpp/actions)
-[![Actions Status](https://github.com/luk036/netlistx-cpp/workflows/Style/badge.svg)](https://github.com/luk036/netlistx-cpp/actions)
 [![Actions Status](https://github.com/luk036/netlistx-cpp/workflows/Install/badge.svg)](https://github.com/luk036/netlistx-cpp/actions)
 [![codecov](https://codecov.io/gh/luk036/netlistx-cpp/branch/master/graph/badge.svg)](https://codecov.io/gh/luk036/netlistx-cpp)
 

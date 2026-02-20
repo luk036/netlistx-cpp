@@ -47,6 +47,36 @@ target("test_netlistx")
     end
     add_tests("default")
 
+    -- Check if rapidcheck was downloaded by CMake (check both build and build_test directories)
+    local build_dirs = {"build", "build_test"}
+    local rapidcheck_dir = nil
+    local rapidcheck_lib_dir = nil
+
+    for _, build_dir in ipairs(build_dirs) do
+        local candidate_src = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-src")
+        local candidate_lib = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-build")
+        if is_plat("windows") then
+            candidate_lib = path.join(candidate_lib, "Release")
+        end
+
+        if os.isdir(candidate_src) and os.isdir(candidate_lib) then
+            rapidcheck_dir = candidate_src
+            rapidcheck_lib_dir = candidate_lib
+            break
+        end
+    end
+
+    if rapidcheck_dir and rapidcheck_lib_dir then
+        add_includedirs(path.join(rapidcheck_dir, "include"))
+        add_linkdirs(rapidcheck_lib_dir)
+        add_links("rapidcheck")
+        add_defines("RAPIDCHECK_H")
+        -- Suppress warnings in RapidCheck headers for MSVC
+        if is_plat("windows") then
+            add_cxxflags("/wd4018", "/wd4100", "/wd4267", "/wd4996", "/wd4189", "/wd4702", {force = true})
+        end
+    end
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

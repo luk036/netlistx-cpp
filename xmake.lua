@@ -71,10 +71,6 @@ target("test_netlistx")
         add_linkdirs(rapidcheck_lib_dir)
         add_links("rapidcheck")
         add_defines("RAPIDCHECK_H")
-        -- Suppress warnings in RapidCheck headers for MSVC
-        if is_plat("windows") then
-            add_cxxflags("/wd4018", "/wd4100", "/wd4267", "/wd4996", "/wd4189", "/wd4702", {force = true})
-        end
     end
 
 --

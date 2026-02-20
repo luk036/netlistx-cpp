@@ -2,7 +2,20 @@
 #include <doctest/doctest.h>
 
 #ifdef RAPIDCHECK_H
+// Suppress signed/unsigned warnings for RapidCheck headers (they have internal signed/unsigned comparisons)
+#    if defined(_MSC_VER)
+#        pragma warning(push)
+#        pragma warning(disable : 4018 4267)
+#    elif defined(__GNUC__) || defined(__clang__)
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wsign-compare"
+#    endif
 #    include <rapidcheck.h>
+#    if defined(_MSC_VER)
+#        pragma warning(pop)
+#    elif defined(__GNUC__) || defined(__clang__)
+#        pragma GCC diagnostic pop
+#    endif
 
 #    include <netlistx/cover.hpp>
 #    include <netlistx/netlist.hpp>
@@ -415,7 +428,7 @@ TEST_CASE("Property-based test: Bipartite graph independent set is non-empty") {
                   std::vector<std::pair<uint32_t, uint32_t>> edges;
                   for (uint32_t i = 0; i < static_cast<uint32_t>(left_size); ++i) {
                       for (uint32_t j = 0; j < static_cast<uint32_t>(right_size); ++j) {
-                          edges.push_back({i, left_size + j});
+                          edges.push_back({i, static_cast<uint32_t>(left_size) + j});
                       }
                   }
 

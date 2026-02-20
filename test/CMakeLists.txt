@@ -49,10 +49,6 @@ if(rapidcheck_ADDED)
       target_link_libraries(${PROJECT_NAME} rapidcheck)
     endif()
   endif()
-  # Suppress warnings in RapidCheck headers for MSVC
-  if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /wd4018 /wd4100 /wd4267 /wd4996 /wd4189 /wd4702)
-  endif()
 endif()
 
 # enable compiler warnings

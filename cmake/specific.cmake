@@ -24,4 +24,11 @@ CPMAddPackage(
   OPTIONS "INSTALL_ONLY ON" # create an installable target
 )
 
-set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt)
+CPMAddPackage(
+  NAME spdlog
+  GIT_TAG v1.12.0
+  GITHUB_REPOSITORY gabime/spdlog
+  OPTIONS "SPDLOG_INSTALL YES" # create an installable target
+)
+
+set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog)

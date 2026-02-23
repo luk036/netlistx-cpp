@@ -6,74 +6,74 @@ add_requires("spdlog", { alias = "spdlog" })
 set_languages("c++23")
 
 if is_plat("linux") then
-    set_warnings("all", "error")
-    add_cxflags("-Wconversion", { force = true })
-    add_cxflags("-Wno-unused-command-line-argument", {force = true})
-    -- Check if we're on Termux/Android
-    local termux_prefix = os.getenv("PREFIX")
-    if termux_prefix then
-        add_sysincludedirs(termux_prefix .. "/include/c++/v1", {public = true})
-        add_sysincludedirs(termux_prefix .. "/include", {public = true})
-    end
-    -- add_cxflags("-nostdinc++", {force = true})
-    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
-    -- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
+	set_warnings("all", "error")
+	add_cxflags("-Wconversion", { force = true })
+	add_cxflags("-Wno-unused-command-line-argument", { force = true })
+	-- Check if we're on Termux/Android
+	local termux_prefix = os.getenv("PREFIX")
+	if termux_prefix then
+		add_sysincludedirs(termux_prefix .. "/include/c++/v1", { public = true })
+		add_sysincludedirs(termux_prefix .. "/include", { public = true })
+	end
+	-- add_cxflags("-nostdinc++", {force = true})
+	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
+	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
-    add_cxflags("/EHsc /W4 /WX", { force = true })
+	add_cxflags("/EHsc /W4 /WX /wd4819 /wd4127 /wd4996", { force = true })
 end
 
 if is_mode("coverage") then
-    add_cxflags("-ftest-coverage", "-fprofile-arcs", { force = true })
+	add_cxflags("-ftest-coverage", "-fprofile-arcs", { force = true })
 end
 
 target("NetlistX")
-    set_kind("static")
-    add_includedirs("include", { public = true })
-    add_includedirs("../py2cpp/include", { public = true })
-    add_includedirs("../xnetwork-cpp/include", { public = true })
-    add_files("source/*.cpp")
-    add_packages("fmt", "spdlog")
+	set_kind("static")
+	add_includedirs("include", { public = true })
+	add_includedirs("../py2cpp/include", { public = true })
+	add_includedirs("../xnetwork-cpp/include", { public = true })
+	add_files("source/*.cpp")
+	add_packages("fmt", "spdlog")
 
 target("test_netlistx")
-    set_kind("binary")
-    add_deps("NetlistX")
-    add_includedirs("include", { public = true })
-    add_includedirs("../py2cpp/include", { public = true })
-    add_includedirs("../xnetwork-cpp/include", { public = true })
-    add_files("test/source/*.cpp")
-    add_packages("fmt", "doctest", "spdlog")
-    if is_plat("linux") then
-        set_rundir("./build/linux/")
-    elseif is_plat("windows") then
-        set_rundir("./build/windows/")
-    end
-    add_tests("default")
+	set_kind("binary")
+	add_deps("NetlistX")
+	add_includedirs("include", { public = true })
+	add_includedirs("../py2cpp/include", { public = true })
+	add_includedirs("../xnetwork-cpp/include", { public = true })
+	add_files("test/source/*.cpp")
+	add_packages("fmt", "doctest", "spdlog")
+	if is_plat("linux") then
+		set_rundir("./build/linux/")
+	elseif is_plat("windows") then
+		set_rundir("./build/windows/")
+	end
+	add_tests("default")
 
-    -- Check if rapidcheck was downloaded by CMake (check both build and build_test directories)
-    local build_dirs = {"build", "build_test"}
-    local rapidcheck_dir = nil
-    local rapidcheck_lib_dir = nil
+-- Check if rapidcheck was downloaded by CMake (check both build and build_test directories)
+local build_dirs = { "build", "build_test" }
+local rapidcheck_dir = nil
+local rapidcheck_lib_dir = nil
 
-    for _, build_dir in ipairs(build_dirs) do
-        local candidate_src = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-src")
-        local candidate_lib = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-build")
-        if is_plat("windows") then
-            candidate_lib = path.join(candidate_lib, "Release")
-        end
+for _, build_dir in ipairs(build_dirs) do
+	local candidate_src = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-src")
+	local candidate_lib = path.join(os.projectdir(), build_dir, "_deps", "rapidcheck-build")
+	if is_plat("windows") then
+		candidate_lib = path.join(candidate_lib, "Release")
+	end
 
-        if os.isdir(candidate_src) and os.isdir(candidate_lib) then
-            rapidcheck_dir = candidate_src
-            rapidcheck_lib_dir = candidate_lib
-            break
-        end
-    end
+	if os.isdir(candidate_src) and os.isdir(candidate_lib) then
+		rapidcheck_dir = candidate_src
+		rapidcheck_lib_dir = candidate_lib
+		break
+	end
+end
 
-    if rapidcheck_dir and rapidcheck_lib_dir then
-        add_includedirs(path.join(rapidcheck_dir, "include"))
-        add_linkdirs(rapidcheck_lib_dir)
-        add_links("rapidcheck")
-        add_defines("RAPIDCHECK_H")
-    end
+if rapidcheck_dir and rapidcheck_lib_dir then
+	add_includedirs(path.join(rapidcheck_dir, "include"))
+	add_linkdirs(rapidcheck_lib_dir)
+	add_links("rapidcheck")
+	add_defines("RAPIDCHECK_H")
+end
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

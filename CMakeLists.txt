@@ -54,6 +54,11 @@ target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>
 # Link dependencies
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SPECIFIC_LIBS} fmt::fmt)
 
+# Suppress MSVC warnings in spdlog
+# if(MSVC AND TARGET spdlog)
+#   target_compile_options(spdlog PRIVATE /wd4996)
+# endif()
+
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                          $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>

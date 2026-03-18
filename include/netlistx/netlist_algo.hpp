@@ -157,7 +157,7 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
  * @tparam C1 The type of the weight function.
  * @param hyprgraph The input hypergraph.
  * @param weight The weight function.
- * @return std::pair<C2, typename C1::mapped_type> Pair containing the matching set and total cost.
+ * @return std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> Pair containing the matching set and total cost.
  */
 template <typename Gnl, typename C1>
 auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight) ->

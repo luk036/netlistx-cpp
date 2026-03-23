@@ -133,6 +133,12 @@ template <typename graph_t> struct Netlist {
         return this->module_weight.empty() ? 1U : this->module_weight[v];
     }
 
+    /**
+     * @brief Set the weight of a module
+     *
+     * @param[in] v The module node index
+     * @param[in] weight The weight to assign to the module
+     */
     void set_module_weight(node_t v, unsigned int weight) {
         if (this->module_weight.empty()) {
             this->module_weight.resize(this->num_modules);
@@ -227,7 +233,17 @@ using graph_t = xnetwork::SimpleGraph;
 using index_t = uint32_t;
 using SimpleNetlist = Netlist<graph_t>;
 
+/**
+ * @brief Snapshot of netlist state for backtracking/undo operations
+ *
+ * This struct stores the external nets and module states at a particular point in time,
+ * enabling rollback functionality for partitioning algorithms.
+ *
+ * @tparam Node The node type used in the netlist
+ */
 template <typename Node> struct Snapshot {
+    /// Set of external (cut) nets in the netlist
     py::set<Node> extern_nets;
+    /// Dictionary mapping module indices to their states (partition assignments)
     py::dict<index_t, std::uint8_t> extern_modules;
 };

@@ -7,8 +7,8 @@
 using namespace std;
 
 extern auto readNetD(std::string_view netDFileName) -> SimpleNetlist;
-extern void readAre(SimpleNetlist &hyprgraph, std::string_view areFileName);
-extern void writeJSON(std::string_view jsonFileName, const SimpleNetlist &hyprgraph);
+extern void readAre(SimpleNetlist& hyprgraph, std::string_view areFileName);
+extern void writeJSON(std::string_view jsonFileName, const SimpleNetlist& hyprgraph);
 
 TEST_CASE("Test Read Dwarf") {
     auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
@@ -72,7 +72,6 @@ TEST_CASE("Test Read ibm03") {
     CHECK(!hyprgraph.has_fixed_modules);
     CHECK(hyprgraph.get_module_weight(1) == 96);
 }
-
 
 // TEST_CASE("Test Read ibm18") {
 //     const auto hyprgraph = readNetD("../../testcases/ibm18.net");

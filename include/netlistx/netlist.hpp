@@ -63,7 +63,7 @@ template <typename graph_t> struct Netlist {
      * @param[in] modules The module nodes in the netlist.
      * @param[in] nets The net nodes in the netlist.
      */
-    Netlist(graph_t gr, const nodeview_t &modules, const nodeview_t &nets);
+    Netlist(graph_t gr, const nodeview_t& modules, const nodeview_t& nets);
 
     /**
      * @brief Construct a new Netlist object
@@ -151,7 +151,7 @@ template <typename graph_t> struct Netlist {
      *
      * @return uint32_t The weight of the net
      */
-    auto get_net_weight(const node_t & /*net*/) const -> uint32_t {
+    auto get_net_weight(const node_t& /*net*/) const -> uint32_t {
         // return this->net_weight.is_empty() ? 1
         //                                 :
         //                                 this->net_weight[this->net_map[net]];
@@ -167,7 +167,7 @@ template <typename graph_t> struct Netlist {
  * modules have fixed positions.
  */
 template <typename graph_t>
-Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_t &nets)
+Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t& modules, const nodeview_t& nets)
     : gr{std::move(gr)},
       modules{modules},
       nets{nets},
@@ -201,7 +201,7 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
         this->max_degree = max_deg1;
     } else {
         // Handle empty range case
-        this->max_degree = 0; // or some default value
+        this->max_degree = 0;  // or some default value
     }
 
     // Find max element in nets
@@ -218,7 +218,7 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t &modules, const nodeview_
         this->max_net_degree = max_deg2;
     } else {
         // Handle empty range case
-        this->max_net_degree = 0; // or some default value
+        this->max_net_degree = 0;  // or some default value
     }
 }
 

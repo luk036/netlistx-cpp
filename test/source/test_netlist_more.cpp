@@ -1,4 +1,5 @@
 #include <doctest/doctest.h>
+
 #include <netlistx/netlist.hpp>
 
 extern auto create_test_netlist() -> SimpleNetlist;

@@ -1,13 +1,13 @@
 #include <doctest/doctest.h>
+
 #include <cstdint>
+#include <netlistx/cover.hpp>    // Assuming the converted functions are in this header
+#include <netlistx/netlist.hpp>  // for Netlist, SimpleNetlist, graph_t
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
 #include <unordered_map>
-#include <vector>
 #include <utility>
-
-#include <netlistx/netlist.hpp>        // for Netlist, SimpleNetlist, graph_t
-#include <netlistx/cover.hpp> // Assuming the converted functions are in this header
+#include <vector>
 
 // Simple test graph structure
 struct TestCoverGraph {
@@ -24,20 +24,14 @@ struct TestCoverGraph {
         }
     }
 
-    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& {
-        return edges_list;
-    }
+    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& { return edges_list; }
 
-    auto operator[](node_t node) const -> const std::vector<node_t>& {
-        return adjacency[node];
-    }
+    auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
     auto begin() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).begin(); }
     auto end() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).end(); }
 
-    auto number_of_nodes() const -> size_t {
-        return num_nodes;
-    }
+    auto number_of_nodes() const -> size_t { return num_nodes; }
 };
 
 // Mock hypergraph for testing
@@ -53,9 +47,8 @@ struct MockHypergraph {
 };
 
 TEST_CASE("Test pd_cover basic") {
-    auto violate_func = []() -> std::vector<std::vector<uint32_t>> {
-        return {{0, 1}, {0, 2}, {1, 2}};
-    };
+    auto violate_func
+        = []() -> std::vector<std::vector<uint32_t>> { return {{0, 1}, {0, 2}, {1, 2}}; };
 
     py::dict<uint32_t, int> weight;
     weight[0] = 1;
@@ -68,7 +61,7 @@ TEST_CASE("Test pd_cover basic") {
     CHECK(covered.contains(0));
     CHECK(covered.contains(1));
     CHECK_FALSE(covered.contains(2));
-    CHECK(cost == 4); // 1 + 2
+    CHECK(cost == 4);  // 1 + 2
 }
 
 TEST_CASE("Test min_vertex_cover simple") {
@@ -90,12 +83,12 @@ TEST_CASE("Test min_vertex_cover simple") {
 
 TEST_CASE("Test min_hyper_vertex_cover") {
     TestCoverGraph base_graph(3, {});
-    MockHypergraph hyprgraph({0, 1}, base_graph); // Nets 0 and 1
+    MockHypergraph hyprgraph({0, 1}, base_graph);  // Nets 0 and 1
 
     // Mock the graph access for nets
     hyprgraph.gr.adjacency = {
-        {1, 2}, // Net 0 connects vertices 1, 2
-        {0, 1}  // Net 1 connects vertices 0, 1
+        {1, 2},  // Net 0 connects vertices 1, 2
+        {0, 1}   // Net 1 connects vertices 0, 1
     };
 
     py::dict<uint32_t, int> weight;
@@ -112,7 +105,7 @@ TEST_CASE("Test min_hyper_vertex_cover") {
 
 TEST_CASE("Test min_cycle_cover triangle") {
     TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
-    py::dict<uint32_t, int> weight {{0, 1}, {1, 1}, {2, 1}};
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
     // weight[0] = 1;
     // weight[1] = 1;
     // weight[2] = 1;
@@ -127,7 +120,7 @@ TEST_CASE("Test min_cycle_cover triangle") {
 
 TEST_CASE("Test min_odd_cycle_cover triangle") {
     TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
-    py::dict<uint32_t, int> weight {{0, 1}, {1, 1}, {2, 1}};
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
     // weight[0] = 1;
     // weight[1] = 1;
     // weight[2] = 1;
@@ -173,6 +166,6 @@ TEST_CASE("Test single vertex") {
     // weight[0] = 5;
 
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
-    CHECK(covered.empty()); // No edges to cover
+    CHECK(covered.empty());  // No edges to cover
     CHECK(cost == 0);
 }

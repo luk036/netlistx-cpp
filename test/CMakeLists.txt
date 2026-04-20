@@ -54,7 +54,7 @@ endif()
 # enable compiler warnings
 if(NOT TEST_INSTALLED_VERSION)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    target_compile_options(NetlistX PUBLIC -Wall -Wpedantic -Wextra -Werror)
+    target_compile_options(NetlistX PUBLIC -Wall -Wpedantic -Wextra -Werror -Wno-deprecated-literal-operator)
   elseif(MSVC)
     target_compile_options(NetlistX PUBLIC /W4 /WX /wd4819 /wd4996)
     target_compile_definitions(${PROJECT_NAME} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
@@ -65,8 +65,8 @@ endif()
 
 enable_testing()
 
-# Add a single test that runs all tests (both doctest and RapidCheck)
-# Note: doctest auto-discovery is disabled to avoid conflicts with RapidCheck
+# Add a single test that runs all tests (both doctest and RapidCheck) Note: doctest auto-discovery
+# is disabled to avoid conflicts with RapidCheck
 add_test(NAME NetlistXAllTests COMMAND ${PROJECT_NAME})
 
 # ---- code coverage ----

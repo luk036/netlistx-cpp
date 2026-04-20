@@ -1,10 +1,11 @@
 // -*- coding: utf-8 -*-
 #include <doctest/doctest.h>
-#include <netlistx/logger.hpp>
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
-#include <iostream>
+#include <spdlog/spdlog.h>
+
 #include <fstream>
+#include <iostream>
+#include <netlistx/logger.hpp>
 
 TEST_CASE("spdlogger integration: Basic logging") {
     std::cout << "Testing spdlogger integration..." << std::endl;

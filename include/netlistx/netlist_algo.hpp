@@ -33,26 +33,26 @@
  * @return The total primal cost of the minimum weighted vertex cover.
  */
 template <typename Gnl, typename C1, typename C2>
-auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
+auto min_vertex_cover(const Gnl& hyprgraph, const C1& weight, C2& coverset) ->
     typename C1::mapped_type {
     using T = typename C1::mapped_type;
-    auto in_coverset = [&](const auto &v) { return coverset.contains(v); };
+    auto in_coverset = [&](const auto& v) { return coverset.contains(v); };
     [[maybe_unused]] auto total_dual_cost = T(0);
     auto total_primal_cost = T(0);
     auto gap = weight;
-    for (const auto &net : hyprgraph.nets) {
+    for (const auto& net : hyprgraph.nets) {
         if (std::any_of(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(), in_coverset)) {
             continue;
         }
 
         auto min_vtx
             = *std::min_element(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(),
-                                [&](const auto &v1, const auto &v2) { return gap[v1] < gap[v2]; });
+                                [&](const auto& v1, const auto& v2) { return gap[v1] < gap[v2]; });
         auto min_val = gap[min_vtx];
         coverset.insert(min_vtx);
         total_primal_cost += weight[min_vtx];
         total_dual_cost += min_val;
-        for (const auto &u : hyprgraph.gr[net]) {
+        for (const auto& u : hyprgraph.gr[net]) {
             gap[u] -= min_val;
         }
     }
@@ -87,17 +87,17 @@ auto min_vertex_cover(const Gnl &hyprgraph, const C1 &weight, C2 &coverset) ->
  * @return typename C1::mapped_type The total primal cost (sum of weights) of the matching.
  */
 template <typename Gnl, typename C1, typename C2>
-auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, C2 &dep) ->
+auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight, C2& matchset, C2& dep) ->
     typename C1::mapped_type {
     /// Lambda function to mark all vertices of a net as dependent
-    auto cover = [&](const auto &net) {
-        for (const auto &v : hyprgraph.gr[net]) {
+    auto cover = [&](const auto& net) {
+        for (const auto& v : hyprgraph.gr[net]) {
             dep.insert(v);
         }
     };
 
     /// Lambda function to check if a vertex is in the dependency set
-    auto in_dep = [&](const auto &v) { return dep.contains(v); };
+    auto in_dep = [&](const auto& v) { return dep.contains(v); };
 
     // auto any_of_dep = [&](const auto& net) {
     //     return ranges::any_of(
@@ -109,7 +109,7 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
     auto gap = weight;
     [[maybe_unused]] auto total_dual_cost = T(0);
     auto total_primal_cost = T(0);
-    for (const auto &net : hyprgraph.nets) {
+    for (const auto& net : hyprgraph.nets) {
         if (std::any_of(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(), in_dep)) {
             continue;
         }
@@ -119,8 +119,8 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
         }
         auto min_val = gap[net];
         auto min_net = net;
-        for (const auto &v : hyprgraph.gr[net]) {
-            for (const auto &net2 : hyprgraph.gr[v]) {
+        for (const auto& v : hyprgraph.gr[net]) {
+            for (const auto& net2 : hyprgraph.gr[v]) {
                 if (std::any_of(hyprgraph.gr[net2].begin(), hyprgraph.gr[net2].end(), in_dep)) {
                     continue;
                 }
@@ -136,8 +136,8 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
         total_dual_cost += min_val;
         if (min_net != net) {
             gap[net] -= min_val;
-            for (const auto &v : hyprgraph.gr[net]) {
-                for (const auto &net2 : hyprgraph.gr[v]) {
+            for (const auto& v : hyprgraph.gr[net]) {
+                for (const auto& net2 : hyprgraph.gr[v]) {
                     gap[net2] -= min_val;
                 }
             }
@@ -157,11 +157,12 @@ auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight, C2 &matchset, 
  * @tparam C1 The type of the weight function.
  * @param hyprgraph The input hypergraph.
  * @param weight The weight function.
- * @return std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> Pair containing the matching set and total cost.
+ * @return std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> Pair containing the
+ * matching set and total cost.
  */
 template <typename Gnl, typename C1>
-auto min_maximal_matching(const Gnl &hyprgraph, const C1 &weight) ->
-    std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> {
+auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight)
+    -> std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> {
     py::set<typename Gnl::node_t> matchset{};
     py::set<typename Gnl::node_t> dep{};
     auto cost = min_maximal_matching(hyprgraph, weight, matchset, dep);

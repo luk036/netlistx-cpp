@@ -1,12 +1,13 @@
 #include <doctest/doctest.h>
+
+#include <cstdint>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
-#include <cstdint>
-#include <utility> // for std::pair
+#include <utility>  // for std::pair
 
 // Include the header with our converted functions
-#include <netlistx/netlist.hpp>        // for Netlist, SimpleNetlist, graph_t
-#include <netlistx/graph_algo.hpp> // Assuming the converted functions are in this header
+#include <netlistx/graph_algo.hpp>  // Assuming the converted functions are in this header
+#include <netlistx/netlist.hpp>     // for Netlist, SimpleNetlist, graph_t
 
 // Simple graph structure for testing
 struct TestGraph {
@@ -22,15 +23,13 @@ struct TestGraph {
         }
     }
 
-    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& {
-        return edges_list;
-    }
+    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& { return edges_list; }
 
-    auto operator[](node_t node) const -> const std::vector<node_t>& {
-        return adjacency[node];
-    }
+    auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
-    auto begin() const { return py::range<uint32_t>(uint32_t(0), uint32_t(adjacency.size())).begin(); }
+    auto begin() const {
+        return py::range<uint32_t>(uint32_t(0), uint32_t(adjacency.size())).begin();
+    }
     auto end() const { return py::range<uint32_t>(uint32_t(0), uint32_t(adjacency.size())).end(); }
 };
 
@@ -75,7 +74,7 @@ TEST_CASE("Test min_vertex_cover_fast - With Pre-existing Coverset") {
     weight[3] = 1;
 
     py::set<uint32_t> coverset;
-    coverset.insert(1); // Pre-cover vertex 1
+    coverset.insert(1);  // Pre-cover vertex 1
 
     auto [result_set, total_weight] = min_vertex_cover_fast(ugraph, weight, coverset);
 
@@ -103,9 +102,7 @@ TEST_CASE("Test min_maximal_independant_set - Basic Example 1") {
 
 TEST_CASE("Test min_maximal_independant_set - Basic Example 2") {
     // Create a small graph
-    TestGraph ugraph(5, {
-        {0, 1}, {0, 2}, {1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}
-    });
+    TestGraph ugraph(5, {{0, 1}, {0, 2}, {1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}});
     py::dict<uint32_t, int> weight;
     for (uint32_t i = 0; i < 5; ++i) {
         weight[i] = 1;
@@ -155,7 +152,7 @@ TEST_CASE("Test min_maximal_independant_set - With Pre-existing Sets") {
     weight[3] = 1;
 
     py::set<uint32_t> indset;
-    indset.insert(0); // Pre-defined independent vertex
+    indset.insert(0);  // Pre-defined independent vertex
     py::set<uint32_t> dep;
 
     auto [result_set, total_weight] = min_maximal_independant_set(ugraph, weight, indset, dep);

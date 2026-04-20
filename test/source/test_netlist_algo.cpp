@@ -13,7 +13,7 @@ using namespace std;
 extern auto create_test_netlist() -> SimpleNetlist;  // import create_test_netlist
 extern auto create_dwarf() -> SimpleNetlist;         // import create_dwarf
 extern auto readNetD(std::string_view netDFileName) -> SimpleNetlist;
-extern void readAre(SimpleNetlist &hyprgraph, std::string_view areFileName);
+extern void readAre(SimpleNetlist& hyprgraph, std::string_view areFileName);
 // extern pair<py::set<node_t>, int>
 // min_net_cover_pd(SimpleNetlist &, const vector<int> &);
 

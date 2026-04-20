@@ -6,13 +6,12 @@
 #include <functional>
 #include <iterator>
 #include <memory>
+#include <py2cpp/dict.hpp>
+#include <py2cpp/set.hpp>
 #include <queue>
 #include <type_traits>
 #include <utility>
 #include <vector>
-
-#include <py2cpp/dict.hpp>
-#include <py2cpp/set.hpp>
 
 /**
  * @brief Implements a primal-dual approximation algorithm for covering problems.
@@ -23,27 +22,26 @@
  * @param violate Callable that returns violate sets (edges/cycles not covered)
  * @param weight Weight function for vertices
  * @param soln Solution set (will be modified)
- * @return std::pair<SolutionSet, typename WeightMap::mapped_type> Solution set and total primal cost
+ * @return std::pair<SolutionSet, typename WeightMap::mapped_type> Solution set and total primal
+ * cost
  */
 template <typename ViolateFunc, typename WeightMap, typename SolutionSet>
-auto pd_cover(
-    ViolateFunc violate,
-    WeightMap& weight,
-    SolutionSet& soln) -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
-
+auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
+    -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
     using CostType = typename WeightMap::mapped_type;
 
     CostType total_prml_cost = 0;
     CostType total_dual_cost = 0;
-    auto gap = weight; // copy weights
+    auto gap = weight;  // copy weights
 
     // Iterate through violate sets
     for (const auto& violateSet : violate()) {
         if (violateSet.empty()) continue;
 
         // Find vertex with minimum gap in the set
-        auto min_vtx = *std::min_element(violateSet.begin(), violateSet.end(),
-            [&](const auto& v1, const auto& v2) { return gap[v1] < gap[v2]; });
+        auto min_vtx
+            = *std::min_element(violateSet.begin(), violateSet.end(),
+                                [&](const auto& v1, const auto& v2) { return gap[v1] < gap[v2]; });
         auto min_val = gap[min_vtx];
 
         soln.insert(min_vtx);
@@ -72,11 +70,8 @@ auto pd_cover(
  * @return std::pair<CoverSet, typename WeightMap::mapped_type> Cover set and total weight
  */
 template <typename Graph, typename WeightMap, typename CoverSet>
-auto min_vertex_cover(
-    const Graph& ugraph,
-    WeightMap& weight,
-    CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-
+auto min_vertex_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
+    -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
 
     // Lambda function that generates violate edges (uncovered edges)
@@ -104,10 +99,8 @@ auto min_vertex_cover(
  * @brief Overload without pre-existing coverset
  */
 template <typename Graph, typename WeightMap>
-auto min_vertex_cover(
-    const Graph& ugraph,
-    WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_vertex_cover(const Graph& ugraph, WeightMap& weight)
+    -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Graph::node_t> coverset{};
     return min_vertex_cover(ugraph, weight, coverset);
 }
@@ -124,11 +117,8 @@ auto min_vertex_cover(
  * @return std::pair<CoverSet, typename WeightMap::mapped_type> Cover set and total weight
  */
 template <typename Hypergraph, typename WeightMap, typename CoverSet>
-auto min_hyper_vertex_cover(
-    const Hypergraph& hyprgraph,
-    WeightMap& weight,
-    CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-
+auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, CoverSet& coverset)
+    -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Hypergraph::node_t;
 
     // Lambda function that generates violate nets (uncovered nets)
@@ -164,10 +154,8 @@ auto min_hyper_vertex_cover(
  * @brief Overload without pre-existing coverset
  */
 template <typename Hypergraph, typename WeightMap>
-auto min_hyper_vertex_cover(
-    const Hypergraph& hyprgraph,
-    WeightMap& weight) -> std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight)
+    -> std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Hypergraph::node_t> coverset{};
     return min_hyper_vertex_cover(hyprgraph, weight, coverset);
 }
@@ -175,8 +163,7 @@ auto min_hyper_vertex_cover(
 /**
  * @brief Information structure for BFS traversal
  */
-template <typename Node>
-struct BFSInfo {
+template <typename Node> struct BFSInfo {
     Node parent;
     int depth;
 
@@ -194,12 +181,8 @@ struct BFSInfo {
  * @param child Second node in cycle
  * @return std::deque<Node> The constructed cycle
  */
-template <typename Node>
-auto _construct_cycle(
-    const py::dict<Node, BFSInfo<Node>>& info,
-    Node parent,
-    Node child) -> std::deque<Node> {
-
+template <typename Node> auto _construct_cycle(const py::dict<Node, BFSInfo<Node>>& info,
+                                               Node parent, Node child) -> std::deque<Node> {
     const auto& info_parent = info.at(parent);
     const auto& info_child = info.at(child);
 
@@ -257,12 +240,9 @@ auto _construct_cycle(
  *         Vector of (BFS info, parent, child) tuples for each cycle found
  */
 template <typename Graph, typename CoverSet>
-auto _generic_bfs_cycle(
-    const Graph& ugraph,
-    const CoverSet& coverset) -> std::vector<std::tuple<py::dict<typename Graph::node_t, BFSInfo<typename Graph::node_t>>,
-                                                       typename Graph::node_t,
-                                                       typename Graph::node_t>> {
-
+auto _generic_bfs_cycle(const Graph& ugraph, const CoverSet& coverset)
+    -> std::vector<std::tuple<py::dict<typename Graph::node_t, BFSInfo<typename Graph::node_t>>,
+                              typename Graph::node_t, typename Graph::node_t>> {
     using node_t = typename Graph::node_t;
     std::vector<std::tuple<py::dict<node_t, BFSInfo<node_t>>, node_t, node_t>> cycles;
 
@@ -310,7 +290,7 @@ auto _generic_bfs_cycle(
         }
     }
 
-    return cycles; // Empty if no cycles found
+    return cycles;  // Empty if no cycles found
 }
 
 /**
@@ -325,11 +305,8 @@ auto _generic_bfs_cycle(
  * @return std::pair<CoverSet, typename WeightMap::mapped_type> Cover set and total weight
  */
 template <typename Graph, typename WeightMap, typename CoverSet>
-auto min_cycle_cover(
-    const Graph& ugraph,
-    WeightMap& weight,
-    CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-
+auto min_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
+    -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
 
     // Lambda function that finds cycles repeatedly
@@ -364,10 +341,8 @@ auto min_cycle_cover(
  * @brief Overload without pre-existing coverset
  */
 template <typename Graph, typename WeightMap>
-auto min_cycle_cover(
-    const Graph& ugraph,
-    WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_cycle_cover(const Graph& ugraph, WeightMap& weight)
+    -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Graph::node_t> coverset{};
     return min_cycle_cover(ugraph, weight, coverset);
 }
@@ -384,11 +359,8 @@ auto min_cycle_cover(
  * @return std::pair<CoverSet, typename WeightMap::mapped_type> Cover set and total weight
  */
 template <typename Graph, typename WeightMap, typename CoverSet>
-auto min_odd_cycle_cover(
-    const Graph& ugraph,
-    WeightMap& weight,
-    CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-
+auto min_odd_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
+    -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
 
     // Lambda function that finds odd cycles repeatedly
@@ -428,10 +400,8 @@ auto min_odd_cycle_cover(
  * @brief Overload without pre-existing coverset
  */
 template <typename Graph, typename WeightMap>
-auto min_odd_cycle_cover(
-    const Graph& ugraph,
-    WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_odd_cycle_cover(const Graph& ugraph, WeightMap& weight)
+    -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Graph::node_t> coverset{};
     return min_odd_cycle_cover(ugraph, weight, coverset);
 }

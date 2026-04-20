@@ -29,7 +29,7 @@ using namespace std;
  * @param jsonFileName The path to the output JSON file.
  * @param hyprgraph The SimpleNetlist to be written to the JSON file.
  */
-void writeJSON(const std::string_view jsonFileName, const SimpleNetlist &hyprgraph) {
+void writeJSON(const std::string_view jsonFileName, const SimpleNetlist& hyprgraph) {
     auto json = ofstream{jsonFileName.data()};
     if (json.fail()) {
         cerr << "Error: Can't open file " << jsonFileName << ".\n";
@@ -48,15 +48,15 @@ void writeJSON(const std::string_view jsonFileName, const SimpleNetlist &hyprgra
 
     json << R"( "nodes": [)"
          << "\n";
-    for (const auto &node : hyprgraph.gr) {
+    for (const auto& node : hyprgraph.gr) {
         json << "  { \"id\": " << node << " },\n";
     }
     json << " ],\n";
 
     json << R"( "links": [)"
          << "\n";
-    for (const auto &v : hyprgraph) {
-        for (const auto &net : hyprgraph.gr[v]) {
+    for (const auto& v : hyprgraph) {
+        for (const auto& net : hyprgraph.gr[v]) {
             json << "  {\n";
             json << "   \"source\": " << v << ",\n";
             json << "   \"target\": " << net << "\n";
@@ -179,7 +179,7 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
  * @param hyprgraph The SimpleNetlist object to populate with the .are file data.
  * @param areFileName The path to the .are format file to read.
  */
-void readAre(SimpleNetlist &hyprgraph, const std::string_view areFileName) {
+void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
     auto are = ifstream{areFileName.data()};
     if (are.fail()) {
         cerr << " Could not open " << areFileName << endl;

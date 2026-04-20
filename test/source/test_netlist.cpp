@@ -5,9 +5,9 @@
 #include <xnetwork/classes/graph.hpp>  // for SimpleGraph, Graph
 // #include <py2cpp/py2cpp.hpp>
 // #include <__config>     // for std
-#include <cstdint>      // for uint32_t
-#include <utility>      // for pair
-#include <vector>       // for vector
+#include <cstdint>  // for uint32_t
+#include <utility>  // for pair
+#include <vector>   // for vector
 
 using namespace std;
 
@@ -29,15 +29,16 @@ auto create_dwarf() -> SimpleNetlist {
     // static vector<nodes> net__name_list = {net1, net2, net3};
 
     // char name[] = "ABCDE";
-    vector<Edge> edge_array{Edge(pad1, net1), Edge(mod0, net1), Edge(mod1, net1), Edge(mod0, net2), Edge(mod2, net2),
-                            Edge(mod3, net2), Edge(mod1, net3), Edge(mod2, net3), Edge(mod3, net3), Edge(mod2, net4),
-                            Edge(pad2, net4), Edge(mod3, net5), Edge(pad3, net5), Edge(mod0, net6)};
+    vector<Edge> edge_array{Edge(pad1, net1), Edge(mod0, net1), Edge(mod1, net1), Edge(mod0, net2),
+                            Edge(mod2, net2), Edge(mod3, net2), Edge(mod1, net3), Edge(mod2, net3),
+                            Edge(mod3, net3), Edge(mod2, net4), Edge(pad2, net4), Edge(mod3, net5),
+                            Edge(pad3, net5), Edge(mod0, net6)};
     // index_t indices[] = {0, 1, 2, 3, 4, 5};
     // int num_arcs = sizeof(edge_array) / sizeof(Edge);
     // auto R = py::range(num_nodes);
     // graph_t g{R, R};
     xnetwork::SimpleGraph g(num_nodes);
-    for (const auto &e : edge_array) {
+    for (const auto& e : edge_array) {
         g.add_edge(e.first, e.second);
     }
     // using node_t = typename boost::graph_traits<graph_t>::vertex_descriptor;
@@ -78,7 +79,7 @@ auto create_test_netlist() -> SimpleNetlist {
     // auto gr = py::GraphAdaptor<graph_t>{std::move(g)};
     // const auto R = py::range(num_nodes);
     graph_t g(num_nodes);
-    for (const auto &e : edge_array) {
+    for (const auto& e : edge_array) {
         g.add_edge(e.first, e.second);
     }
 

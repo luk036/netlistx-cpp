@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cassert>
-#include <utility>  // for std::pair
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
+#include <utility>  // for std::pair
 
 /**
  * @brief Performs minimum weighted vertex cover using a primal-dual approximation algorithm
@@ -19,11 +19,8 @@
  * @return std::pair<CoverSet, typename WeightMap::mapped_type> The cover set and total weight
  */
 template <typename Graph, typename WeightMap, typename CoverSet>
-auto min_vertex_cover_fast(
-    const Graph& ugraph,
-    WeightMap& weight,
-    CoverSet& coverset) -> std::pair<CoverSet, typename WeightMap::mapped_type> {
-
+auto min_vertex_cover_fast(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
+    -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using CostType = typename WeightMap::mapped_type;
 
     // Create a copy of weights for the gap values
@@ -60,10 +57,8 @@ auto min_vertex_cover_fast(
  * @brief Overload that creates an empty coverset
  */
 template <typename Graph, typename WeightMap>
-auto min_vertex_cover_fast(
-    const Graph& ugraph,
-    WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_vertex_cover_fast(const Graph& ugraph, WeightMap& weight)
+    -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Graph::node_t> coverset{};
     return min_vertex_cover_fast(ugraph, weight, coverset);
 }
@@ -84,12 +79,9 @@ auto min_vertex_cover_fast(
  * @return std::pair<IndSet, typename WeightMap::mapped_type> The independent set and total weight
  */
 template <typename Graph, typename WeightMap, typename IndSet, typename DepSet>
-auto min_maximal_independant_set(
-    const Graph& ugraph,
-    WeightMap& weight,
-    IndSet& indset,
-    DepSet& dep) -> std::pair<IndSet, typename WeightMap::mapped_type> {
-
+auto min_maximal_independant_set(const Graph& ugraph, WeightMap& weight, IndSet& indset,
+                                 DepSet& dep)
+    -> std::pair<IndSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
     using CostType = typename WeightMap::mapped_type;
 
@@ -151,10 +143,8 @@ auto min_maximal_independant_set(
  * @brief Overload that creates empty indset and dep sets
  */
 template <typename Graph, typename WeightMap>
-auto min_maximal_independant_set(
-    const Graph& ugraph,
-    WeightMap& weight) -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
-
+auto min_maximal_independant_set(const Graph& ugraph, WeightMap& weight)
+    -> std::pair<py::set<typename Graph::node_t>, typename WeightMap::mapped_type> {
     py::set<typename Graph::node_t> indset{};
     py::set<typename Graph::node_t> dep{};
     return min_maximal_independant_set(ugraph, weight, indset, dep);

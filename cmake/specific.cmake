@@ -28,7 +28,8 @@ CPMAddPackage(
   NAME spdlog
   GIT_TAG v1.12.0
   GITHUB_REPOSITORY gabime/spdlog
-  OPTIONS "SPDLOG_INSTALL YES" "SPDLOG_COMPILED_LIB ON" # create an installable target and compile as library
+  OPTIONS "SPDLOG_INSTALL YES" "SPDLOG_COMPILED_LIB ON" # create an installable target and compile
+                                                        # as library
 )
 
 set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog)

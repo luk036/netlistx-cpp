@@ -31,23 +31,23 @@ auto main(int argc, char** argv) -> int {
     auto result = options.parse(argc, argv);
 
     if (result["help"].as<bool>()) {
-        std::cout << options.help() << std::endl;
+        std::cout << options.help() << '\n';
         return 0;
     }
 
     if (result["version"].as<bool>()) {
-        std::cout << "NetlistX, version " << NETLISTX_VERSION << std::endl;
+        std::cout << "NetlistX, version " << NETLISTX_VERSION << '\n';
         return 0;
     }
 
     auto langIt = languages.find(language);
     if (langIt == languages.end()) {
-        std::cerr << "unknown language code: " << language << std::endl;
+        std::cerr << "unknown language code: " << language << '\n';
         return 1;
     }
 
     // netlistx::NetlistX netlistx(name);
-    // std::cout << netlistx.greet(langIt->second) << std::endl;
+    // std::cout << netlistx.greet(langIt->second) << '\n';
 
     return 0;
 }

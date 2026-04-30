@@ -19,8 +19,8 @@ struct TestCoverGraph {
     TestCoverGraph(size_t n, const std::vector<std::pair<node_t, node_t>>& edges)
         : edges_list(edges), adjacency(n), num_nodes(n) {
         for (const auto& edge : edges) {
-            adjacency[edge.first].push_back(edge.second);
-            adjacency[edge.second].push_back(edge.first);
+            adjacency[edge.first].emplace_back(edge.second);
+            adjacency[edge.second].emplace_back(edge.first);
         }
     }
 

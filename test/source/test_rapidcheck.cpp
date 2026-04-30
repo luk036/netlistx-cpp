@@ -37,8 +37,8 @@ struct RapidTestGraph {
         : edges_list(edges), adjacency(n), num_nodes(n) {
         for (const auto& edge : edges) {
             if (edge.first < n && edge.second < n) {
-                adjacency[edge.first].push_back(edge.second);
-                adjacency[edge.second].push_back(edge.first);
+                adjacency[edge.first].emplace_back(edge.second);
+                adjacency[edge.second].emplace_back(edge.first);
             }
         }
     }

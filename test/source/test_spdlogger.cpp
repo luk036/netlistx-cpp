@@ -8,7 +8,7 @@
 #include <netlistx/logger.hpp>
 
 TEST_CASE("spdlogger integration: Basic logging") {
-    std::cout << "Testing spdlogger integration..." << std::endl;
+    std::cout << "Testing spdlogger integration...\n";
 
     // Test the wrapper function
     netlistx::log_with_spdlog("Test message from spdlogger integration test");
@@ -23,11 +23,11 @@ TEST_CASE("spdlogger integration: Basic logging") {
     CHECK(log_file.good());
     log_file.close();
 
-    std::cout << "Logged messages to netlistx.log" << std::endl;
+    std::cout << "Logged messages to netlistx.log\n";
 }
 
 TEST_CASE("spdlogger integration: Direct spdlog usage") {
-    std::cout << "Testing direct spdlog usage..." << std::endl;
+    std::cout << "Testing direct spdlog usage...\n";
 
     // Test direct spdlog API (control test)
     auto logger = spdlog::basic_logger_mt("direct_test", "direct_test.log");
@@ -42,7 +42,7 @@ TEST_CASE("spdlogger integration: Direct spdlog usage") {
     CHECK(log_file.good());
     log_file.close();
 
-    std::cout << "Direct spdlog test completed" << std::endl;
+    std::cout << "Direct spdlog test completed\n";
 
     // Cleanup
     spdlog::drop("direct_test");

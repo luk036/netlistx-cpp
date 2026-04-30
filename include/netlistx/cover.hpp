@@ -138,9 +138,9 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
                 // Convert the net's vertices to a vector
                 std::vector<node_t> net_vertices;
                 for (const auto& vtx : hyprgraph.gr[net]) {
-                    net_vertices.push_back(vtx);
+                    net_vertices.emplace_back(vtx);
                 }
-                violate_sets.push_back(std::move(net_vertices));
+                violate_sets.emplace_back(std::move(net_vertices));
             }
         }
 
@@ -205,7 +205,7 @@ template <typename Node> auto _construct_cycle(const py::dict<Node, BFSInfo<Node
 
     // Build path from node_a up to same depth as node_b
     while (depth_a < depth_b) {
-        path.push_back(node_a);
+        path.emplace_back(node_a);
         const auto& next_info = info.at(node_a);
         node_a = next_info.parent;
         depth_a = next_info.depth;
@@ -213,7 +213,7 @@ template <typename Node> auto _construct_cycle(const py::dict<Node, BFSInfo<Node
 
     // Move both nodes up until they meet
     while (node_a != node_b) {
-        path.push_back(node_a);
+        path.emplace_back(node_a);
         path.push_front(node_b);
 
         const auto& info_a = info.at(node_a);
@@ -324,7 +324,7 @@ auto min_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
 
             // Convert deque to vector
             std::vector<node_t> cycle_vec(cycle_deque.begin(), cycle_deque.end());
-            violate_sets.push_back(std::move(cycle_vec));
+            violate_sets.emplace_back(std::move(cycle_vec));
 
             // In the Python version, this would continue finding cycles
             // but for simplicity, we break after first cycle (matching test behavior)
@@ -383,7 +383,7 @@ auto min_odd_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& cover
 
                 // Convert deque to vector
                 std::vector<node_t> cycle_vec(cycle_deque.begin(), cycle_deque.end());
-                violate_sets.push_back(std::move(cycle_vec));
+                violate_sets.emplace_back(std::move(cycle_vec));
             }
 
             // Break after first valid cycle found (matching test behavior)

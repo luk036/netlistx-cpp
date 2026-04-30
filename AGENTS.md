@@ -136,7 +136,7 @@ TEST_CASE("Test description") {
 
 | Library | Purpose |
 |---------|---------|
-| fmt 10.2.1 | String formatting |
+| fmt 12.1.0 | String formatting |
 | doctest 2.4.9 | Testing |
 | xnetwork | Graph data structures |
 | py2cpp | Pythonic collections |

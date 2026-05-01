@@ -61,8 +61,8 @@ TEST_CASE("Test min_vertex_cover_fast - Basic Example 2") {
     auto [coverset, total_weight] = min_vertex_cover_fast(ugraph, weight);
 
     // Should cover at least 2 vertices in a triangle
-    CHECK(coverset.size() >= 2);
-    CHECK(total_weight >= 2);
+    CHECK_GE(coverset.size(), 2);
+    CHECK_GE(total_weight, 2);
 }
 
 TEST_CASE("Test min_vertex_cover_fast - With Pre-existing Coverset") {
@@ -80,7 +80,7 @@ TEST_CASE("Test min_vertex_cover_fast - With Pre-existing Coverset") {
 
     // Vertex 1 should still be in the cover set
     CHECK(result_set.contains(1));
-    CHECK(total_weight >= 1);
+    CHECK_GE(total_weight, 1);
 }
 
 TEST_CASE("Test min_maximal_independant_set - Basic Example 1") {

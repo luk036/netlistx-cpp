@@ -100,7 +100,7 @@ TEST_CASE("Test min_hyper_vertex_cover") {
     auto [covered, cost] = min_hyper_vertex_cover(hyprgraph, weight, soln);
 
     // Should cover at least one vertex from each net
-    CHECK(covered.size() >= 1);
+    CHECK_GE(covered.size(), 1);
 }
 
 TEST_CASE("Test min_cycle_cover triangle") {
@@ -114,8 +114,8 @@ TEST_CASE("Test min_cycle_cover triangle") {
     auto [covered, cost] = min_cycle_cover(ugraph, weight, soln);
 
     // Should cover at least one vertex to break the cycle
-    CHECK(covered.size() >= 1);
-    CHECK(cost >= 1);
+    CHECK_GE(covered.size(), 1);
+    CHECK_GE(cost, 1);
 }
 
 TEST_CASE("Test min_odd_cycle_cover triangle") {
@@ -129,8 +129,8 @@ TEST_CASE("Test min_odd_cycle_cover triangle") {
     auto [covered, cost] = min_odd_cycle_cover(ugraph, weight, soln);
 
     // Should cover at least one vertex to break the odd cycle
-    CHECK(covered.size() >= 1);
-    CHECK(cost >= 1);
+    CHECK_GE(covered.size(), 1);
+    CHECK_GE(cost, 1);
 }
 
 TEST_CASE("Test _construct_cycle") {
@@ -144,7 +144,7 @@ TEST_CASE("Test _construct_cycle") {
     auto cycle = _construct_cycle<uint32_t>(info, 1, 3);
 
     // Cycle should contain the path
-    CHECK(cycle.size() >= 2);
+    CHECK_GE(cycle.size(), 2);
 }
 
 TEST_CASE("Test empty graph") {

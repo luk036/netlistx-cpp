@@ -19,7 +19,7 @@ TEST_CASE("Test Read Dwarf") {
     // CHECK_EQ(hyprgraph.number_of_pins(), 13);
     CHECK_EQ(hyprgraph.get_max_degree(), 3);
     CHECK_EQ(hyprgraph.get_max_net_degree(), 3);
-    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK_FALSE(hyprgraph.has_fixed_modules);
     CHECK_EQ(hyprgraph.get_module_weight(1), 2);
 }
 
@@ -31,7 +31,7 @@ TEST_CASE("Test Read p1") {
     // CHECK_EQ(hyprgraph.number_of_pins(), 2908);
     CHECK_EQ(hyprgraph.get_max_degree(), 9);
     CHECK_EQ(hyprgraph.get_max_net_degree(), 18);
-    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK_FALSE(hyprgraph.has_fixed_modules);
     CHECK_EQ(hyprgraph.get_module_weight(1), 1);
 }
 
@@ -43,7 +43,7 @@ TEST_CASE("Test Read ibm01") {
     // CHECK_EQ(hyprgraph.number_of_pins(), 2908);
     CHECK_EQ(hyprgraph.get_max_degree(), 39);
     CHECK_EQ(hyprgraph.get_max_net_degree(), 42);
-    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK_FALSE(hyprgraph.has_fixed_modules);
     CHECK_EQ(hyprgraph.get_module_weight(1), 1);
 }
 
@@ -56,7 +56,7 @@ TEST_CASE("Test Read ibm02") {
     // CHECK_EQ(hyprgraph.number_of_pins(), 2908);
     CHECK_EQ(hyprgraph.get_max_degree(), 69);
     CHECK_EQ(hyprgraph.get_max_net_degree(), 134);
-    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK_FALSE(hyprgraph.has_fixed_modules);
     CHECK_EQ(hyprgraph.get_module_weight(1), 64);
 }
 
@@ -69,7 +69,7 @@ TEST_CASE("Test Read ibm03") {
     // CHECK_EQ(hyprgraph.number_of_pins(), 2908);
     CHECK_EQ(hyprgraph.get_max_degree(), 100);
     CHECK_EQ(hyprgraph.get_max_net_degree(), 55);
-    CHECK(!hyprgraph.has_fixed_modules);
+    CHECK_FALSE(hyprgraph.has_fixed_modules);
     CHECK_EQ(hyprgraph.get_module_weight(1), 96);
 }
 
@@ -81,7 +81,7 @@ TEST_CASE("Test Read ibm03") {
 //     // CHECK_EQ(hyprgraph.number_of_pins(), 2908);
 //     CHECK_EQ(hyprgraph.get_max_degree(), 97);
 //     CHECK_EQ(hyprgraph.get_max_net_degree(), 66);
-//     CHECK(!hyprgraph.has_fixed_modules);
+//     CHECK_FALSE(hyprgraph.has_fixed_modules);
 //     CHECK_EQ(hyprgraph.get_module_weight(1), 1);
 // }
 

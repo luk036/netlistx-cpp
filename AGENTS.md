@@ -121,7 +121,7 @@ cmake/             # CMake utilities
 
 TEST_CASE("Test description") {
     auto result = myFunction();
-    CHECK(result == expected);
+    CHECK_EQ(result, expected);
 }
 ```
 

@@ -61,7 +61,7 @@ TEST_CASE("Test pd_cover basic") {
     CHECK(covered.contains(0));
     CHECK(covered.contains(1));
     CHECK_FALSE(covered.contains(2));
-    CHECK(cost == 4);  // 1 + 2
+    CHECK_EQ(cost, 4);  // 1 + 2
 }
 
 TEST_CASE("Test min_vertex_cover simple") {
@@ -153,11 +153,11 @@ TEST_CASE("Test empty graph") {
 
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
     CHECK(covered.empty());
-    CHECK(cost == 0);
+    CHECK_EQ(cost, 0);
 
     auto [covered2, cost2] = min_cycle_cover(ugraph, weight);
     CHECK(covered2.empty());
-    CHECK(cost2 == 0);
+    CHECK_EQ(cost2, 0);
 }
 
 TEST_CASE("Test single vertex") {
@@ -167,5 +167,5 @@ TEST_CASE("Test single vertex") {
 
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
     CHECK(covered.empty());  // No edges to cover
-    CHECK(cost == 0);
+    CHECK_EQ(cost, 0);
 }

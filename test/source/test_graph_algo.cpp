@@ -44,7 +44,7 @@ TEST_CASE("Test min_vertex_cover_fast - Basic Example 1") {
     auto [coverset, total_weight] = min_vertex_cover_fast(ugraph, weight);
 
     // Expected: {0, 2} with total weight 2
-    CHECK(total_weight == 2);
+    CHECK_EQ(total_weight, 2);
     CHECK(coverset.contains(0));
     CHECK(coverset.contains(2));
     CHECK_FALSE(coverset.contains(1));
@@ -94,7 +94,7 @@ TEST_CASE("Test min_maximal_independant_set - Basic Example 1") {
     auto [indset, total_weight] = min_maximal_independant_set(ugraph, weight);
 
     // Expected: {0, 2} with total weight 2
-    CHECK(total_weight == 2);
+    CHECK_EQ(total_weight, 2);
     CHECK(indset.contains(0));
     CHECK(indset.contains(2));
     CHECK_FALSE(indset.contains(1));
@@ -175,7 +175,7 @@ TEST_CASE("Test min_vertex_cover_fast - Weighted Example") {
 
     // Algorithm should prefer cheaper vertices
     // Expected: cover vertex 1 (weight 1) to cover both edges
-    CHECK(total_weight == 1);
+    CHECK_EQ(total_weight, 1);
     CHECK(coverset.contains(1));
     CHECK_FALSE(coverset.contains(0));
     CHECK_FALSE(coverset.contains(2));
@@ -193,7 +193,7 @@ TEST_CASE("Test min_maximal_independant_set - Weighted Example") {
 
     // Algorithm should prefer cheaper vertices for independent set
     // Expected: {0, 2} with total weight 3
-    CHECK(total_weight == 3);
+    CHECK_EQ(total_weight, 3);
     CHECK(indset.contains(0));
     CHECK(indset.contains(2));
     CHECK_FALSE(indset.contains(1));
@@ -225,8 +225,8 @@ TEST_CASE("Test Empty Graph") {
     auto [cover_set, cover_weight] = min_vertex_cover_fast(ugraph, weight);
     auto [ind_set, ind_weight] = min_maximal_independant_set(ugraph, weight);
 
-    CHECK(cover_weight == 0);
-    CHECK(ind_weight == 0);
+    CHECK_EQ(cover_weight, 0);
+    CHECK_EQ(ind_weight, 0);
     CHECK(cover_set.empty());
     CHECK(ind_set.empty());
 }
@@ -241,8 +241,8 @@ TEST_CASE("Test Single Vertex Graph") {
 
     // For single vertex with no edges, vertex cover should be empty
     // Independent set should contain the vertex
-    CHECK(cover_weight == 0);
+    CHECK_EQ(cover_weight, 0);
     CHECK(cover_set.empty());
-    CHECK(ind_weight == 5);
+    CHECK_EQ(ind_weight, 5);
     CHECK(ind_set.contains(0));
 }

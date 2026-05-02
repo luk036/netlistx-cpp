@@ -49,11 +49,10 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="netlist_8hpp.html">&lt;netlistx/netlist.hpp&gt;</a></div>
-          <div class="m-doc-template">template&lt;typename Node&gt;</div>
+          <div class="m-doc-template">template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">Node</a>&gt;</div>
           Snapshot <span class="m-thin">struct</span>
         </h1>
-        <p><span></span></p>
+        <p><a href="structSnapshot.html" class="m-doc">Snapshot</a> of netlist state for backtracking/undo operations.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -65,17 +64,18 @@
             </li>
           </ul>
         </nav>
+<p>This struct stores the external nets and module states at a particular point in time, enabling rollback functionality for partitioning algorithms.</p>
         <section id="pub-attribs">
           <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
             <dt id="a1ff1edea232c1d336928d4112bf528ed">
-              py::set&lt;Node&gt; <a href="#a1ff1edea232c1d336928d4112bf528ed" class="m-doc-self">extern_nets</a>
+              py::set&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">Node</a>&gt; <a href="#a1ff1edea232c1d336928d4112bf528ed" class="m-doc-self">extern_nets</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Set of external (cut) nets in the netlist.</dd>
             <dt id="a4ea1a7cde6d62e424cc670ffea27a2b5">
               py::dict&lt;<a href="netlist_8hpp.html#ab41b824af8e088d090c0b9e60f536c9d" class="m-doc">index_<wbr />t</a>, std::uint8_t&gt; <a href="#a4ea1a7cde6d62e424cc670ffea27a2b5" class="m-doc-self">extern_modules</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Dictionary mapping module indices to their states (partition assignments)</dd>
           </dl>
         </section>
       </div>

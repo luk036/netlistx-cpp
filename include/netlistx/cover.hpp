@@ -3,13 +3,13 @@
 #include <algorithm>
 #include <cassert>
 #include <deque>
-#include <functional>
-#include <iterator>
-#include <memory>
+// #include <functional>
+// #include <iterator>
+// #include <memory>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
 #include <queue>
-#include <type_traits>
+// #include <type_traits>
 #include <utility>
 #include <vector>
 

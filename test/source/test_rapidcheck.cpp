@@ -4,7 +4,7 @@
 #ifdef RAPIDCHECK_H
 // Suppress signed/unsigned warnings for RapidCheck headers (they have internal signed/unsigned
 // comparisons)
-#    if defined(_MSC_VER)
+#    ifdef _MSC_VER
 #        pragma warning(push)
 #        pragma warning(disable : 4018 4267)
 #    elif defined(__GNUC__) || defined(__clang__)
@@ -12,7 +12,7 @@
 #        pragma GCC diagnostic ignored "-Wsign-compare"
 #    endif
 #    include <rapidcheck.h>
-#    if defined(_MSC_VER)
+#    ifdef _MSC_VER
 #        pragma warning(pop)
 #    elif defined(__GNUC__) || defined(__clang__)
 #        pragma GCC diagnostic pop
@@ -47,8 +47,8 @@ struct RapidTestGraph {
 
     auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
-    auto begin() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).begin(); }
-    auto end() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).end(); }
+    auto begin() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).begin(); }
+    auto end() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).end(); }
 
     auto number_of_nodes() const -> size_t { return num_nodes; }
 };
@@ -66,7 +66,7 @@ TEST_CASE("Property-based test: Vertex cover covers all edges") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -99,7 +99,7 @@ TEST_CASE("Property-based test: Maximal independent set is independent") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -132,7 +132,7 @@ TEST_CASE("Property-based test: Vertex cover weight is non-negative") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -160,7 +160,7 @@ TEST_CASE("Property-based test: Independent set weight is non-negative") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -206,7 +206,7 @@ TEST_CASE("Property-based test: Independent set is subset of all vertices") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -237,7 +237,7 @@ TEST_CASE("Property-based test: Vertex cover size does not exceed vertex count")
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -262,7 +262,7 @@ TEST_CASE("Property-based test: Complete graph vertex cover is non-empty") {
         std::vector<std::pair<uint32_t, uint32_t>> edges;
         for (uint32_t i = 0; i < static_cast<uint32_t>(num_nodes); ++i) {
             for (uint32_t j = i + 1; j < static_cast<uint32_t>(num_nodes); ++j) {
-                edges.push_back({i, j});
+                edges.emplace_back(i, j);
             }
         }
 
@@ -290,7 +290,7 @@ TEST_CASE("Property-based test: Independent set size is bounded") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -357,8 +357,9 @@ TEST_CASE("Property-based test: Path graph has simple vertex cover") {
 
         // Create a path graph
         std::vector<std::pair<uint32_t, uint32_t>> edges;
-        for (uint32_t i = 0; i < static_cast<uint32_t>(path_length - 1); ++i) {
-            edges.push_back({i, i + 1});
+        edges.reserve(static_cast<uint32_t>(path_length - 1));
+for (uint32_t i = 0; i < static_cast<uint32_t>(path_length - 1); ++i) {
+            edges.emplace_back(i, i + 1);
         }
 
         RapidTestGraph graph(path_length, edges);
@@ -384,7 +385,7 @@ TEST_CASE("Property-based test: Star graph has minimal vertex cover") {
         // Create a star graph (center = 0, leaves = 1..num_leaves)
         std::vector<std::pair<uint32_t, uint32_t>> edges;
         for (uint32_t i = 1; i <= static_cast<uint32_t>(num_leaves); ++i) {
-            edges.push_back({0, i});
+            edges.emplace_back(0, i);
         }
 
         RapidTestGraph graph(num_leaves + 1, edges);
@@ -412,7 +413,7 @@ TEST_CASE("Property-based test: Bipartite graph independent set is non-empty") {
         std::vector<std::pair<uint32_t, uint32_t>> edges;
         for (uint32_t i = 0; i < static_cast<uint32_t>(left_size); ++i) {
             for (uint32_t j = 0; j < static_cast<uint32_t>(right_size); ++j) {
-                edges.push_back({i, static_cast<uint32_t>(left_size) + j});
+                edges.emplace_back(i, static_cast<uint32_t>(left_size) + j);
             }
         }
 
@@ -440,7 +441,7 @@ TEST_CASE("Property-based test: Vertex cover with varying weights") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 
@@ -475,7 +476,7 @@ TEST_CASE("Property-based test: Independent set with varying weights") {
             auto u = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             auto v = static_cast<uint32_t>(*rc::gen::inRange(0, static_cast<int>(num_nodes - 1)));
             if (u != v) {
-                edges.push_back({u, v});
+                edges.emplace_back(u, v);
             }
         }
 

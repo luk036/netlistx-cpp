@@ -213,7 +213,7 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
             are >> node;
         } else if (ch == 'p') {
             are >> node;
-            node += node_t(padOffset);
+            node += static_cast<node_t>(padOffset);
         } else {
             cerr << "Syntax error in line " << lineno << ":"
                  << R"(expect keyword "a" or "p")" << '\n';

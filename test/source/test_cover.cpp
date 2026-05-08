@@ -28,8 +28,8 @@ struct TestCoverGraph {
 
     auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
-    auto begin() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).begin(); }
-    auto end() const { return py::range<uint32_t>(uint32_t(0), uint32_t(num_nodes)).end(); }
+    auto begin() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).begin(); }
+    auto end() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).end(); }
 
     auto number_of_nodes() const -> size_t { return num_nodes; }
 };
@@ -136,10 +136,10 @@ TEST_CASE("Test min_odd_cycle_cover triangle") {
 TEST_CASE("Test _construct_cycle") {
     py::dict<uint32_t, BFSInfo<uint32_t>> info;
 
-    info.insert_or_assign(uint32_t(0), BFSInfo<uint32_t>(uint32_t(0), 3));
-    info.insert_or_assign(uint32_t(1), BFSInfo<uint32_t>(uint32_t(0), 2));
-    info.insert_or_assign(uint32_t(2), BFSInfo<uint32_t>(uint32_t(1), 1));
-    info.insert_or_assign(uint32_t(3), BFSInfo<uint32_t>(uint32_t(2), 0));
+    info.insert_or_assign(static_cast<uint32_t>(0), BFSInfo<uint32_t>(static_cast<uint32_t>(0), 3));
+    info.insert_or_assign(static_cast<uint32_t>(1), BFSInfo<uint32_t>(static_cast<uint32_t>(0), 2));
+    info.insert_or_assign(static_cast<uint32_t>(2), BFSInfo<uint32_t>(static_cast<uint32_t>(1), 1));
+    info.insert_or_assign(static_cast<uint32_t>(3), BFSInfo<uint32_t>(static_cast<uint32_t>(2), 0));
 
     auto cycle = _construct_cycle<uint32_t>(info, 1, 3);
 

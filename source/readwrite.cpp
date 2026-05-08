@@ -7,13 +7,11 @@
 #include <netlistx/netlist.hpp>        // for SimpleNetlist, index_t, Netlist
 #include <py2cpp/range.hpp>            // for _iterator
 #include <py2cpp/set.hpp>              // for set
-#include <sstream>                     // for stringstream
 #include <xnetwork/classes/graph.hpp>  // for Graph
 // #include <py2cpp/py2cpp.hpp>
 // #include <__config>      // for std
 // #include <__hash_table>  // for __hash_const_iterator, operator!=
 #include <string_view>  // for std::string_view
-#include <type_traits>  // for move
 #include <vector>       // for vector
 
 // using graph_t =
@@ -30,7 +28,7 @@ using namespace std;
  * @param hyprgraph The SimpleNetlist to be written to the JSON file.
  */
 void writeJSON(const std::string_view jsonFileName, const SimpleNetlist& hyprgraph) {
-    auto json = ofstream{jsonFileName.data()};
+    auto json = ofstream{std::string(jsonFileName)};
     if (json.fail()) {
         cerr << "Error: Can't open file " << jsonFileName << ".\n";
         exit(1);
@@ -79,7 +77,7 @@ void writeJSON(const std::string_view jsonFileName, const SimpleNetlist& hyprgra
  * @return A SimpleNetlist object representing the design in the input file.
  */
 auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
-    auto netD = ifstream{netDFileName.data()};
+    auto netD = ifstream{std::string(netDFileName)};
     if (netD.fail()) {
         cerr << "Error: Can't open file " << netDFileName << ".\n";
         exit(1);
@@ -180,9 +178,9 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
  * @param areFileName The path to the .are format file to read.
  */
 void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
-    auto are = ifstream{areFileName.data()};
+    auto are = ifstream{std::string(areFileName)};
     if (are.fail()) {
-        cerr << " Could not open " << areFileName << endl;
+        cerr << " Could not open " << areFileName << '\n';
         exit(1);
     }
 
@@ -218,7 +216,7 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
             node += node_t(padOffset);
         } else {
             cerr << "Syntax error in line " << lineno << ":"
-                 << R"(expect keyword "a" or "p")" << endl;
+                 << R"(expect keyword "a" or "p")" << '\n';
             exit(0);
         }
 

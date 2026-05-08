@@ -47,8 +47,14 @@ struct RapidTestGraph {
 
     auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
-    auto begin() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).begin(); }
-    auto end() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).end(); }
+    auto begin() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .begin();
+    }
+    auto end() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .end();
+    }
 
     auto number_of_nodes() const -> size_t { return num_nodes; }
 };
@@ -358,7 +364,7 @@ TEST_CASE("Property-based test: Path graph has simple vertex cover") {
         // Create a path graph
         std::vector<std::pair<uint32_t, uint32_t>> edges;
         edges.reserve(static_cast<uint32_t>(path_length - 1));
-for (uint32_t i = 0; i < static_cast<uint32_t>(path_length - 1); ++i) {
+        for (uint32_t i = 0; i < static_cast<uint32_t>(path_length - 1); ++i) {
             edges.emplace_back(i, i + 1);
         }
 

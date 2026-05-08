@@ -28,8 +28,14 @@ struct TestCoverGraph {
 
     auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
-    auto begin() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).begin(); }
-    auto end() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes)).end(); }
+    auto begin() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .begin();
+    }
+    auto end() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .end();
+    }
 
     auto number_of_nodes() const -> size_t { return num_nodes; }
 };

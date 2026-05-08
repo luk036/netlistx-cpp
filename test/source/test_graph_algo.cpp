@@ -28,9 +28,15 @@ struct TestGraph {
     auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
 
     auto begin() const {
-        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(adjacency.size())).begin();
+        return py::range<uint32_t>(static_cast<uint32_t>(0),
+                                   static_cast<uint32_t>(adjacency.size()))
+            .begin();
     }
-    auto end() const { return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(adjacency.size())).end(); }
+    auto end() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0),
+                                   static_cast<uint32_t>(adjacency.size()))
+            .end();
+    }
 };
 
 TEST_CASE("Test min_vertex_cover_fast - Basic Example 1") {

@@ -62,6 +62,12 @@ target_include_directories(
                          $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
 
+install(TARGETS nlohmann_json
+        EXPORT NetlistXTargets  # 必须和上面一致
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)
+
 # ---- Create an installable target ----
 # this allows users to install and find the library via `find_package()`.
 

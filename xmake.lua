@@ -2,6 +2,7 @@ add_rules("mode.debug", "mode.release", "mode.coverage")
 add_requires("fmt", { alias = "fmt" })
 add_requires("doctest", { alias = "doctest" })
 add_requires("spdlog", { alias = "spdlog" })
+add_requires("nlohmann_json", { alias = "nlohmann_json" })
 
 set_languages("c++23")
 
@@ -32,7 +33,7 @@ target("NetlistX")
 	add_includedirs("../py2cpp/include", { public = true })
 	add_includedirs("../xnetwork-cpp/include", { public = true })
 	add_files("source/*.cpp")
-	add_packages("fmt", "spdlog")
+	add_packages("fmt", "spdlog", "nlohmann_json")
 
 target("test_netlistx")
 	set_kind("binary")
@@ -41,7 +42,7 @@ target("test_netlistx")
 	add_includedirs("../py2cpp/include", { public = true })
 	add_includedirs("../xnetwork-cpp/include", { public = true })
 	add_files("test/source/*.cpp")
-	add_packages("fmt", "doctest", "spdlog")
+	add_packages("fmt", "doctest", "spdlog", "nlohmann_json")
 	if is_plat("linux") then
 		set_rundir("./build/linux/")
 	elseif is_plat("windows") then

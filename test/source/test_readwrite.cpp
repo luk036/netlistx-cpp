@@ -1,14 +1,31 @@
 // -*- coding: utf-8 -*-
 #include <doctest/doctest.h>  // for ResultBuilder, CHECK, TestCase, TEST_CASE
 // #include <__config>            // for std
-#include <netlistx/netlist.hpp>  // for Netlist, SimpleNetlist
-#include <string_view>           // for std::string_view
+#include <netlistx/netlist.hpp>    // for Netlist, SimpleNetlist
+#include <netlistx/readwrite.hpp>  // for read_yosys_json
+#include <string_view>             // for std::string_view
 
 using namespace std;
 
 extern auto readNetD(std::string_view netDFileName) -> SimpleNetlist;
 extern void readAre(SimpleNetlist& hyprgraph, std::string_view areFileName);
 extern void writeJSON(std::string_view jsonFileName, const SimpleNetlist& hyprgraph);
+
+TEST_CASE("Test Read Yosys JSON") {
+    auto hyprgraph = read_yosys_json("../../testcases/yosys_and2.json");
+
+    CHECK_EQ(hyprgraph.number_of_modules(), 5);  // 2 cells + 3 ports
+    CHECK_EQ(hyprgraph.number_of_nets(), 4);     // nets 0, 1, 2, 3
+    CHECK_EQ(hyprgraph.num_pads, 3);             // 3 I/O ports
+    CHECK(hyprgraph.has_fixed_modules);
+
+    // Module weights: cells=1, ports=0
+    CHECK_EQ(hyprgraph.get_module_weight(0), 1);  // and1
+    CHECK_EQ(hyprgraph.get_module_weight(1), 1);  // buf1
+    CHECK_EQ(hyprgraph.get_module_weight(2), 0);  // port a
+    CHECK_EQ(hyprgraph.get_module_weight(3), 0);  // port b
+    CHECK_EQ(hyprgraph.get_module_weight(4), 0);  // port y
+}
 
 TEST_CASE("Test Read Dwarf") {
     auto hyprgraph = readNetD("../../testcases/dwarf1.netD");

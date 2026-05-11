@@ -19,6 +19,12 @@
 // using node_t = typename boost::graph_traits<graph_t>::vertex_descriptor;
 // using edge_t = typename boost::graph_traits<graph_t>::edge_iterator;
 
+#include <nlohmann/json.hpp>  // for json
+
+#include <set>             // for set
+#include <string>          // for string
+#include <unordered_map>   // for unordered_map
+
 using namespace std;
 
 /**
@@ -233,4 +239,139 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
     }
 
     hyprgraph.module_weight = std::move(module_weight);
+}
+
+/**
+ * @brief Read a Yosys JSON file and convert it to a SimpleNetlist object.
+ *
+ * Node numbering:
+ *   - Cell nodes (modules):   0 .. C-1
+ *   - Port nodes (modules):   C .. C+P-1
+ *   - Net nodes:              C+P .. C+P+N-1
+ *
+ * where C = number of cells, P = number of ports, N = number of nets.
+ */
+auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
+    auto file = ifstream{std::string(filename)};
+    if (file.fail()) {
+        cerr << "Error: Can't open file " << filename << ".\n";
+        exit(1);
+    }
+
+    nlohmann::json data;
+    file >> data;
+
+    // Get the first (top) module from the Yosys JSON
+    auto& modules = data["modules"];
+    auto module_name = modules.begin().key();
+    auto& module_data = modules[module_name];
+
+    // --- Collect cells (module nodes 0 .. C-1) ---
+    vector<string> cell_names;
+    for (auto& [name, _] : module_data["cells"].items()) {
+        cell_names.push_back(name);
+    }
+    auto num_cells = static_cast<uint32_t>(cell_names.size());
+
+    // --- Collect all unique integer net IDs ---
+    set<uint32_t> all_nets_set;
+
+    // Nets from port bits
+    for (auto& [_, port_info] : module_data["ports"].items()) {
+        for (auto& bit : port_info["bits"]) {
+            if (bit.is_number_integer()) {
+                all_nets_set.insert(bit.get<uint32_t>());
+            }
+        }
+    }
+
+    // Nets from netnames
+    if (module_data.contains("netnames")) {
+        for (auto& [_, netinfo] : module_data["netnames"].items()) {
+            for (auto& bit : netinfo["bits"]) {
+                if (bit.is_number_integer()) {
+                    all_nets_set.insert(bit.get<uint32_t>());
+                }
+            }
+        }
+    }
+
+    // Nets from cell connections (skip string constants like "0", "1")
+    for (auto& [_, cell_info] : module_data["cells"].items()) {
+        for (auto& [port_name, connections] : cell_info["connections"].items()) {
+            (void)port_name;
+            for (auto& net_id : connections) {
+                if (net_id.is_number_integer()) {
+                    all_nets_set.insert(net_id.get<uint32_t>());
+                }
+            }
+        }
+    }
+
+    // Build sorted net list and net_id -> node mapping
+    // Net node IDs start at num_cells + num_ports
+    auto num_ports = static_cast<uint32_t>(module_data["ports"].size());
+    vector<uint32_t> nets_list(all_nets_set.begin(), all_nets_set.end());
+    auto num_nets = static_cast<uint32_t>(nets_list.size());
+    auto net_start = num_cells + num_ports;
+
+    unordered_map<uint32_t, uint32_t> net_to_node;
+    for (uint32_t i = 0; i < num_nets; ++i) {
+        net_to_node[nets_list[i]] = net_start + i;
+    }
+
+    // Total graph nodes = cells + ports + nets
+    auto total_nodes = net_start + num_nets;
+
+    // --- Build the bipartite graph ---
+    xnetwork::SimpleGraph g(total_nodes);
+
+    // Edges: cells -> nets
+    for (uint32_t i = 0; i < num_cells; ++i) {
+        auto& cell_info = module_data["cells"][cell_names[i]];
+        for (auto& [_, connections] : cell_info["connections"].items()) {
+            for (auto& net_id : connections) {
+                if (net_id.is_number_integer()) {
+                    auto net_node = net_to_node[net_id.get<uint32_t>()];
+                    g.add_edge(i, net_node);
+                }
+            }
+        }
+    }
+
+    // Edges: ports -> nets
+    auto port_start = num_cells;
+    uint32_t port_idx = 0;
+    for (auto& [_, port_info] : module_data["ports"].items()) {
+        auto port_node = port_start + port_idx;
+        for (auto& bit : port_info["bits"]) {
+            if (bit.is_number_integer()) {
+                auto net_id = bit.get<uint32_t>();
+                auto it = net_to_node.find(net_id);
+                if (it != net_to_node.end()) {
+                    g.add_edge(port_node, it->second);
+                }
+            }
+        }
+        ++port_idx;
+    }
+
+    // --- Create Netlist ---
+    // modules = range(0, num_cells + num_ports), nets = range(net_start, total_nodes)
+    auto hyprgraph = SimpleNetlist{std::move(g), num_cells + num_ports, num_nets};
+    hyprgraph.num_pads = num_ports;
+
+    // Module weights: cells=1, ports=0
+    hyprgraph.module_weight.assign(num_cells + num_ports, 0);
+    for (uint32_t i = 0; i < num_cells; ++i) {
+        hyprgraph.module_weight[i] = 1;
+    }
+
+    // Mark port nodes as fixed
+    for (uint32_t i = 0; i < num_ports; ++i) {
+        hyprgraph.module_fixed.insert(port_start + i);
+    }
+    hyprgraph.has_fixed_modules = (num_ports > 0);
+
+    return hyprgraph;
 }

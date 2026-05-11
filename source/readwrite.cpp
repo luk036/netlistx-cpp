@@ -8,9 +8,6 @@
 #include <py2cpp/range.hpp>            // for _iterator
 #include <py2cpp/set.hpp>              // for set
 #include <xnetwork/classes/graph.hpp>  // for Graph
-// #include <py2cpp/py2cpp.hpp>
-// #include <__config>      // for std
-// #include <__hash_table>  // for __hash_const_iterator, operator!=
 #include <string_view>  // for std::string_view
 #include <vector>       // for vector
 
@@ -119,9 +116,10 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
             cerr << "Warning: Unexpected end of file.\n";
             break;
         }
-        do {
+        netD.get(ch);
+        while (isspace(ch) != 0) {
             netD.get(ch);
-        } while ((isspace(ch) != 0));
+        }
         if (ch == '\n') {
             continue;
         }
@@ -131,9 +129,10 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
             netD >> node;
             node += padOffset;
         }
-        do {
+        netD.get(ch);
+        while (isspace(ch) != 0) {
             netD.get(ch);
-        } while ((isspace(ch) != 0));
+        }
         if (ch == 's') {
             ++edgeIdx;
         }
@@ -141,9 +140,11 @@ auto readNetD(const std::string_view netDFileName) -> SimpleNetlist {
         // edge_array[idx] = Edge(node, edgeIdx);
         g.add_edge(node, edgeIdx);
 
-        do {
+        netD.get(ch);
+        while (isspace(ch) != 0 && ch != '\n') {
             netD.get(ch);
-        } while ((isspace(ch) != 0) && ch != '\n');
+        }
+
         // switch (ch) {
         // case 'O': aPin.setDirection(Pin::OUTPUT); break;
         // case 'I': aPin.setDirection(Pin::INPUT); break;
@@ -197,8 +198,6 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
     char ch = 0;
     node_t node = 0;
     unsigned int weight = 0;
-    // auto totalWeight = 0;
-    // xxx index_t smallestWeight = UINT_MAX;
     auto numModules = hyprgraph.number_of_modules();
     auto padOffset = numModules - hyprgraph.num_pads - 1;
     auto module_weight = vector<unsigned int>(numModules);
@@ -208,9 +207,10 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
         if (are.eof()) {
             break;
         }
-        do {
+        are.get(ch);
+        while (isspace(ch) != 0) {
             are.get(ch);
-        } while ((isspace(ch) != 0));
+        }
         if (ch == '\n') {
             lineno++;
             continue;
@@ -226,9 +226,10 @@ void readAre(SimpleNetlist& hyprgraph, const std::string_view areFileName) {
             exit(0);
         }
 
-        do {
+        are.get(ch);
+        while (isspace(ch) != 0) {
             are.get(ch);
-        } while ((isspace(ch) != 0));
+        }
         if (isdigit(ch) != 0) {
             are.putback(ch);
             are >> weight;
@@ -268,7 +269,7 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
 
     // --- Collect cells (module nodes 0 .. C-1) ---
     vector<string> cell_names;
-    for (auto& [name, _] : module_data["cells"].items()) {
+    for (const auto& [name, _] : module_data["cells"].items()) {
         cell_names.push_back(name);
     }
     auto num_cells = static_cast<uint32_t>(cell_names.size());
@@ -277,7 +278,7 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
     set<uint32_t> all_nets_set;
 
     // Nets from port bits
-    for (auto& [_, port_info] : module_data["ports"].items()) {
+    for (const auto& [_, port_info] : module_data["ports"].items()) {
         for (auto& bit : port_info["bits"]) {
             if (bit.is_number_integer()) {
                 all_nets_set.insert(bit.get<uint32_t>());
@@ -287,7 +288,7 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
 
     // Nets from netnames
     if (module_data.contains("netnames")) {
-        for (auto& [_, netinfo] : module_data["netnames"].items()) {
+        for (const auto& [_, netinfo] : module_data["netnames"].items()) {
             for (auto& bit : netinfo["bits"]) {
                 if (bit.is_number_integer()) {
                     all_nets_set.insert(bit.get<uint32_t>());
@@ -297,8 +298,8 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
     }
 
     // Nets from cell connections (skip string constants like "0", "1")
-    for (auto& [_, cell_info] : module_data["cells"].items()) {
-        for (auto& [port_name, connections] : cell_info["connections"].items()) {
+    for (const auto& [_, cell_info] : module_data["cells"].items()) {
+        for (const auto& [port_name, connections] : cell_info["connections"].items()) {
             (void)port_name;
             for (auto& net_id : connections) {
                 if (net_id.is_number_integer()) {
@@ -329,7 +330,7 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
     // Edges: cells -> nets
     for (uint32_t i = 0; i < num_cells; ++i) {
         auto& cell_info = module_data["cells"][cell_names[i]];
-        for (auto& [_, connections] : cell_info["connections"].items()) {
+        for (const auto& [_, connections] : cell_info["connections"].items()) {
             for (auto& net_id : connections) {
                 if (net_id.is_number_integer()) {
                     auto net_node = net_to_node[net_id.get<uint32_t>()];
@@ -342,7 +343,7 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
     // Edges: ports -> nets
     auto port_start = num_cells;
     uint32_t port_idx = 0;
-    for (auto& [_, port_info] : module_data["ports"].items()) {
+    for (const auto& [_, port_info] : module_data["ports"].items()) {
         auto port_node = port_start + port_idx;
         for (auto& bit : port_info["bits"]) {
             if (bit.is_number_integer()) {

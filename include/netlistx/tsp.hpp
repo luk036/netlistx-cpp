@@ -24,9 +24,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <limits>
 #include <set>
 #include <tuple>
@@ -55,7 +53,7 @@ double calculate_total_distance(const std::vector<Node>& path, WeightFunc&& weig
     double dist = 0.0;
     for (size_t i = 0; i + 1 < path.size(); ++i)
     {
-        dist += weight(path[i], path[i + 1]);
+        dist += std::forward<WeightFunc>(weight)(path[i], path[i + 1]);
     }
     return dist;
 }
@@ -110,7 +108,7 @@ auto prim_mst(size_t n, WeightFunc&& weight) -> std::vector<std::pair<Node, Node
         {
             if (!in_mst[static_cast<size_t>(v)])
             {
-                const double w = weight(u, v);
+                const double w = std::forward<WeightFunc>(weight)(u, v);
                 auto& kv = key[static_cast<size_t>(v)];
                 if (w < kv)
                 {
@@ -177,7 +175,7 @@ auto greedy_min_weight_matching(const std::vector<Node>& odd_nodes,
     {
         for (size_t j = i + 1; j < k; ++j)
         {
-            edges.emplace_back(weight(odd_nodes[i], odd_nodes[j]),
+            edges.emplace_back(std::forward<WeightFunc>(weight)(odd_nodes[i], odd_nodes[j]),
                                odd_nodes[i], odd_nodes[j]);
         }
     }
@@ -191,7 +189,8 @@ auto greedy_min_weight_matching(const std::vector<Node>& odd_nodes,
     for (const auto& [w, u, v] : edges)
     {
         // Map node → index in odd_nodes (linear scan, k is small)
-        size_t iu = 0, iv = 0;
+        size_t iu = 0;
+        size_t iv = 0;
         for (size_t t = 0; t < k; ++t)
         {
             if (odd_nodes[t] == u)
@@ -339,7 +338,7 @@ auto christofides_tsp(const Graph& G, WeightFunc&& weight)
     const auto odd_nodes = detail::find_odd_degree_nodes(mst_edges, n);
 
     // 3. Minimum-weight perfect matching on odd vertices
-    const auto matching = detail::greedy_min_weight_matching(odd_nodes, weight);
+    const auto matching = detail::greedy_min_weight_matching(odd_nodes, std::forward<WeightFunc>(weight));
 
     // 4. Build the Eulerian multigraph (MST ∪ matching)
     auto adj = detail::build_multigraph<Node>(n, mst_edges, matching);
@@ -374,7 +373,7 @@ auto two_opt(std::vector<typename Graph::node_t> path, const Graph& G, WeightFun
     -> std::vector<typename Graph::node_t>
 {
     (void)G; // only used for type deduction
-    using Node = typename Graph::node_t;
+    // using Node = typename Graph::node_t;
 
     bool improved = true;
     while (improved)
@@ -392,7 +391,7 @@ auto two_opt(std::vector<typename Graph::node_t> path, const Graph& G, WeightFun
                 // Weight delta: subtract old edges, add new edges
                 const double delta =
                     -weight(path[i - 1], path[i]) - weight(path[j], path[j + 1])
-                    + weight(path[i - 1], path[j]) + weight(path[i], path[j + 1]);
+                    + weight(path[i - 1], path[j]) + std::forward<WeightFunc>(weight)(path[i], path[j + 1]);
 
                 if (delta < -1.0e-12) // strict improvement
                 {
@@ -427,7 +426,7 @@ template <typename Graph, typename WeightFunc>
 auto solve_christofides_2opt_tsp(const Graph& G, WeightFunc&& weight)
     -> std::vector<typename Graph::node_t>
 {
-    auto path = christofides_tsp(G, weight);
+    auto path = christofides_tsp(G, std::forward<WeightFunc>(weight));
     if (path.size() <= 3)
         return path; // nothing meaningful to improve
     return two_opt(std::move(path), G, weight);

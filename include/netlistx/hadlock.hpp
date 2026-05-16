@@ -4,6 +4,12 @@
  * @file hadlock.hpp
  * Hadlock's algorithm: planar MAX-CUT → minimum weight perfect matching on dual.
  *
+ * The algorithm is accelerated by **biconnected component decomposition**:
+ * MAX-CUT is additive over biconnected components because edges in different
+ * blocks share only articulation points and cannot form cycles together.
+ * Processing each block independently dramatically reduces the size of the
+ * dual-graph shortest-path and MWPM subproblems.
+ *
  * Reference:
  *   Hadlock, F. O. (1975). "Finding a Maximum Cut of a Planar Graph in
  *   Polynomial Time." SIAM Journal on Computing, 4(3), 221-225.
@@ -11,6 +17,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <limits>
 #include <map>
 #include <queue>
@@ -22,6 +29,8 @@
 
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
+
+#include <netlistx/thread_pool.hpp>
 
 // Hash for std::pair — needed by py::set<std::pair<...>> (backed by unordered_set)
 namespace std {
@@ -243,22 +252,119 @@ auto min_weight_perfect_matching(
     return greedy_mwpm<Node>(odd_faces, dist);
 }
 
-} // namespace netlistx::detail
-
-// ===================================================================
-// Public API
-// ===================================================================
+// -------------------------------------------------------------------
+// Biconnected Component Decomposition (for MAX-CUT speedup)
+// -------------------------------------------------------------------
 
 /**
- * Solve MAX-CUT for a planar graph using Hadlock's algorithm.
+ * @brief Decompose a graph into its biconnected components (blocks).
  *
- * @param G       planar graph (must provide `edges()`, node type `node_t`)
- * @param weight  callable `weight(u, v) -> int`
- * @param faces   list of faces, each a cyclic node sequence
- * @return        set of edges belonging to the maximum cut
+ * MAX-CUT is additive over biconnected components because edges in
+ * different blocks share only articulation points and cannot form
+ * cycles together.  Processing each block independently reduces the
+ * size of the dual-graph shortest-path and MWPM subproblems.
+ *
+ * Uses a DFS-based algorithm (Tarjan) tracking discovery time and
+ * low-link values, pushing/poping edges onto a stack.
+ *
+ * @tparam Graph  Graph type (must provide `node_t`, `operator[]`, begin/end)
+ * @param G       The input graph.
+ * @return        Vector of node-sets, one per biconnected component.
+ *                Articulation points may appear in multiple components;
+ *                each edge belongs to exactly one component.
+ */
+template <typename Graph>
+auto biconnected_components(const Graph& G)
+    -> std::vector<py::set<typename Graph::node_t>> {
+    using node_t = typename Graph::node_t;
+
+    std::vector<py::set<node_t>> components;
+    std::map<node_t, int> disc;
+    std::map<node_t, int> low;
+    std::map<node_t, node_t> parent;
+    std::vector<std::pair<node_t, node_t>> edge_stack;
+    int time = 0;
+
+    std::function<void(node_t)> dfs;
+    dfs = [&](node_t u) {
+        disc[u] = low[u] = ++time;
+        int children = 0;
+
+        for (const auto& v : G[u]) {
+            if (!disc.contains(v)) {
+                parent[v] = u;
+                ++children;
+                edge_stack.emplace_back(u, v);
+                dfs(v);
+
+                if (low[v] < low[u]) low[u] = low[v];
+
+                // u is an articulation point if:
+                //   - root of DFS tree with >= 2 children, OR
+                //   - non-root with low[v] >= disc[u]
+                const bool is_art = (!parent.contains(u) && children > 1)
+                                 || (parent.contains(u) && low[v] >= disc[u]);
+
+                if (is_art) {
+                    py::set<node_t> comp;
+                    while (!edge_stack.empty()) {
+                        auto [x, y] = edge_stack.back();
+                        edge_stack.pop_back();
+                        comp.insert(x);
+                        comp.insert(y);
+                        if ((x == u && y == v) || (x == v && y == u)) break;
+                    }
+                    if (!comp.empty()) {
+                        components.push_back(std::move(comp));
+                    }
+                }
+            } else if (disc[v] < disc[u]) {
+                // v is an ancestor of u — back edge
+                // But skip if v is the direct parent of u in the DFS tree
+                if (parent.contains(u) && parent.at(u) == v) continue;
+                if (disc[v] < low[u]) low[u] = disc[v];
+                edge_stack.emplace_back(u, v);
+            }
+        }
+    };
+
+    for (const auto& node : G) {
+        if (disc.contains(node)) continue;
+        dfs(node);
+        if (!edge_stack.empty()) {
+            py::set<node_t> comp;
+            for (const auto& [x, y] : edge_stack) {
+                comp.insert(x);
+                comp.insert(y);
+            }
+            edge_stack.clear();
+            components.push_back(std::move(comp));
+        }
+    }
+
+    return components;
+}
+
+// -------------------------------------------------------------------
+// Core Hadlock solver (single component)
+// -------------------------------------------------------------------
+
+/**
+ * @brief Solve MAX-CUT for a single planar biconnected component.
+ *
+ * This is the core Hadlock logic factored out so it can be called once
+ * per biconnected component.  The existing 3-argument overload of
+ * `solve_hadlock_max_cut` delegates here.
+ *
+ * @tparam Graph      Graph type
+ * @tparam WeightFunc Callable `(u, v) -> int`
+ * @param G           Planar graph (or subgraph)
+ * @param weight      Edge weight function
+ * @param faces       Face boundaries (cyclic node sequences)
+ * @return            Set of edges in the maximum cut
  */
 template <typename Graph, typename WeightFunc>
-auto solve_hadlock_max_cut(
+auto solve_hadlock_component(
     const Graph& G,
     WeightFunc weight,
     const std::vector<std::vector<typename Graph::node_t>>& faces
@@ -266,7 +372,7 @@ auto solve_hadlock_max_cut(
     using node_t = typename Graph::node_t;
 
     // (1) Build the dual graph
-    const auto dual = netlistx::detail::build_dual<node_t>(faces, weight);
+    const auto dual = build_dual<node_t>(faces, weight);
 
     // (2) Identify odd-degree faces
     std::vector<int> odd_faces;
@@ -312,11 +418,11 @@ auto solve_hadlock_max_cut(
     );
 
     for (int i = 0; i < n_odd; ++i) {
-        auto [dist, prev] = netlistx::detail::dijkstra<node_t>(dual, odd_faces[i]);
+        auto [dist, prev] = dijkstra<node_t>(dual, odd_faces[i]);
         dist_mat[i] = std::move(dist);
         for (int j = 0; j < n_odd; ++j) {
             if (i != j) {
-                path_mat[i][j] = netlistx::detail::reconstruct_path(
+                path_mat[i][j] = reconstruct_path(
                     prev, odd_faces[i], odd_faces[j]
                 );
             }
@@ -324,7 +430,7 @@ auto solve_hadlock_max_cut(
     }
 
     // (4) Minimum weight perfect matching on odd-face distances
-    auto matching = netlistx::detail::min_weight_perfect_matching<node_t>(
+    auto matching = min_weight_perfect_matching<node_t>(
         odd_faces, dist_mat
     );
 
@@ -370,6 +476,117 @@ auto solve_hadlock_max_cut(
             cut_edges.insert(e);
         }
     }
+    return cut_edges;
+}
+
+} // namespace netlistx::detail
+
+// ===================================================================
+// Public API
+// ===================================================================
+
+/**
+ * @brief Solve MAX-CUT for a planar graph using Hadlock's algorithm.
+ *
+ * This overload processes the graph as-is (no decomposition).
+ *
+ * @param G       planar graph (must provide `edges()`, node type `node_t`)
+ * @param weight  callable `weight(u, v) -> int`
+ * @param faces   list of faces, each a cyclic node sequence
+ * @return        set of edges belonging to the maximum cut
+ */
+template <typename Graph, typename WeightFunc>
+auto solve_hadlock_max_cut(
+    const Graph& G,
+    WeightFunc weight,
+    const std::vector<std::vector<typename Graph::node_t>>& faces
+) -> py::set<std::pair<typename Graph::node_t, typename Graph::node_t>> {
+    return netlistx::detail::solve_hadlock_component(G, weight, faces);
+}
+
+/**
+ * @brief Solve MAX-CUT using biconnected component decomposition for speed.
+ *
+ * The graph is first decomposed into biconnected components (blocks).
+ * MAX-CUT is solved independently per block (each with its own faces),
+ * and the results are unioned.  This is significantly faster because
+ * all-pairs shortest paths and MWPM are computed on smaller dual graphs.
+ *
+ * @param G                planar graph
+ * @param weight           callable `weight(u, v) -> int`
+ * @param component_faces  vector of face-lists, one per biconnected
+ *                         component.  `component_faces[i]` is the list
+ *                         of face-boundary node sequences for the i-th
+ *                         biconnected component.
+ * @return                 set of edges belonging to the maximum cut
+ */
+template <typename Graph, typename WeightFunc>
+auto solve_hadlock_max_cut(
+    const Graph& G,
+    WeightFunc weight,
+    const std::vector<std::vector<std::vector<typename Graph::node_t>>>& component_faces
+) -> py::set<std::pair<typename Graph::node_t, typename Graph::node_t>> {
+    using node_t = typename Graph::node_t;
+    using edge_t = std::pair<node_t, node_t>;
+
+    // Decompose into biconnected components
+    auto comp_nodes = netlistx::detail::biconnected_components(G);
+
+    const auto n_comps =
+        std::min(comp_nodes.size(), component_faces.size());
+
+    // Components are independent (edges are disjoint), so no
+    // synchronization is needed beyond collecting results.
+    netlistx::thread_pool pool;
+    std::vector<std::future<py::set<edge_t>>> futures;
+    futures.reserve(n_comps);
+
+    for (size_t i = 0; i < n_comps; ++i) {
+        futures.push_back(pool.enqueue([&, i]() -> py::set<edge_t> {
+            const auto& comp_faces = component_faces[i];
+
+            auto comp_weight = [&weight](node_t u, node_t v) -> int {
+                return weight(u, v);
+            };
+
+            // Extract edges belonging to this component by scanning faces
+            std::vector<std::pair<node_t, node_t>> comp_edges;
+            for (const auto& face : comp_faces) {
+                for (size_t j = 0; j < face.size(); ++j) {
+                    auto u = face[j];
+                    auto v = face[(j + 1) % face.size()];
+                    if (u > v) std::swap(u, v);
+                    edge_t e{u, v};
+                    if (std::find(comp_edges.begin(), comp_edges.end(), e)
+                        == comp_edges.end()) {
+                        comp_edges.push_back(e);
+                    }
+                }
+            }
+
+            struct CompGraph {
+                using node_t = typename Graph::node_t;
+                const std::vector<std::pair<node_t, node_t>>& edge_list;
+                auto edges() const {
+                    return edge_list;
+                }
+            };
+
+            CompGraph comp_g{comp_edges};
+            return netlistx::detail::solve_hadlock_component(
+                comp_g, comp_weight, comp_faces
+            );
+        }));
+    }
+
+    py::set<edge_t> cut_edges;
+    for (auto& f : futures) {
+        auto comp_cut = f.get();
+        for (const auto& e : comp_cut) {
+            cut_edges.insert(e);
+        }
+    }
+
     return cut_edges;
 }
 

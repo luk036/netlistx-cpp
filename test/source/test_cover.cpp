@@ -67,7 +67,7 @@ TEST_CASE("Test pd_cover basic") {
     CHECK(covered.contains(0));
     CHECK(covered.contains(1));
     CHECK_FALSE(covered.contains(2));
-    CHECK_EQ(cost, 4);  // 1 + 2
+    CHECK_EQ(cost, 3);
 }
 
 TEST_CASE("Test min_vertex_cover simple") {
@@ -174,4 +174,75 @@ TEST_CASE("Test single vertex") {
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
     CHECK(covered.empty());  // No edges to cover
     CHECK_EQ(cost, 0);
+}
+
+TEST_CASE("Test minimal vertex cover triangle") {
+    // A triangle needs 2 vertices to cover all edges
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    py::set<uint32_t> soln;
+    auto [covered, cost] = min_vertex_cover(ugraph, weight, soln);
+
+    // Any 2 nodes cover all edges in a triangle.
+    // Post-processing ensures it doesn't accidentally pick all 3.
+    CHECK_EQ(covered.size(), 2);
+    CHECK_EQ(cost, 2);
+}
+
+TEST_CASE("Test cycle cover tree") {
+    // A tree has no cycles → cycle cover should be empty
+    TestCoverGraph ugraph(4, {{0, 1}, {1, 2}, {2, 3}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1}};
+
+    py::set<uint32_t> soln;
+    auto [covered, cost] = min_cycle_cover(ugraph, weight, soln);
+
+    CHECK(covered.empty());
+    CHECK_EQ(cost, 0);
+}
+
+TEST_CASE("Test odd cycle cover detection") {
+    // Square (even) + Triangle (odd) in one graph
+    TestCoverGraph ugraph(7,
+                          {{0, 1}, {1, 2}, {2, 3}, {3, 0},    // even cycle (square)
+                           {4, 5}, {5, 6}, {6, 4}});           // odd cycle (triangle)
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1},
+                                   {4, 1}, {5, 1}, {6, 1}};
+
+    py::set<uint32_t> soln;
+    auto [covered, cost] = min_odd_cycle_cover(ugraph, weight, soln);
+
+    // Should only pick a vertex from the triangle (nodes 4, 5, or 6)
+    CHECK_MESSAGE((covered.contains(4) || covered.contains(5) || covered.contains(6)),
+                  "Should cover at least one odd cycle vertex");
+    CHECK_MESSAGE((!covered.contains(0) && !covered.contains(1) && !covered.contains(2)
+                   && !covered.contains(3)),
+                  "Should not cover any even cycle vertex");
+}
+
+TEST_CASE("Test post-processing minimality") {
+    // K5: complete graph with 5 vertices, all weights = 1
+    TestCoverGraph ugraph(5,
+                          {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2},
+                           {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}};
+
+    py::set<uint32_t> soln;
+    auto [covered, cost] = min_vertex_cover(ugraph, weight, soln);
+
+    // For K5, a minimal vertex cover has 4 nodes.
+    // Verify: removing any node from the solution breaks the cover.
+    for (const auto& node : covered) {
+        py::set<uint32_t> test_soln = covered.copy();
+        test_soln.erase(node);
+        bool found_uncovered = false;
+        for (const auto& edge : ugraph.edges()) {
+            if (!test_soln.contains(edge.first) && !test_soln.contains(edge.second)) {
+                found_uncovered = true;
+                break;
+            }
+        }
+        CHECK_MESSAGE(found_uncovered, "Node " << node << " was redundant in the cover");
+    }
 }

@@ -6,6 +6,7 @@
 // #include <functional>
 // #include <iterator>
 // #include <memory>
+#include <netlistx/gen.hpp>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
 #include <queue>
@@ -29,33 +30,57 @@ template <typename ViolateFunc, typename WeightMap, typename SolutionSet>
 auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
     -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
     using CostType = typename WeightMap::mapped_type;
+    using NodeType = typename SolutionSet::value_type;
 
-    CostType total_prml_cost = 0;
     CostType total_dual_cost = 0;
     auto gap = weight;  // copy weights
+    std::vector<NodeType> added_order;
 
-    // Iterate through violate sets
-    for (const auto& violateSet : violate()) {
-        if (violateSet.empty()) continue;
+    // Phase 1: Primal-Dual Selection
+    // Iterate over the generator lazily — one violation per iteration,
+    // with coverset/gap updated between yields (matching Python generator behavior).
+    for (auto&& violate_set : violate()) {
+        if (violate_set.empty()) continue;
 
-        // Find vertex with minimum gap in the set
         auto min_vtx
-            = *std::min_element(violateSet.begin(), violateSet.end(),
+            = *std::min_element(violate_set.begin(), violate_set.end(),
                                 [&](const auto& v1, const auto& v2) { return gap[v1] < gap[v2]; });
         auto min_val = gap[min_vtx];
 
-        soln.insert(min_vtx);
-        total_prml_cost += weight[min_vtx];
+        if (!soln.contains(min_vtx)) {
+            soln.insert(min_vtx);
+            added_order.emplace_back(min_vtx);
+        }
+
         total_dual_cost += min_val;
 
-        // Update gaps for all vertices in the set
-        for (const auto& vtx : violateSet) {
+        for (const auto& vtx : violate_set) {
             gap[vtx] -= min_val;
         }
     }
 
-    assert(total_dual_cost <= total_prml_cost);
-    return std::make_pair(soln, total_prml_cost);
+    // Phase 2: Reverse-Delete Post-Processing
+    for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
+        soln.erase(*it);
+        bool is_redundant = true;
+        for (auto&& check_set : violate()) {
+            if (!check_set.empty()) {
+                is_redundant = false;
+                break;
+            }
+        }
+        if (!is_redundant) {
+            soln.insert(*it);
+        }
+    }
+
+    CostType final_prml_cost = 0;
+    for (const auto& vtx : soln) {
+        final_prml_cost += weight[vtx];
+    }
+
+    assert(total_dual_cost <= final_prml_cost);
+    return std::make_pair(soln, final_prml_cost);
 }
 
 /**
@@ -75,9 +100,7 @@ auto min_vertex_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset
     using node_t = typename Graph::node_t;
 
     // Lambda function that generates violate edges (uncovered edges)
-    auto violate_graph = [&]() -> std::vector<std::vector<node_t>> {
-        std::vector<std::vector<node_t>> violate_sets;
-
+    auto violate_graph = [&]() -> py::Generator<std::vector<node_t>> {
         for (const auto& edge : ugraph.edges()) {
             auto utx = edge.first;
             auto vtx = edge.second;
@@ -86,10 +109,8 @@ auto min_vertex_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset
                 continue;
             }
 
-            violate_sets.push_back({utx, vtx});
+            co_yield std::vector<node_t>{utx, vtx};
         }
-
-        return violate_sets;
     };
 
     return pd_cover(violate_graph, weight, coverset);
@@ -122,9 +143,7 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
     using node_t = typename Hypergraph::node_t;
 
     // Lambda function that generates violate nets (uncovered nets)
-    auto violate_netlist = [&]() -> std::vector<std::vector<node_t>> {
-        std::vector<std::vector<node_t>> violate_sets;
-
+    auto violate_netlist = [&]() -> py::Generator<std::vector<node_t>> {
         for (const auto& net : hyprgraph.nets) {
             bool covered = false;
             for (const auto& vtx : hyprgraph.gr[net]) {
@@ -135,16 +154,13 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
             }
 
             if (!covered) {
-                // Convert the net's vertices to a vector
                 std::vector<node_t> net_vertices;
                 for (const auto& vtx : hyprgraph.gr[net]) {
                     net_vertices.emplace_back(vtx);
                 }
-                violate_sets.emplace_back(std::move(net_vertices));
+                co_yield std::move(net_vertices);
             }
         }
-
-        return violate_sets;
     };
 
     return pd_cover(violate_netlist, weight, coverset);
@@ -284,8 +300,6 @@ auto _generic_bfs_cycle(const Graph& ugraph, const CoverSet& coverset)
 
                 // Cycle found
                 cycles.emplace_back(info, parent, child);
-                // For now, return first cycle found (matching Python behavior)
-                return cycles;
             }
         }
     }
@@ -309,29 +323,18 @@ auto min_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& coverset)
     -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
 
-    // Lambda function that finds cycles repeatedly
-    auto violate = [&]() -> std::vector<std::vector<node_t>> {
-        std::vector<std::vector<node_t>> violate_sets;
-
+    // Lambda function that yields one cycle at a time (lazy generator)
+    auto violate = [&]() -> py::Generator<std::vector<node_t>> {
         while (true) {
             auto cycles = _generic_bfs_cycle<Graph, CoverSet>(ugraph, coverset);
             if (cycles.empty()) {
                 break;
             }
-
             const auto& [info, parent, child] = cycles[0];
             auto cycle_deque = _construct_cycle<node_t>(info, parent, child);
-
-            // Convert deque to vector
             std::vector<node_t> cycle_vec(cycle_deque.begin(), cycle_deque.end());
-            violate_sets.emplace_back(std::move(cycle_vec));
-
-            // In the Python version, this would continue finding cycles
-            // but for simplicity, we break after first cycle (matching test behavior)
-            break;
+            co_yield std::move(cycle_vec);
         }
-
-        return violate_sets;
     };
 
     return pd_cover(violate, weight, coverset);
@@ -363,34 +366,29 @@ auto min_odd_cycle_cover(const Graph& ugraph, WeightMap& weight, CoverSet& cover
     -> std::pair<CoverSet, typename WeightMap::mapped_type> {
     using node_t = typename Graph::node_t;
 
-    // Lambda function that finds odd cycles repeatedly
-    auto violate = [&]() -> std::vector<std::vector<node_t>> {
-        std::vector<std::vector<node_t>> violate_sets;
-
+    // Lambda function that yields one odd cycle at a time (lazy generator)
+    auto violate = [&]() -> py::Generator<std::vector<node_t>> {
         while (true) {
             auto cycles = _generic_bfs_cycle<Graph, CoverSet>(ugraph, coverset);
             if (cycles.empty()) {
                 break;
             }
-
-            const auto& [info, parent, child] = cycles[0];
-            const auto& info_parent = info.at(parent);
-            const auto& info_child = info.at(child);
-
-            // Check if cycle is odd
-            if ((info_parent.depth - info_child.depth) % 2 == 0) {
-                auto cycle_deque = _construct_cycle<node_t>(info, parent, child);
-
-                // Convert deque to vector
-                std::vector<node_t> cycle_vec(cycle_deque.begin(), cycle_deque.end());
-                violate_sets.emplace_back(std::move(cycle_vec));
+            bool found_odd = false;
+            for (const auto& [info, parent, child] : cycles) {
+                const auto& info_parent = info.at(parent);
+                const auto& info_child = info.at(child);
+                if ((info_parent.depth - info_child.depth) % 2 == 0) {
+                    auto cycle_deque = _construct_cycle<node_t>(info, parent, child);
+                    std::vector<node_t> cycle_vec(cycle_deque.begin(), cycle_deque.end());
+                    co_yield std::move(cycle_vec);
+                    found_odd = true;
+                    break;
+                }
             }
-
-            // Break after first valid cycle found (matching test behavior)
-            break;
+            if (!found_odd) {
+                break;
+            }
         }
-
-        return violate_sets;
     };
 
     return pd_cover(violate, weight, coverset);

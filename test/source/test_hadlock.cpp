@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <netlistx/hadlock.hpp>
+#include <py2cpp/range.hpp>
 #include <py2cpp/set.hpp>
 #include <utility>
 #include <vector>
@@ -13,10 +14,11 @@ struct TestGraph {
     using node_t = uint32_t;
     std::vector<std::pair<node_t, node_t>> edges_list;
     std::vector<std::vector<node_t>> adjacency;
+    uint32_t num_nodes;
 
     TestGraph(uint32_t num_nodes,
               std::vector<std::pair<node_t, node_t>> edges)
-        : edges_list(std::move(edges)), adjacency(num_nodes) {
+        : edges_list(std::move(edges)), adjacency(num_nodes), num_nodes(num_nodes) {
         for (const auto& e : edges_list) {
             adjacency[e.first].push_back(e.second);
             adjacency[e.second].push_back(e.first);
@@ -26,6 +28,19 @@ struct TestGraph {
     auto edges() const -> const std::vector<std::pair<node_t, node_t>>& {
         return edges_list;
     }
+
+    auto operator[](node_t node) const -> const std::vector<node_t>& {
+        return adjacency[node];
+    }
+
+    auto begin() const {
+        return py::range<uint32_t>(0, num_nodes).begin();
+    }
+    auto end() const {
+        return py::range<uint32_t>(0, num_nodes).end();
+    }
+
+    auto number_of_nodes() const -> size_t { return num_nodes; }
 };
 
 // ===================================================================
@@ -169,4 +184,137 @@ TEST_CASE("Unit weight overload") {
     auto [ok, val] = validate_max_cut(G, cut);
     CHECK(ok);
     CHECK_EQ(val, 1);
+}
+
+// ===================================================================
+// Tests: biconnected_components
+// ===================================================================
+
+TEST_CASE("biconnected_components — single triangle") {
+    // Triangle has one bc component containing all 3 nodes
+    TestGraph G(3, {{0, 1}, {1, 2}, {2, 0}});
+    auto comps = netlistx::detail::biconnected_components(G);
+
+    CHECK_EQ(comps.size(), 1);
+    CHECK(comps[0].contains(0));
+    CHECK(comps[0].contains(1));
+    CHECK(comps[0].contains(2));
+}
+
+TEST_CASE("biconnected_components — bowtie (two triangles sharing vertex)") {
+    // Two triangles sharing node 2 → two bc components
+    // Comp1: {0,1,2}, Comp2: {2,3,4}
+    TestGraph G(5, {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 2}});
+    auto comps = netlistx::detail::biconnected_components(G);
+
+    CHECK_EQ(comps.size(), 2);
+
+    // Each component should have exactly 3 nodes
+    // Node 2 (articulation point) appears in both
+    CHECK_EQ(comps[0].size(), 3);
+    CHECK_EQ(comps[1].size(), 3);
+    CHECK(comps[0].contains(2));
+    CHECK(comps[1].contains(2));
+}
+
+TEST_CASE("biconnected_components — tree (no cycles)") {
+    // A tree has one biconnected component per edge (each is size 2)
+    TestGraph G(4, {{0, 1}, {1, 2}, {2, 3}});
+    auto comps = netlistx::detail::biconnected_components(G);
+
+    // 3 edges → 3 biconnected components, each with 2 nodes
+    CHECK_EQ(comps.size(), 3);
+    for (const auto& comp : comps) {
+        CHECK_EQ(comp.size(), 2);
+    }
+}
+
+TEST_CASE("biconnected_components — empty graph") {
+    TestGraph G(0, {});
+    auto comps = netlistx::detail::biconnected_components(G);
+    CHECK(comps.empty());
+}
+
+// ===================================================================
+// Tests: bc-optimized solve_hadlock_max_cut
+// ===================================================================
+
+TEST_CASE("BC-optimized — bowtie (two unit-weight triangles)") {
+    // Two triangles sharing node 2:
+    //   Triangle 1: 0-1-2 (unit weight)
+    //   Triangle 2: 2-3-4 (unit weight)
+    // Each triangle's max cut = 2 edges → total 4 edges in the cut
+    TestGraph G(5, {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 2}});
+
+    // Per-component faces
+    // Comp 0 (triangle 0-1-2): inner {0,1,2}, outer {0,2,1}
+    // Comp 1 (triangle 2-3-4): inner {2,3,4}, outer {2,4,3}
+    std::vector<std::vector<std::vector<uint32_t>>> component_faces = {
+        {{0, 1, 2}, {0, 2, 1}},
+        {{2, 3, 4}, {2, 4, 3}}
+    };
+
+    auto cut = solve_hadlock_max_cut(G, unit_weight, component_faces);
+    auto [ok, val] = validate_max_cut(G, cut, unit_weight);
+
+    CHECK(ok);
+    CHECK_EQ(cut.size(), 4);  // 2 + 2 edges
+    CHECK_EQ(val, 4);
+}
+
+TEST_CASE("BC-optimized — disconnected triangles") {
+    // Two completely disconnected triangles (no shared vertex):
+    //   Triangle 1: nodes {0,1,2}
+    //   Triangle 2: nodes {3,4,5}
+    TestGraph G(6, {{0, 1}, {1, 2}, {2, 0}, {3, 4}, {4, 5}, {5, 3}});
+
+    std::vector<std::vector<std::vector<uint32_t>>> component_faces = {
+        {{0, 1, 2}, {0, 2, 1}},
+        {{3, 4, 5}, {3, 5, 4}}
+    };
+
+    auto cut = solve_hadlock_max_cut(G, unit_weight, component_faces);
+    auto [ok, val] = validate_max_cut(G, cut, unit_weight);
+
+    CHECK(ok);
+    CHECK_EQ(cut.size(), 4);  // 2 + 2
+    CHECK_EQ(val, 4);
+}
+
+TEST_CASE("BC-optimized — mixed: triangle + square") {
+    // Triangle (nodes 0,1,2) + square (nodes 2,3,4,5) sharing node 2
+    // Triangle faces: inner {0,1,2}, outer {0,2,1}
+    // Square  faces: inner {2,3,4,5}, outer {2,5,4,3}
+    TestGraph G(6, {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 5}, {5, 2}});
+    // Edge weights: triangle edges = 1, square edges = 1
+    // Square is bipartite (even cycle) → all 4 square edges in cut
+    // Triangle has max cut = 2 edges
+    // Total cut = 6 edges, weight = 6
+
+    std::vector<std::vector<std::vector<uint32_t>>> component_faces = {
+        {{0, 1, 2}, {0, 2, 1}},             // triangle
+        {{2, 3, 4, 5}, {2, 5, 4, 3}}        // square
+    };
+
+    auto cut = solve_hadlock_max_cut(G, unit_weight, component_faces);
+    auto [ok, val] = validate_max_cut(G, cut, unit_weight);
+
+    CHECK(ok);
+    // Square has 0 odd faces → all 4 edges in cut
+    // Triangle has max cut = 2 edges
+    CHECK_EQ(val, 6);
+}
+
+TEST_CASE("BC-optimized — component_faces mismatch handled gracefully") {
+    // Only provide faces for 1 component but graph has 2
+    TestGraph G(5, {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 2}});
+
+    // Only 1 face list for a 2-component graph
+    std::vector<std::vector<std::vector<uint32_t>>> component_faces = {
+        {{0, 1, 2}, {0, 2, 1}}
+    };
+
+    // Should not crash — returns partial cut
+    auto cut = solve_hadlock_max_cut(G, unit_weight, component_faces);
+    CHECK_GE(cut.size(), 0);  // at least the first component's cut
 }

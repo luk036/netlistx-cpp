@@ -3,6 +3,7 @@ add_requires("fmt", { alias = "fmt" })
 add_requires("doctest", { alias = "doctest" })
 add_requires("spdlog", { alias = "spdlog" })
 add_requires("nlohmann_json", { alias = "nlohmann_json" })
+-- cppcoro unavailable via network; using hand-rolled Generator<T> instead
 
 set_languages("c++23")
 

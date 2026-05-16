@@ -1,0 +1,317 @@
+#include <doctest/doctest.h>
+
+#include <cstdint>
+#include <netlistx/rand_cover.hpp>
+#include <py2cpp/dict.hpp>
+#include <py2cpp/range.hpp>
+#include <py2cpp/set.hpp>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+namespace {
+
+struct TestCoverGraph {
+    using node_t = uint32_t;
+    std::vector<std::pair<node_t, node_t>> edges_list;
+    std::vector<std::vector<node_t>> adjacency;
+    size_t num_nodes;
+
+    TestCoverGraph(size_t n, const std::vector<std::pair<node_t, node_t>>& edges)
+        : edges_list(edges), adjacency(n), num_nodes(n) {
+        for (const auto& edge : edges) {
+            adjacency[edge.first].emplace_back(edge.second);
+            adjacency[edge.second].emplace_back(edge.first);
+        }
+    }
+
+    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& { return edges_list; }
+
+    auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
+
+    auto begin() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .begin();
+    }
+    auto end() const {
+        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
+            .end();
+    }
+
+    auto number_of_nodes() const -> size_t { return num_nodes; }
+};
+
+struct MockHypergraph {
+    using node_t = uint32_t;
+    using graph_t = TestCoverGraph;
+
+    graph_t gr;
+    std::vector<node_t> nets;
+
+    MockHypergraph(const std::vector<node_t>& net_list, const graph_t& graph)
+        : gr(graph), nets(net_list) {}
+};
+
+} // anonymous namespace
+
+// Helper: verify every edge is covered
+template <typename Graph, typename CoverSet>
+bool is_valid_vertex_cover(const Graph& ugraph, const CoverSet& soln) {
+    for (const auto& edge : ugraph.edges()) {
+        if (!soln.contains(edge.first) && !soln.contains(edge.second)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// ============================================================================
+// rand_vertex_cover (single trial)
+// ============================================================================
+
+TEST_CASE("rand_vertex_cover simple triangle") {
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 42);
+    CHECK_EQ(soln.size(), 2);  // optimum for triangle is 2
+    CHECK_EQ(cost, 2);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover line") {
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 1);
+    CHECK(1 <= cost);
+    CHECK(cost <= 2);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover star") {
+    TestCoverGraph ugraph(4, {{0, 1}, {0, 2}, {0, 3}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1}};
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 2);
+    CHECK(1 <= cost);
+    CHECK(cost <= 3);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover weighted") {
+    // Lighter vertex should be selected
+    TestCoverGraph ugraph(2, {{0, 1}});
+    py::dict<uint32_t, int> weight{{0, 100}, {1, 1}};
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 42);
+    CHECK_EQ(soln.size(), 1);
+    CHECK(soln.contains(1));  // lighter vertex chosen by Pitt's rule
+    CHECK_EQ(cost, 1);
+}
+
+TEST_CASE("rand_vertex_cover empty graph") {
+    TestCoverGraph ugraph(0, {});
+    py::dict<uint32_t, int> weight;
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 0);
+    CHECK(soln.empty());
+    CHECK_EQ(cost, 0);
+}
+
+TEST_CASE("rand_vertex_cover single edge") {
+    TestCoverGraph ugraph(2, {{0, 1}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}};
+
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 7);
+    CHECK_EQ(soln.size(), 1);
+    CHECK_EQ(cost, 1);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover deterministic seed") {
+    TestCoverGraph ugraph(4, {{0, 1}, {1, 2}, {2, 3}, {3, 0}});
+    py::dict<uint32_t, int> weight{{0, 2}, {1, 3}, {2, 1}, {3, 4}};
+
+    auto [soln1, cost1] = rand_vertex_cover(ugraph, weight, 123);
+    auto [soln2, cost2] = rand_vertex_cover(ugraph, weight, 123);
+
+    CHECK_EQ(soln1, soln2);
+    CHECK_EQ(cost1, cost2);
+}
+
+TEST_CASE("rand_vertex_cover with initial coverset") {
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    py::set<uint32_t> initial{0};
+    auto [soln, cost] = rand_vertex_cover(ugraph, weight, 42, initial);
+
+    CHECK(soln.contains(0));  // pre-seeded vertex preserved
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+// ============================================================================
+// rand_vertex_cover_mt (multi-threaded)
+// ============================================================================
+
+TEST_CASE("rand_vertex_cover_mt simple triangle") {
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    // With many trials, should reliably find cover of size 2
+    auto [soln, cost] = rand_vertex_cover_mt(ugraph, weight, 128, 42);
+    CHECK_EQ(cost, 2);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover_mt weighted") {
+    TestCoverGraph ugraph(2, {{0, 1}});
+    py::dict<uint32_t, int> weight{{0, 100}, {1, 1}};
+
+    // Many trials: lighter vertex should always win
+    auto [soln, cost] = rand_vertex_cover_mt(ugraph, weight, 256, 42);
+    CHECK_EQ(soln.size(), 1);
+    CHECK(soln.contains(1));
+    CHECK_EQ(cost, 1);
+}
+
+TEST_CASE("rand_vertex_cover_mt empty graph") {
+    TestCoverGraph ugraph(0, {});
+    py::dict<uint32_t, int> weight;
+
+    auto [soln, cost] = rand_vertex_cover_mt(ugraph, weight, 64, 0);
+    CHECK(soln.empty());
+    CHECK_EQ(cost, 0);
+}
+
+TEST_CASE("rand_vertex_cover_mt deterministic seed") {
+    TestCoverGraph ugraph(4, {{0, 1}, {1, 2}, {2, 3}, {3, 0}});
+    py::dict<uint32_t, int> weight{{0, 2}, {1, 3}, {2, 1}, {3, 4}};
+
+    auto [soln1, cost1] = rand_vertex_cover_mt(ugraph, weight, 64, 123);
+    auto [soln2, cost2] = rand_vertex_cover_mt(ugraph, weight, 64, 123);
+
+    CHECK_EQ(soln1, soln2);
+    CHECK_EQ(cost1, cost2);
+}
+
+TEST_CASE("rand_vertex_cover_mt with initial coverset") {
+    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    py::set<uint32_t> initial{0};
+    auto [soln, cost] = rand_vertex_cover_mt(ugraph, weight, 64, 42, initial);
+
+    CHECK(soln.contains(0));
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+}
+
+TEST_CASE("rand_vertex_cover_mt larger graph") {
+    // Manually construct a graph with 8 nodes and ~20 edges
+    TestCoverGraph ugraph(8,
+                          {{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 4},
+                           {2, 3}, {2, 5}, {3, 6}, {4, 5}, {4, 7},
+                           {5, 6}, {5, 7}, {6, 7}});
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1},
+                                   {4, 1}, {5, 1}, {6, 1}, {7, 1}};
+
+    auto [soln, cost] = rand_vertex_cover_mt(ugraph, weight, 128, 1);
+    CHECK(is_valid_vertex_cover(ugraph, soln));
+    CHECK_LE(cost, 8);   // can't exceed all vertices
+    CHECK_GE(cost, 1);   // must have at least one vertex
+}
+
+// ============================================================================
+// rand_hyper_vertex_cover
+// ============================================================================
+
+TEST_CASE("rand_hyper_vertex_cover simple") {
+    TestCoverGraph base_graph(3, {});
+    MockHypergraph hyprgraph({0, 1}, base_graph);
+    hyprgraph.gr.adjacency = {
+        {1, 2},  // Net 0 connects vertices 1, 2
+        {0, 1}   // Net 1 connects vertices 0, 1
+    };
+
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    auto [soln, cost] = rand_hyper_vertex_cover(hyprgraph, weight, 42);
+    // Must cover each net
+    for (const auto& net : hyprgraph.nets) {
+        bool covered = false;
+        for (const auto& v : hyprgraph.gr[net]) {
+            if (soln.contains(v)) {
+                covered = true;
+                break;
+            }
+        }
+        CHECK(covered);
+    }
+    CHECK_GE(cost, 1);
+}
+
+TEST_CASE("rand_hyper_vertex_cover empty") {
+    TestCoverGraph base_graph(0, {});
+    MockHypergraph hyprgraph({}, base_graph);
+    py::dict<uint32_t, int> weight;
+
+    auto [soln, cost] = rand_hyper_vertex_cover(hyprgraph, weight, 0);
+    CHECK(soln.empty());
+    CHECK_EQ(cost, 0);
+}
+
+TEST_CASE("rand_hyper_vertex_cover deterministic") {
+    TestCoverGraph base_graph(3, {});
+    MockHypergraph hyprgraph({0}, base_graph);
+    hyprgraph.gr.adjacency = {
+        {0, 1, 2}  // Single net connecting all 3 vertices
+    };
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    auto [soln1, cost1] = rand_hyper_vertex_cover(hyprgraph, weight, 99);
+    auto [soln2, cost2] = rand_hyper_vertex_cover(hyprgraph, weight, 99);
+
+    CHECK_EQ(soln1, soln2);
+    CHECK_EQ(cost1, cost2);
+}
+
+// ============================================================================
+// rand_hyper_vertex_cover_mt
+// ============================================================================
+
+TEST_CASE("rand_hyper_vertex_cover_mt simple") {
+    TestCoverGraph base_graph(3, {});
+    MockHypergraph hyprgraph({0, 1}, base_graph);
+    hyprgraph.gr.adjacency = {
+        {1, 2},  // Net 0: vertices 1, 2
+        {0, 1}   // Net 1: vertices 0, 1
+    };
+    py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
+
+    auto [soln, cost] = rand_hyper_vertex_cover_mt(hyprgraph, weight, 64, 42);
+    for (const auto& net : hyprgraph.nets) {
+        bool covered = false;
+        for (const auto& v : hyprgraph.gr[net]) {
+            if (soln.contains(v)) {
+                covered = true;
+                break;
+            }
+        }
+        CHECK(covered);
+    }
+    CHECK_GE(cost, 1);
+}
+
+TEST_CASE("rand_hyper_vertex_cover_mt weighted") {
+    TestCoverGraph base_graph(2, {});
+    MockHypergraph hyprgraph({0}, base_graph);
+    hyprgraph.gr.adjacency = {{0, 1}};  // Single net connecting 0 and 1
+    py::dict<uint32_t, int> weight{{0, 100}, {1, 1}};
+
+    // With many trials, the lighter vertex (1) should be picked
+    auto [soln, cost] = rand_hyper_vertex_cover_mt(hyprgraph, weight, 128, 7);
+    CHECK_EQ(soln.size(), 1);
+    CHECK(soln.contains(1));
+    CHECK_EQ(cost, 1);
+}

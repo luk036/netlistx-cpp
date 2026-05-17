@@ -5,8 +5,6 @@
 #include <py2cpp/dict.hpp>  // for dict<>::Base
 #include <py2cpp/set.hpp>   // for set
 #include <transrangers_ext.hpp>
-#include <tuple>                       // for tuple_element<>::type
-#include <unordered_map>               // for operator!=
 #include <vector>                      // for vector
 #include <xnetwork/classes/graph.hpp>  // for Graph, SimpleGraph
 

@@ -8,49 +8,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
-// Simple test graph structure
-struct TestCoverGraph {
-    using node_t = uint32_t;
-    std::vector<std::pair<node_t, node_t>> edges_list;
-    std::vector<std::vector<node_t>> adjacency;
-    size_t num_nodes;
-
-    TestCoverGraph(size_t n, const std::vector<std::pair<node_t, node_t>>& edges)
-        : edges_list(edges), adjacency(n), num_nodes(n) {
-        for (const auto& edge : edges) {
-            adjacency[edge.first].emplace_back(edge.second);
-            adjacency[edge.second].emplace_back(edge.first);
-        }
-    }
-
-    auto edges() const -> const std::vector<std::pair<node_t, node_t>>& { return edges_list; }
-
-    auto operator[](node_t node) const -> const std::vector<node_t>& { return adjacency[node]; }
-
-    auto begin() const {
-        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
-            .begin();
-    }
-    auto end() const {
-        return py::range<uint32_t>(static_cast<uint32_t>(0), static_cast<uint32_t>(num_nodes))
-            .end();
-    }
-
-    auto number_of_nodes() const -> size_t { return num_nodes; }
-};
-
-// Mock hypergraph for testing
-struct MockHypergraph {
-    using node_t = uint32_t;
-    using graph_t = TestCoverGraph;
-
-    graph_t gr;
-    std::vector<node_t> nets;
-
-    MockHypergraph(const std::vector<node_t>& net_list, const graph_t& graph)
-        : gr(graph), nets(net_list) {}
-};
+#include <xnetwork/classes/graph.hpp>  // for SimpleGraph
 
 TEST_CASE("Test pd_cover basic") {
     auto violate_func
@@ -71,7 +29,9 @@ TEST_CASE("Test pd_cover basic") {
 }
 
 TEST_CASE("Test min_vertex_cover simple") {
-    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}});
+    xnetwork::SimpleGraph ugraph(3);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
     py::dict<uint32_t, int> weight;
     weight[0] = 1;
     weight[1] = 1;
@@ -88,14 +48,15 @@ TEST_CASE("Test min_vertex_cover simple") {
 }
 
 TEST_CASE("Test min_hyper_vertex_cover") {
-    TestCoverGraph base_graph(3, {});
-    MockHypergraph hyprgraph({0, 1}, base_graph);  // Nets 0 and 1
-
-    // Mock the graph access for nets
-    hyprgraph.gr.adjacency = {
-        {1, 2},  // Net 0 connects vertices 1, 2
-        {0, 1}   // Net 1 connects vertices 0, 1
-    };
+    // 3 vertices (0,1,2) + 2 nets (3,4) = 5 total nodes
+    xnetwork::SimpleGraph g(5);
+    // Net 0 (node 3) connects vertices 1, 2
+    g.add_edge(3, 1);
+    g.add_edge(3, 2);
+    // Net 1 (node 4) connects vertices 0, 1
+    g.add_edge(4, 0);
+    g.add_edge(4, 1);
+    SimpleNetlist hyprgraph(std::move(g), 3, 2);
 
     py::dict<uint32_t, int> weight;
     weight[0] = 1;
@@ -110,11 +71,11 @@ TEST_CASE("Test min_hyper_vertex_cover") {
 }
 
 TEST_CASE("Test min_cycle_cover triangle") {
-    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    xnetwork::SimpleGraph ugraph(3);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(2, 0);
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
-    // weight[0] = 1;
-    // weight[1] = 1;
-    // weight[2] = 1;
 
     py::set<uint32_t> soln;
     auto [covered, cost] = min_cycle_cover(ugraph, weight, soln);
@@ -125,11 +86,11 @@ TEST_CASE("Test min_cycle_cover triangle") {
 }
 
 TEST_CASE("Test min_odd_cycle_cover triangle") {
-    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    xnetwork::SimpleGraph ugraph(3);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(2, 0);
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
-    // weight[0] = 1;
-    // weight[1] = 1;
-    // weight[2] = 1;
 
     py::set<uint32_t> soln;
     auto [covered, cost] = min_odd_cycle_cover(ugraph, weight, soln);
@@ -154,7 +115,7 @@ TEST_CASE("Test _construct_cycle") {
 }
 
 TEST_CASE("Test empty graph") {
-    TestCoverGraph ugraph(0, {});
+    xnetwork::SimpleGraph ugraph(0);
     py::dict<uint32_t, int> weight;
 
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
@@ -167,9 +128,8 @@ TEST_CASE("Test empty graph") {
 }
 
 TEST_CASE("Test single vertex") {
-    TestCoverGraph ugraph(1, {});
+    xnetwork::SimpleGraph ugraph(1);
     py::dict<uint32_t, int> weight{{0, 5}};
-    // weight[0] = 5;
 
     auto [covered, cost] = min_vertex_cover(ugraph, weight);
     CHECK(covered.empty());  // No edges to cover
@@ -178,7 +138,10 @@ TEST_CASE("Test single vertex") {
 
 TEST_CASE("Test minimal vertex cover triangle") {
     // A triangle needs 2 vertices to cover all edges
-    TestCoverGraph ugraph(3, {{0, 1}, {1, 2}, {2, 0}});
+    xnetwork::SimpleGraph ugraph(3);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(2, 0);
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}};
 
     py::set<uint32_t> soln;
@@ -192,7 +155,10 @@ TEST_CASE("Test minimal vertex cover triangle") {
 
 TEST_CASE("Test cycle cover tree") {
     // A tree has no cycles → cycle cover should be empty
-    TestCoverGraph ugraph(4, {{0, 1}, {1, 2}, {2, 3}});
+    xnetwork::SimpleGraph ugraph(4);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(2, 3);
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1}};
 
     py::set<uint32_t> soln;
@@ -204,9 +170,14 @@ TEST_CASE("Test cycle cover tree") {
 
 TEST_CASE("Test odd cycle cover detection") {
     // Square (even) + Triangle (odd) in one graph
-    TestCoverGraph ugraph(7,
-                          {{0, 1}, {1, 2}, {2, 3}, {3, 0},    // even cycle (square)
-                           {4, 5}, {5, 6}, {6, 4}});           // odd cycle (triangle)
+    xnetwork::SimpleGraph ugraph(7);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(2, 3);
+    ugraph.add_edge(3, 0);  // even cycle (square)
+    ugraph.add_edge(4, 5);
+    ugraph.add_edge(5, 6);
+    ugraph.add_edge(6, 4);  // odd cycle (triangle)
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1},
                                    {4, 1}, {5, 1}, {6, 1}};
 
@@ -223,9 +194,17 @@ TEST_CASE("Test odd cycle cover detection") {
 
 TEST_CASE("Test post-processing minimality") {
     // K5: complete graph with 5 vertices, all weights = 1
-    TestCoverGraph ugraph(5,
-                          {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2},
-                           {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}});
+    xnetwork::SimpleGraph ugraph(5);
+    ugraph.add_edge(0, 1);
+    ugraph.add_edge(0, 2);
+    ugraph.add_edge(0, 3);
+    ugraph.add_edge(0, 4);
+    ugraph.add_edge(1, 2);
+    ugraph.add_edge(1, 3);
+    ugraph.add_edge(1, 4);
+    ugraph.add_edge(2, 3);
+    ugraph.add_edge(2, 4);
+    ugraph.add_edge(3, 4);
     py::dict<uint32_t, int> weight{{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}};
 
     py::set<uint32_t> soln;

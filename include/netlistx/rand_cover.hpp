@@ -247,7 +247,8 @@ auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph,
     std::uniform_real_distribution<double> dist(0.0, 1.0);
 
     for (const auto& net : hyprgraph.nets) {
-        const auto& vertices = hyprgraph.gr[net];
+        // Copy vertices to a vector for random access
+        std::vector<node_t> vertices(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end());
 
         // Skip nets already covered
         bool covered = false;

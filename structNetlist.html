@@ -49,7 +49,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a>&gt;</div>
+          <div class="m-doc-template">template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a>&gt;</div>
           Netlist <span class="m-thin">struct</span>
         </h1>
         <p>Represents a netlist, which is implemented using a graph-like data structure.</p>
@@ -71,14 +71,14 @@
           <dl class="m-doc">
             <dt>
               <span class="m-doc-wrap-bumper"><a href="#af6efb23337903e1708acbaa6ef084827" class="m-doc">Netlist</a>(</span><span class="m-doc-wrap"><a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> gr,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; modules,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; nets)</span>
+              const <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; modules,
+              const <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; nets)</span>
             </dt>
             <dd>Constructs a new <a href="structNetlist.html" class="m-doc">Netlist</a> object.</dd>
             <dt>
               <span class="m-doc-wrap-bumper"><a href="#ac7d88c2ad20883d273ce8212c86044c1" class="m-doc">Netlist</a>(</span><span class="m-doc-wrap"><a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> gr,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">uint32_<wbr />t</a> numModules,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">uint32_<wbr />t</a> numNets)</span>
+              uint32_t numModules,
+              uint32_t numNets)</span>
             </dt>
             <dd>Construct a new <a href="structNetlist.html" class="m-doc">Netlist</a> object.</dd>
           </dl>
@@ -87,44 +87,44 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt id="a9b291296aff6be252bdbf1ec223780c1">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9b291296aff6be252bdbf1ec223780c1" class="m-doc-self">begin</a>(</span><span class="m-doc-wrap">) const -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9b291296aff6be252bdbf1ec223780c1" class="m-doc-self">begin</a>(</span><span class="m-doc-wrap">) const -&gt; auto</span>
             </dt>
             <dd>Returns an iterator to the beginning of the modules nodeview.</dd>
             <dt id="a95bcf35a0d80b22bff12404dd953b7ad">
-              <span class="m-doc-wrap-bumper">auto <a href="#a95bcf35a0d80b22bff12404dd953b7ad" class="m-doc-self">end</a>(</span><span class="m-doc-wrap">) const -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a95bcf35a0d80b22bff12404dd953b7ad" class="m-doc-self">end</a>(</span><span class="m-doc-wrap">) const -&gt; auto</span>
             </dt>
             <dd>Returns an iterator to the end of the modules nodeview.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a995da877a09ce1823a104720f3bdd539" class="m-doc">number_of_modules</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a995da877a09ce1823a104720f3bdd539" class="m-doc">number_of_modules</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
             <dd>Get the number of modules in the netlist.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a93fe2265b67cee9f0047aba206e70125" class="m-doc">number_of_nets</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a93fe2265b67cee9f0047aba206e70125" class="m-doc">number_of_nets</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
             <dd>Get the number of nets in the netlist.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a92dc1c22bf9262f753a4c65796e7677d" class="m-doc">number_of_nodes</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a92dc1c22bf9262f753a4c65796e7677d" class="m-doc">number_of_nodes</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
             <dd>Get the number of nodes in the netlist graph.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a92e324fe34b3112849da0fe9cb7e1ad1" class="m-doc">get_max_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a92e324fe34b3112849da0fe9cb7e1ad1" class="m-doc">get_max_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
             <dd>Get the maximum degree of any node in the netlist.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#aebb0557c2d86fdb203d47cf840b1483f" class="m-doc">get_max_net_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aebb0557c2d86fdb203d47cf840b1483f" class="m-doc">get_max_net_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
             <dd>Get the max net degree.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a27cb4030d507d6e322a727d20c7b3272" class="m-doc">get_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v) const -&gt; unsigned int -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a27cb4030d507d6e322a727d20c7b3272" class="m-doc">get_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v) const -&gt; unsigned int -&gt; auto</span>
             </dt>
             <dd>Get the module weight.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#ac7bc93ffeb30b55c408d5c855a2bab8a" class="m-doc">set_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">unsigned</a> <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">int</a> weight) -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">void</a></span>
+              <span class="m-doc-wrap-bumper">void <a href="#ac7bc93ffeb30b55c408d5c855a2bab8a" class="m-doc">set_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v,
+              unsigned int weight)</span>
             </dt>
             <dd>Set the weight of a module.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a62e16d1c1ac77cbe8f2e587c07b28025" class="m-doc">get_net_weight</a>(</span><span class="m-doc-wrap"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a>&amp;) const -&gt; uint32_t -&gt; <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a62e16d1c1ac77cbe8f2e587c07b28025" class="m-doc">get_net_weight</a>(</span><span class="m-doc-wrap">const <a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a>&amp;) const -&gt; uint32_t -&gt; auto</span>
             </dt>
             <dd>Get the net weight.</dd>
           </dl>
@@ -134,11 +134,11 @@
           <section class="m-doc-details" id="af6efb23337903e1708acbaa6ef084827"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
               <span class="m-doc-wrap-bumper"> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af6efb23337903e1708acbaa6ef084827" class="m-doc-self">Netlist</a>(</span><span class="m-doc-wrap"><a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> gr,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; modules,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; nets)</span></span>
+              const <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; modules,
+              const <a href="structNetlist.html#a08ef86caa175ac7ce7cec591e3543183" class="m-doc">nodeview_<wbr />t</a>&amp; nets)</span></span>
             </h3>
             <p>Constructs a new <a href="structNetlist.html" class="m-doc">Netlist</a> object.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -165,11 +165,11 @@
           <section class="m-doc-details" id="ac7d88c2ad20883d273ce8212c86044c1"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
               <span class="m-doc-wrap-bumper"> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac7d88c2ad20883d273ce8212c86044c1" class="m-doc-self">Netlist</a>(</span><span class="m-doc-wrap"><a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> gr,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">uint32_<wbr />t</a> numModules,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">uint32_<wbr />t</a> numNets)</span></span>
+              uint32_t numModules,
+              uint32_t numNets)</span></span>
             </h3>
             <p>Construct a new <a href="structNetlist.html" class="m-doc">Netlist</a> object.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -195,9 +195,9 @@
           <section class="m-doc-details" id="a995da877a09ce1823a104720f3bdd539"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a995da877a09ce1823a104720f3bdd539" class="m-doc-self">number_of_modules</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a995da877a09ce1823a104720f3bdd539" class="m-doc-self">number_of_modules</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
             </h3>
             <p>Get the number of modules in the netlist.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -212,9 +212,9 @@
           <section class="m-doc-details" id="a93fe2265b67cee9f0047aba206e70125"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a93fe2265b67cee9f0047aba206e70125" class="m-doc-self">number_of_nets</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a93fe2265b67cee9f0047aba206e70125" class="m-doc-self">number_of_nets</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
             </h3>
             <p>Get the number of nets in the netlist.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -229,9 +229,9 @@
           <section class="m-doc-details" id="a92dc1c22bf9262f753a4c65796e7677d"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a92dc1c22bf9262f753a4c65796e7677d" class="m-doc-self">number_of_nodes</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a92dc1c22bf9262f753a4c65796e7677d" class="m-doc-self">number_of_nodes</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
             </h3>
             <p>Get the number of nodes in the netlist graph.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -246,9 +246,9 @@
           <section class="m-doc-details" id="a92e324fe34b3112849da0fe9cb7e1ad1"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a92e324fe34b3112849da0fe9cb7e1ad1" class="m-doc-self">get_max_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a92e324fe34b3112849da0fe9cb7e1ad1" class="m-doc-self">get_max_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
             </h3>
             <p>Get the maximum degree of any node in the netlist.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -263,9 +263,9 @@
           <section class="m-doc-details" id="aebb0557c2d86fdb203d47cf840b1483f"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aebb0557c2d86fdb203d47cf840b1483f" class="m-doc-self">get_max_net_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aebb0557c2d86fdb203d47cf840b1483f" class="m-doc-self">get_max_net_degree</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
             </h3>
             <p>Get the max net degree.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -280,9 +280,9 @@
           <section class="m-doc-details" id="a27cb4030d507d6e322a727d20c7b3272"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a27cb4030d507d6e322a727d20c7b3272" class="m-doc-self">get_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v) const -&gt; unsigned int</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a27cb4030d507d6e322a727d20c7b3272" class="m-doc-self">get_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v) const -&gt; unsigned int</span></span>
             </h3>
             <p>Get the module weight.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -306,10 +306,10 @@
           <section class="m-doc-details" id="ac7bc93ffeb30b55c408d5c855a2bab8a"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">void</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac7bc93ffeb30b55c408d5c855a2bab8a" class="m-doc-self">set_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v,
-              <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">unsigned</a> <a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">int</a> weight)</span></span>
+              <span class="m-doc-wrap-bumper">void Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac7bc93ffeb30b55c408d5c855a2bab8a" class="m-doc-self">set_module_weight</a>(</span><span class="m-doc-wrap"><a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a> v,
+              unsigned int weight)</span></span>
             </h3>
             <p>Set the weight of a module.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -331,9 +331,9 @@
           <section class="m-doc-details" id="a62e16d1c1ac77cbe8f2e587c07b28025"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">typename</a> <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
+                template&lt;typename <a href="netlist_8hpp.html#abf8ac668235c649d61f393bab7d9d761" class="m-doc">graph_<wbr />t</a> _1&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">auto</a> Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a62e16d1c1ac77cbe8f2e587c07b28025" class="m-doc-self">get_net_weight</a>(</span><span class="m-doc-wrap"><a href="cover_8hpp.html#a0135d3f62c355b135763409df1b9a604" class="m-doc">const</a> <a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a>&amp;) const -&gt; uint32_t</span></span>
+              <span class="m-doc-wrap-bumper">auto Netlist&lt;_1&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a62e16d1c1ac77cbe8f2e587c07b28025" class="m-doc-self">get_net_weight</a>(</span><span class="m-doc-wrap">const <a href="structNetlist.html#a8fbf3e646832343e6cfc2c788e35a669" class="m-doc">node_<wbr />t</a>&amp;) const -&gt; uint32_t</span></span>
             </h3>
             <p>Get the net weight.</p>
             <table class="m-table m-fullwidth m-flat">

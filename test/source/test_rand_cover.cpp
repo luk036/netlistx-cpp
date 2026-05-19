@@ -5,9 +5,7 @@
 #include <netlistx/rand_cover.hpp>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
-#include <unordered_map>
 #include <utility>
-#include <vector>
 #include <xnetwork/classes/graph.hpp>  // for SimpleGraph
 
 // ============================================================================

@@ -6,7 +6,6 @@
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
 #include <utility>
-#include <vector>
 #include <xnetwork/classes/graph.hpp>  // for SimpleGraph
 
 TEST_CASE("Test min_hyper_vertex_cover") {

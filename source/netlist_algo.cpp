@@ -79,9 +79,9 @@ auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight)
 // Explicit instantiations for SimpleNetlist
 using node_t = SimpleNetlist::node_t;
 
-template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, int>, py::set<node_t>>(
-    const SimpleNetlist&, const py::dict<node_t, int>&, py::set<node_t>&, py::set<node_t>&) -> int;
+template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, unsigned int>, py::set<node_t>>(
+    const SimpleNetlist&, const py::dict<node_t, unsigned int>&, py::set<node_t>&, py::set<node_t>&) -> unsigned int;
 
-template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, int>>(
-    const SimpleNetlist&, const py::dict<node_t, int>&)
-    -> std::pair<py::set<node_t>, int>;
+template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, unsigned int>>(
+    const SimpleNetlist&, const py::dict<node_t, unsigned int>&)
+    -> std::pair<py::set<node_t>, unsigned int>;

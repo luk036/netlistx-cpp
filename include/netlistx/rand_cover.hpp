@@ -23,43 +23,40 @@
 #include <algorithm>
 #include <cassert>
 #include <future>
+#include <netlistx/thread_pool.hpp>
 #include <optional>
+#include <py2cpp/set.hpp>
 #include <random>
 #include <utility>
 #include <vector>
 
-#include <py2cpp/set.hpp>
-
-#include <netlistx/thread_pool.hpp>
-
 namespace detail {
 
-/**
- * @brief Reverse-delete post-processing step.
- *
- * Iterates through vertices in reverse addition order.  For each vertex,
- * temporarily removes it; if the cover remains valid, the removal is
- * kept (vertex was redundant).  Otherwise the vertex is restored.
- *
- * @tparam Node Vertex type
- * @tparam Validator Callable that returns true if current cover is valid
- * @param soln Mutable cover set (modified in place)
- * @param added_order Vertices in order they were added
- * @param is_valid Validation callable
- */
-template <typename Node, typename Validator>
-void reverse_delete_cover(py::set<Node>& soln,
-                           const std::vector<Node>& added_order,
-                           Validator&& is_valid) {
-    for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
-        soln.erase(*it);
-        if (!std::forward<Validator>(is_valid)()) {
-            soln.insert(*it);
+    /**
+     * @brief Reverse-delete post-processing step.
+     *
+     * Iterates through vertices in reverse addition order.  For each vertex,
+     * temporarily removes it; if the cover remains valid, the removal is
+     * kept (vertex was redundant).  Otherwise the vertex is restored.
+     *
+     * @tparam Node Vertex type
+     * @tparam Validator Callable that returns true if current cover is valid
+     * @param soln Mutable cover set (modified in place)
+     * @param added_order Vertices in order they were added
+     * @param is_valid Validation callable
+     */
+    template <typename Node, typename Validator>
+    void reverse_delete_cover(py::set<Node>& soln, const std::vector<Node>& added_order,
+                              Validator&& is_valid) {
+        for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
+            soln.erase(*it);
+            if (!std::forward<Validator>(is_valid)()) {
+                soln.insert(*it);
+            }
         }
     }
-}
 
-} // namespace detail
+}  // namespace detail
 
 /**
  * @brief Single trial of Pitt's randomized hypergraph vertex cover.
@@ -79,10 +76,8 @@ void reverse_delete_cover(py::set<Node>& soln,
  * @return std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type>
  */
 template <typename Hypergraph, typename WeightMap, typename RNG>
-auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph,
-                                    const WeightMap& weight,
-                                    const py::set<typename Hypergraph::node_t>& coverset,
-                                    RNG& rng)
+auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph, const WeightMap& weight,
+                                   const py::set<typename Hypergraph::node_t>& coverset, RNG& rng)
     -> std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type> {
     using node_t = typename Hypergraph::node_t;
     using CostType = typename WeightMap::mapped_type;
@@ -161,11 +156,9 @@ auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph,
  * @brief Single-trial hypergraph vertex cover (seeded convenience wrapper).
  */
 template <typename Hypergraph, typename WeightMap>
-auto rand_hyper_vertex_cover(
-    const Hypergraph& hyprgraph,
-    const WeightMap& weight,
-    std::optional<unsigned int> seed = std::optional<unsigned int>{0},
-    const py::set<typename Hypergraph::node_t>& coverset = {})
+auto rand_hyper_vertex_cover(const Hypergraph& hyprgraph, const WeightMap& weight,
+                             std::optional<unsigned int> seed = std::optional<unsigned int>{0},
+                             const py::set<typename Hypergraph::node_t>& coverset = {})
     -> std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type> {
     // using node_t = typename Hypergraph::node_t;
 
@@ -184,12 +177,9 @@ auto rand_hyper_vertex_cover(
  * Runs @p num_trials independent trials and returns the best cover.
  */
 template <typename Hypergraph, typename WeightMap>
-auto rand_hyper_vertex_cover_mt(
-    const Hypergraph& hyprgraph,
-    const WeightMap& weight,
-    unsigned int num_trials = 64,
-    unsigned int seed = 0,
-    const py::set<typename Hypergraph::node_t>& coverset = {})
+auto rand_hyper_vertex_cover_mt(const Hypergraph& hyprgraph, const WeightMap& weight,
+                                unsigned int num_trials = 64, unsigned int seed = 0,
+                                const py::set<typename Hypergraph::node_t>& coverset = {})
     -> std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type> {
     using node_t = typename Hypergraph::node_t;
     using CostType = typename WeightMap::mapped_type;

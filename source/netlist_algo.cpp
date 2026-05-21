@@ -1,10 +1,8 @@
-#include <netlistx/netlist_algo.hpp>
+#include <algorithm>
 #include <netlistx/netlist.hpp>
-
+#include <netlistx/netlist_algo.hpp>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
-
-#include <algorithm>
 #include <unordered_map>
 #include <utility>
 
@@ -80,7 +78,8 @@ auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight)
 using node_t = SimpleNetlist::node_t;
 
 template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, unsigned int>, py::set<node_t>>(
-    const SimpleNetlist&, const py::dict<node_t, unsigned int>&, py::set<node_t>&, py::set<node_t>&) -> unsigned int;
+    const SimpleNetlist&, const py::dict<node_t, unsigned int>&, py::set<node_t>&, py::set<node_t>&)
+    -> unsigned int;
 
 template auto min_maximal_matching<SimpleNetlist, py::dict<node_t, unsigned int>>(
     const SimpleNetlist&, const py::dict<node_t, unsigned int>&)

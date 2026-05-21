@@ -3,14 +3,12 @@
 #include <algorithm>
 #include <cassert>
 #include <deque>
+#include <netlistx/gen.hpp>
+#include <py2cpp/dict.hpp>
+#include <py2cpp/set.hpp>
 #include <queue>
 #include <utility>
 #include <vector>
-
-#include <py2cpp/dict.hpp>
-#include <py2cpp/set.hpp>
-
-#include <netlistx/gen.hpp>
 
 /**
  * @brief Implements a primal-dual approximation algorithm for covering problems.

@@ -32,13 +32,11 @@ CPMAddPackage(
                                                         # as library
 )
 
-# CPMAddPackage(
-#   NAME nlohmann_json
-#   GITHUB_REPOSITORY nlohmann/json
-#   GIT_TAG v3.12.0
-#   OPTIONS "JSON_BuildTests OFF" "JSON_Install OFF" # we don't need the installable target, just the header
-# )
+# CPMAddPackage( NAME nlohmann_json GITHUB_REPOSITORY nlohmann/json GIT_TAG v3.12.0 OPTIONS
+# "JSON_BuildTests OFF" "JSON_Install OFF" # we don't need the installable target, just the header )
 # set(NLOHMANN_JSON_INSTALL ON CACHE BOOL "" FORCE)
 CPMAddPackage("gh:nlohmann/json@3.12.0")
 
-set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog nlohmann_json::nlohmann_json)
+set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog
+                  nlohmann_json::nlohmann_json
+)

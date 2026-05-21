@@ -1,5 +1,3 @@
-#include <netlistx/readwrite.hpp>
-
 #include <algorithm>
 #include <cctype>
 #include <cstdint>
@@ -8,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <netlistx/netlist.hpp>
+#include <netlistx/readwrite.hpp>
 #include <py2cpp/range.hpp>
 #include <py2cpp/set.hpp>
 #include <sstream>
@@ -22,10 +21,9 @@
 // using edge_t = typename boost::graph_traits<graph_t>::edge_iterator;
 
 #include <nlohmann/json.hpp>  // for json
-
-#include <set>             // for set
-#include <string>          // for string
-#include <unordered_map>   // for unordered_map
+#include <set>                // for set
+#include <string>             // for string
+#include <unordered_map>      // for unordered_map
 
 using namespace std;
 
@@ -470,8 +468,7 @@ auto read_dimacs_format(const string& filename) -> SimpleNetlist {
     string line;
 
     while (getline(file, line)) {
-        if (line.empty())
-            continue;
+        if (line.empty()) continue;
 
         if (line[0] == 'c') {
             continue;

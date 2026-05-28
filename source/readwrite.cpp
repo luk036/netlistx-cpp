@@ -22,7 +22,6 @@
 
 #include <nlohmann/json.hpp>  // for json
 #include <set>                // for set
-#include <string>             // for string
 #include <unordered_map>      // for unordered_map
 
 using namespace std;

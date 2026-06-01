@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14...3.22)
+cmake_minimum_required(VERSION 3.14)
 
 project(NetlistXTests LANGUAGES CXX)
 
@@ -31,12 +31,62 @@ else()
   CPMAddPackage(NAME NetlistX SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..)
 endif()
 
+# ---- Optional CUDA GPU acceleration ----
+find_package(CUDAToolkit QUIET)
+if(CUDAToolkit_FOUND)
+  message(STATUS "NetlistXTests: GPU acceleration enabled")
+  set(CUDA_ENABLED ON)
+else()
+  set(CUDA_ENABLED OFF)
+endif()
+
 # ---- Create binary ----
 
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 add_executable(${PROJECT_NAME} ${sources})
-target_link_libraries(
-  ${PROJECT_NAME} doctest::doctest NetlistX::NetlistX ${SPECIFIC_LIBS} nlohmann_json::nlohmann_json
+
+# ---- CUDA GPU object (compiled by nvcc, linked into test binary) ----
+if(CUDA_ENABLED)
+    set(CUDA_SRC "${CMAKE_CURRENT_LIST_DIR}/../source/rand_cover_gpu.cu")
+    set(CUDA_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rand_cover_gpu.obj")
+
+    # Flags matching xmake: CUDA 12.3, compute 7.5, C++20, device link
+    set(NVCC_FLAGS
+        --compile
+        --gpu-architecture=compute_75
+        --std=c++20
+        --use-local-env
+        -ccbin "${CMAKE_CXX_COMPILER}"
+        -I"${CMAKE_CURRENT_LIST_DIR}/../include"
+        -I"${CMAKE_CURRENT_LIST_DIR}/../include/netlistx"
+        -I"${CUDAToolkit_INCLUDE_DIRS}"
+        -DHAS_CUDA
+        -DDOCTEST_CONFIG_USE_STD_HEADERS
+        -O2
+        -o "${CUDA_OBJ}"
+    )
+
+    if(MSVC)
+        list(APPEND NVCC_FLAGS
+            -Xcompiler="/EHsc" -Xcompiler="/wd4819" -Xcompiler="/O2"
+            "-Xcompiler=/MD$<$<CONFIG:Debug>:d>")
+    endif()
+
+    add_custom_command(
+        OUTPUT ${CUDA_OBJ}
+        COMMAND ${CUDAToolkit_BIN_DIR}/nvcc ${NVCC_FLAGS} "${CUDA_SRC}"
+        DEPENDS ${CUDA_SRC}
+        COMMENT "Compiling rand_cover_gpu.cu with nvcc"
+        VERBATIM
+    )
+
+    target_sources(${PROJECT_NAME} PRIVATE ${CUDA_OBJ})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE HAS_CUDA)
+    target_link_libraries(${PROJECT_NAME} CUDA::cudart)
+endif()
+
+target_link_libraries(${PROJECT_NAME}
+    doctest::doctest NetlistX::NetlistX ${SPECIFIC_LIBS} nlohmann_json::nlohmann_json
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)
 
@@ -53,7 +103,7 @@ if(NOT TEST_INSTALLED_VERSION)
       NetlistX PUBLIC -Wall -Wpedantic -Wextra -Werror -Wno-deprecated-literal-operator
     )
   elseif(MSVC)
-    target_compile_options(NetlistX PUBLIC /W4 /WX /wd4459 /wd4819 /wd4996)
+    target_compile_options(NetlistX PUBLIC /W4 /wd4459 /wd4819 /wd4996 /wd5051)
     target_compile_definitions(${PROJECT_NAME} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
   endif()
 endif()

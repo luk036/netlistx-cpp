@@ -11,9 +11,9 @@ set_languages("c++23")
 local has_cuda = false
 if os.getenv("CUDA_PATH") or os.getenv("CUDA_ROOT") then
     has_cuda = true
-    print("[xmake] CUDA detected -- enabling GPU acceleration")
+    print("[xmake] CUDA detected — enabling GPU acceleration")
 else
-    print("[xmake] CUDA not found -- CPU-only mode")
+    print("[xmake] CUDA not found — CPU-only mode")
 end
 
 if is_plat("linux") then
@@ -31,7 +31,6 @@ if is_plat("linux") then
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
     add_cxflags("/EHsc /W4 /WX /wd4459 /wd4819 /wd4127 /wd4996 /wd5051", { force = true })
-    add_cxflags("/std:c++latest", { force = true })
 end
 
 if is_mode("coverage") then
@@ -46,9 +45,9 @@ target("NetlistX")
     add_files("source/*.cpp")
     if has_cuda then
         add_files("source/*.cu")
-        set_languages("c++23")
+        set_languages("cuda")
         set_policy("build.cuda.devlink", true)
-        add_defines("HAS_CUDA", { public = true })
+        add_defines("HAS_CUDA")
         add_cuflags("--extended-lambda", "--gpu-architecture=compute_75", { force = true })
         add_links("cudart")
         print("[xmake] NetlistX: GPU acceleration enabled (CUDA)")
@@ -64,6 +63,9 @@ target("test_netlistx")
     add_includedirs("../py2cpp/include", { public = true })
     add_includedirs("../xnetwork-cpp/include", { public = true })
     add_files("test/source/*.cpp")
+    if has_cuda then
+        add_defines("HAS_CUDA")
+    end
     add_packages("fmt", "doctest", "spdlog", "nlohmann_json")
 	if is_plat("linux") then
 		set_rundir("./build/linux/")

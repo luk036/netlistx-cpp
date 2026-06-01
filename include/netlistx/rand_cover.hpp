@@ -102,7 +102,7 @@ auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph, const WeightMap&
             continue;
         }
 
-        // Generalized Pitt rule: P(pick vi) ∝ 1/w(vi)
+        // Generalized Pitt rule: P(pick vi) ~ 1/w(vi)
         double total_inv{};
         std::vector<double> inv_weights;
         inv_weights.reserve(vertices.size());

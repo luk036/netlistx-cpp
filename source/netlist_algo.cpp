@@ -11,7 +11,7 @@ auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight, C2& matchset, 
     typename C1::mapped_type {
     using T = typename C1::mapped_type;
 
-    // dep_count[net] > 0  ⇔  at least one vertex of net is in dep.
+    // dep_count[net] > 0  iff  at least one vertex of net is in dep.
     // Replaces the O(deg(net2)) std::any_of scan with an O(1) dict lookup.
     std::unordered_map<typename Gnl::node_t, int> dep_count;
 

@@ -11,12 +11,12 @@ project(
 # ---- CUDA (optional) ---
 find_package(CUDAToolkit QUIET)
 if(CUDAToolkit_FOUND)
-    list(APPEND CMAKE_MESSAGE_CONTEXT "CUDA")
-    message(STATUS "CUDA detected — enabling GPU acceleration")
-    set(HAS_CUDA ON)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "CUDA")
+  message(STATUS "CUDA detected — enabling GPU acceleration")
+  set(HAS_CUDA ON)
 else()
-    set(HAS_CUDA OFF)
-    message(STATUS "CUDA not found — CPU-only mode")
+  set(HAS_CUDA OFF)
+  message(STATUS "CUDA not found — CPU-only mode")
 endif()
 
 # ---- Include guards ----
@@ -63,15 +63,15 @@ target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>
 
 # ---- CUDA source files ----
 if(HAS_CUDA)
-    file(GLOB cuda_sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cu")
-    target_sources(${PROJECT_NAME} PRIVATE ${cuda_sources})
-    set_source_files_properties(${cuda_sources} PROPERTIES LANGUAGE CUDA)
-    set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE HAS_CUDA)
-    if(MSVC)
-        target_compile_options(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/wd4819>")
-    endif()
-    message(STATUS "NetlistX: GPU acceleration enabled (CUDA)")
+  file(GLOB cuda_sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cu")
+  target_sources(${PROJECT_NAME} PRIVATE ${cuda_sources})
+  set_source_files_properties(${cuda_sources} PROPERTIES LANGUAGE CUDA)
+  set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE HAS_CUDA)
+  if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/wd4819>")
+  endif()
+  message(STATUS "NetlistX: GPU acceleration enabled (CUDA)")
 endif()
 
 # Link dependencies

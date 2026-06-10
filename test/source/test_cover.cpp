@@ -8,8 +8,7 @@
 #include <utility>
 #include <xnetwork/classes/graph.hpp>  // for SimpleGraph
 
-static void verify_cover_valid(const SimpleNetlist& hyprgraph,
-                                const py::set<uint32_t>& coverset) {
+static void verify_cover_valid(const SimpleNetlist& hyprgraph, const py::set<uint32_t>& coverset) {
     for (const auto& net : hyprgraph.nets) {
         bool net_covered = false;
         for (const auto& v : hyprgraph.gr[net]) {

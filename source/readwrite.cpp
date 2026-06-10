@@ -448,11 +448,25 @@ auto read_json_format(const string& filename) -> SimpleNetlist {
         exit(1);
     }
 
-    ostringstream oss;
-    oss << file.rdbuf();
+    nlohmann::json data;
+    file >> data;
 
-    cerr << "Error: JSON format not fully implemented.\n";
-    exit(1);
+    auto& graph = data["graph"];
+    const auto num_modules = graph["num_modules"].get<uint32_t>();
+    const auto num_nets = graph["num_nets"].get<uint32_t>();
+    const auto num_pads = graph["num_pads"].get<uint32_t>();
+    const auto total_nodes = num_modules + num_nets;
+
+    xnetwork::SimpleGraph g(total_nodes);
+    for (const auto& link : data["links"]) {
+        const auto source = link["source"].get<uint32_t>();
+        const auto target = link["target"].get<uint32_t>();
+        g.add_edge(source, target);
+    }
+
+    auto hyprgraph = SimpleNetlist{std::move(g), num_modules, num_nets};
+    hyprgraph.num_pads = num_pads;
+    return hyprgraph;
 }
 
 auto read_dimacs_format(const string& filename) -> SimpleNetlist {

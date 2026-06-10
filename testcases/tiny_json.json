@@ -1,0 +1,22 @@
+{
+ "directed": false,
+ "multigraph": false,
+ "graph": {
+ "num_modules": 3,
+ "num_nets": 2,
+ "num_pads": 0
+ },
+ "nodes": [
+  { "id": 0 },
+  { "id": 1 },
+  { "id": 2 },
+  { "id": 3 },
+  { "id": 4 }
+ ],
+ "links": [
+  { "source": 0, "target": 3 },
+  { "source": 0, "target": 4 },
+  { "source": 1, "target": 3 },
+  { "source": 2, "target": 4 }
+ ]
+}

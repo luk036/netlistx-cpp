@@ -25,9 +25,20 @@ TEST_CASE("Test min_vertex_cover dwarf") {
     py::set<node_t> covset{};
     for (auto node : hyprgraph) {
         weight[node] = 1;
-        // covset[node] = false;
     }
-    min_vertex_cover(hyprgraph, weight, covset);
+    const auto cost = min_vertex_cover(hyprgraph, weight, covset);
+
+    for (const auto& net : hyprgraph.nets) {
+        bool covered = false;
+        for (const auto& v : hyprgraph.gr[net]) {
+            if (covset.contains(v)) {
+                covered = true;
+                break;
+            }
+        }
+        CHECK_MESSAGE(covered, "Net ", net, " should be covered by min vertex cover");
+    }
+    CHECK_GT(cost, 0U);
 }
 
 //
@@ -36,17 +47,62 @@ TEST_CASE("Test min_vertex_cover dwarf") {
 
 TEST_CASE("Test min_maximal_matching dwarf") {
     const auto hyprgraph = create_dwarf();
-    // const auto N = hyprgraph.number_of_nets();
     py::dict<node_t, unsigned int> weight{};
     py::set<node_t> matchset{};
     py::set<node_t> dep{};
     for (auto net : hyprgraph.nets) {
-        // matchset[net] = false;
         weight[net] = 1;
     }
-    // for (auto v : hyprgraph)
-    // {
-    //     dep[v] = false;
-    // }
-    min_maximal_matching(hyprgraph, weight, matchset, dep);
+    const auto cost = min_maximal_matching(hyprgraph, weight, matchset, dep);
+
+    for (const auto& net : hyprgraph.nets) {
+        if (matchset.contains(net)) {
+            continue;
+        }
+        bool covered_by_dep = false;
+        for (const auto& v : hyprgraph.gr[net]) {
+            if (dep.contains(v)) {
+                covered_by_dep = true;
+                break;
+            }
+        }
+        CHECK_MESSAGE(covered_by_dep, "Net ", net, " should be covered by dep in maximal matching");
+    }
+    for (const auto& n : matchset) {
+        CHECK_GE(n, hyprgraph.number_of_modules());
+        CHECK_LT(n, hyprgraph.number_of_modules() + hyprgraph.number_of_nets());
+    }
+    CHECK_GT(cost, 0U);
+}
+
+TEST_CASE("Test min_maximal_matching convenience overload") {
+    const auto hyprgraph = create_dwarf();
+    py::dict<node_t, unsigned int> weight{};
+    for (auto net : hyprgraph.nets) {
+        weight[net] = 1;
+    }
+    const auto [matchset, cost] = min_maximal_matching(hyprgraph, weight);
+
+    for (const auto& net : hyprgraph.nets) {
+        bool covered = matchset.contains(net);
+        if (!covered) {
+            for (const auto& net2 : hyprgraph.nets) {
+                if (matchset.contains(net2)) {
+                    for (const auto& v : hyprgraph.gr[net2]) {
+                        for (const auto& v2 : hyprgraph.gr[net]) {
+                            if (v == v2) {
+                                covered = true;
+                                break;
+                            }
+                        }
+                        if (covered) break;
+                    }
+                }
+                if (covered) break;
+            }
+        }
+        CHECK_MESSAGE(covered, "Net ", net, " should be covered in maximal matching");
+    }
+    CHECK_GT(cost, 0U);
+    CHECK_FALSE(matchset.empty());
 }

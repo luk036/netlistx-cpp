@@ -128,3 +128,79 @@ TEST_CASE("write_partition") {
     write_partition(part, oss2, OutputFormat::json);
     CHECK_EQ(oss2.str(), "[0, 1, 0, 1, 0]\n");
 }
+
+TEST_CASE("read_hmetis_format") {
+    const auto hyprgraph = read_hmetis_format("../../testcases/tiny.hgr");
+
+    CHECK_EQ(hyprgraph.number_of_modules(), 3);
+    CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    // tiny.hgr net0: {0,1,2}, net1: {0,1}
+    CHECK_EQ(hyprgraph.gr.degree(0), 2);
+    CHECK_EQ(hyprgraph.gr.degree(1), 2);
+    CHECK_EQ(hyprgraph.gr.degree(2), 1);
+    // net0 = node 3, connects mods 0,1,2; net1 = node 4, connects mods 0,1
+    CHECK_EQ(hyprgraph.gr.degree(3), 3);
+    CHECK_EQ(hyprgraph.gr.degree(4), 2);
+}
+
+TEST_CASE("read_json_format") {
+    const auto hyprgraph = read_json_format("../../testcases/tiny_json.json");
+
+    CHECK_EQ(hyprgraph.number_of_modules(), 3);
+    CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    CHECK_EQ(hyprgraph.gr.degree(0), 2);
+    CHECK_EQ(hyprgraph.gr.degree(1), 1);
+    CHECK_EQ(hyprgraph.gr.degree(2), 1);
+    CHECK_EQ(hyprgraph.num_pads, 0);
+}
+
+TEST_CASE("read_dimacs_format") {
+    const auto hyprgraph = read_dimacs_format("../../testcases/tiny.dimacs");
+
+    CHECK_EQ(hyprgraph.number_of_modules(), 3);
+    CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    CHECK_EQ(hyprgraph.number_of_nodes(), 5U);
+    for (uint32_t i = 0; i < 5; ++i) {
+        CHECK_EQ(hyprgraph.gr.degree(i), 0);
+    }
+}
+
+TEST_CASE("read_hypergraph with auto_detect") {
+    SUBCASE("auto-detect .netD") {
+        const auto hyprgraph = read_hypergraph("../../testcases/dwarf1.netD");
+        CHECK_EQ(hyprgraph.number_of_modules(), 7);
+        CHECK_EQ(hyprgraph.number_of_nets(), 5);
+    }
+
+    SUBCASE("auto-detect .hgr") {
+        const auto hyprgraph = read_hypergraph("../../testcases/tiny.hgr");
+        CHECK_EQ(hyprgraph.number_of_modules(), 3);
+        CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    }
+
+    SUBCASE("auto-detect .json") {
+        const auto hyprgraph = read_hypergraph("../../testcases/tiny_json.json");
+        CHECK_EQ(hyprgraph.number_of_modules(), 3);
+        CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    }
+}
+
+TEST_CASE("read_hypergraph with explicit format") {
+    SUBCASE("hmetis format explicit") {
+        const auto hyprgraph = read_hypergraph("../../testcases/tiny.hgr", InputFormat::hmetis);
+        CHECK_EQ(hyprgraph.number_of_modules(), 3);
+        CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    }
+
+    SUBCASE("json format explicit") {
+        const auto hyprgraph = read_hypergraph("../../testcases/tiny_json.json", InputFormat::json);
+        CHECK_EQ(hyprgraph.number_of_modules(), 3);
+        CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    }
+
+    SUBCASE("dimacs format explicit") {
+        const auto hyprgraph = read_hypergraph("../../testcases/tiny.dimacs", InputFormat::dimacs);
+        CHECK_EQ(hyprgraph.number_of_modules(), 3);
+        CHECK_EQ(hyprgraph.number_of_nets(), 2);
+    }
+}

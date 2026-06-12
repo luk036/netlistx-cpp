@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * @brief Standalone executable entry point for NetlistX.
+ *
+ * Provides a CLI tool with --help, --version, --name, and --lang options.
+ * Currently serves as a scaffold for demonstration purposes.
+ */
+
 #include <netlistx/greeter.h>
 #include <netlistx/version.h>
 

@@ -118,7 +118,14 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
 }
 
 /**
- * @brief Overload without pre-existing coverset
+ * @brief Convenience overload that creates an empty coverset internally.
+ *
+ * @tparam Hypergraph Hypergraph type
+ * @tparam WeightMap Weight map type
+ * @param hyprgraph Input hypergraph
+ * @param weight Weight function
+ * @return std::pair<py::set<typename Hypergraph::node_t>, typename WeightMap::mapped_type>
+ *         Cover set and total weight
  */
 template <typename Hypergraph, typename WeightMap>
 auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight)

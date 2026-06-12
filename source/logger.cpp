@@ -5,8 +5,9 @@
 
 namespace netlistx {
 
+    // Log a message to "netlistx.log" via spdlog.
+    // Drops any existing "file_logger" instance first to ensure a fresh file handle.
     void log_with_spdlog(const std::string& message) {
-        // Always create a fresh logger to ensure proper file handling
         std::shared_ptr<spdlog::logger> logger;
         try {
             // Try to drop the existing logger first

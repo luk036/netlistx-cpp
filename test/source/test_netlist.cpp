@@ -17,9 +17,12 @@ using namespace std;
 // using edge_t = typename boost::graph_traits<graph_t>::edge_iterator;
 
 /**
- * @brief Create a test netlist object
+ * @brief Create a test netlist (the "dwarf" benchmark).
  *
- * @return Netlist
+ * Constructs a small bipartite graph with 7 module nodes (4 cells + 3 pads)
+ * and 6 net nodes, used as a minimal test case for partitioning algorithms.
+ *
+ * @return SimpleNetlist A pre-built test netlist with module weights assigned
  */
 auto create_dwarf() -> SimpleNetlist {
     using Edge = pair<uint32_t, uint32_t>;

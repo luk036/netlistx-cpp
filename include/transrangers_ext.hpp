@@ -64,11 +64,11 @@ namespace transrangers {
         using ranger = decltype(skip_first(std::declval<Range&>()));
         using cursor = typename ranger::cursor;
 
-    /// Invoke the underlying ranger on the given predicate.
-    template <typename F> auto operator()(const F& p) { return rgr(p); }
+        /// Invoke the underlying ranger on the given predicate.
+        template <typename F> auto operator()(const F& p) { return rgr(p); }
 
-    Range rng;
-    ranger rgr = skip_first(rng);
+        Range rng;
+        ranger rgr = skip_first(rng);
     };
 
     /**
@@ -118,11 +118,11 @@ namespace transrangers {
         using ranger = decltype(skip_last(std::declval<Range&>()));
         using cursor = typename ranger::cursor;
 
-    /// Invoke the underlying ranger on the given predicate.
-    template <typename F> auto operator()(const F& p) { return rgr(p); }
+        /// Invoke the underlying ranger on the given predicate.
+        template <typename F> auto operator()(const F& p) { return rgr(p); }
 
-    Range rng;
-    ranger rgr = skip_last(rng);
+        Range rng;
+        ranger rgr = skip_last(rng);
     };
 
     /**
@@ -173,11 +173,11 @@ namespace transrangers {
         using ranger = decltype(skip_both(std::declval<Range&>()));
         using cursor = typename ranger::cursor;
 
-    /// Invoke the underlying ranger on the given predicate.
-    template <typename F> auto operator()(const F& p) { return rgr(p); }
+        /// Invoke the underlying ranger on the given predicate.
+        template <typename F> auto operator()(const F& p) { return rgr(p); }
 
-    Range rng;
-    ranger rgr = skip_both(rng);
+        Range rng;
+        ranger rgr = skip_both(rng);
     };
 
     /**

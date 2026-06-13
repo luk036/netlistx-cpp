@@ -17,6 +17,11 @@ CPMAddPackage(
   OPTIONS "INSTALL_ONLY ON" # create an installable target
 )
 
+# Suppress MSVC STL1011 error on <experimental/coroutine> used by xnetwork via /await
+if(MSVC)
+  add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+endif()
+
 CPMAddPackage(
   NAME XNetwork
   GIT_TAG 1.7.3

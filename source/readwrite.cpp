@@ -15,11 +15,6 @@
 #include <vector>
 #include <xnetwork/classes/graph.hpp>
 
-// using graph_t =
-//     boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>;
-// using node_t = typename boost::graph_traits<graph_t>::vertex_descriptor;
-// using edge_t = typename boost::graph_traits<graph_t>::edge_iterator;
-
 #include <nlohmann/json.hpp>  // for json
 #include <set>                // for set
 #include <unordered_map>      // for unordered_map
@@ -379,7 +374,9 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
     return hyprgraph;
 }
 
-// Helper: map file extension to InputFormat based on suffix matching.
+/**
+ * @brief Map file extension to InputFormat based on suffix matching.
+ */
 auto detect_input_format(const string& filename) -> InputFormat {
     auto n = filename.size();
     if (n >= 4 && filename.substr(n - 4) == ".net") {
@@ -400,7 +397,9 @@ auto detect_input_format(const string& filename) -> InputFormat {
     return InputFormat::auto_detect;
 }
 
-// Parse hMetis format: header line (num_nets num_vertices [fmt]) then one line per net.
+/**
+ * @brief Parse hMetis format: header line (num_nets num_vertices [fmt]) then one line per net.
+ */
 auto read_hmetis_format(const string& filename) -> SimpleNetlist {
     auto file = ifstream{filename};
     if (file.fail()) {
@@ -443,7 +442,9 @@ auto read_hmetis_format(const string& filename) -> SimpleNetlist {
     return SimpleNetlist{g, num_modules, num_nets};
 }
 
-// Parse JSON format: graph metadata + links array with source/target pairs.
+/**
+ * @brief Parse JSON format: graph metadata + links array with source/target pairs.
+ */
 auto read_json_format(const string& filename) -> SimpleNetlist {
     auto file = ifstream{filename};
     if (file.fail()) {
@@ -472,8 +473,11 @@ auto read_json_format(const string& filename) -> SimpleNetlist {
     return hyprgraph;
 }
 
-// Parse DIMACS format: comment lines (c), problem line (p hypre V E), edge lines (e).
-// Currently only reads the header and creates an empty graph with the declared dimensions.
+/**
+ * @brief Parse DIMACS format: comment lines (c), problem line (p hypre V E), edge lines (e).
+ *
+ * Currently only reads the header and creates an empty graph with the declared dimensions.
+ */
 auto read_dimacs_format(const string& filename) -> SimpleNetlist {
     auto file = ifstream{filename};
     if (file.fail()) {
@@ -509,7 +513,9 @@ auto read_dimacs_format(const string& filename) -> SimpleNetlist {
     return SimpleNetlist{g, num_vertices, num_nets};
 }
 
-// Parse IBM .netD format: header line, then pin records (a=module, p=pad, s=new net).
+/**
+ * @brief Parse IBM .netD format: header line, then pin records (a=module, p=pad, s=new net).
+ */
 auto read_netD_format(const string& filename) -> SimpleNetlist {
     auto netD = ifstream{filename};
     if (netD.fail()) {
@@ -578,7 +584,9 @@ auto read_netD_format(const string& filename) -> SimpleNetlist {
     return hyprgraph;
 }
 
-// Dispatch to format-specific reader based on detected or explicit format.
+/**
+ * @brief Dispatch to format-specific reader based on detected or explicit format.
+ */
 auto read_hypergraph(const string& filename, InputFormat format) -> SimpleNetlist {
     auto actual_format = format;
     if (format == InputFormat::auto_detect) {
@@ -601,14 +609,18 @@ auto read_hypergraph(const string& filename, InputFormat format) -> SimpleNetlis
     }
 }
 
-// Write partition in hMetis format: one integer per line.
+/**
+ * @brief Write partition in hMetis format: one integer per line.
+ */
 void write_hmetis_partition(const vector<uint8_t>& part, ostream& os) {
     for (const auto p : part) {
         os << static_cast<int>(p) << "\n";
     }
 }
 
-// Write partition as a JSON array, e.g. [0, 1, 0, 1, ...].
+/**
+ * @brief Write partition as a JSON array, e.g. [0, 1, 0, 1, ...].
+ */
 void write_json_partition(const vector<uint8_t>& part, ostream& os) {
     os << "[";
     for (size_t i = 0; i < part.size(); ++i) {
@@ -620,7 +632,9 @@ void write_json_partition(const vector<uint8_t>& part, ostream& os) {
     os << "]\n";
 }
 
-// Dispatch partition output to the appropriate format writer.
+/**
+ * @brief Dispatch partition output to the appropriate format writer.
+ */
 void write_partition(const vector<uint8_t>& part, ostream& os, OutputFormat format) {
     if (format == OutputFormat::json) {
         write_json_partition(part, os);

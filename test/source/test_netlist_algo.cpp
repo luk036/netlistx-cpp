@@ -1,6 +1,4 @@
 #include <doctest/doctest.h>  // for TestCase, TEST_CASE
-// #include <__config>                 // for std
-// #include <__hash_table>             // for operator!=
 #include <netlistx/netlist.hpp>       // for Netlist, Netlist<>::nodeview_t
 #include <netlistx/netlist_algo.hpp>  // for min_maximal_matching, min_vertex_...
 #include <py2cpp/dict.hpp>            // for dict
@@ -14,8 +12,6 @@ extern auto create_test_netlist() -> SimpleNetlist;  // import create_test_netli
 extern auto create_dwarf() -> SimpleNetlist;         // import create_dwarf
 extern auto readNetD(std::string_view netDFileName) -> SimpleNetlist;
 extern void readAre(SimpleNetlist& hyprgraph, std::string_view areFileName);
-// extern pair<py::set<node_t>, int>
-// min_net_cover_pd(SimpleNetlist &, const vector<int> &);
 
 using node_t = SimpleNetlist::node_t;
 

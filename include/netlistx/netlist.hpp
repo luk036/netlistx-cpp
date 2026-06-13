@@ -1,20 +1,11 @@
 #pragma once
 
-// #include <algorithm>         // for max_element
 #include <cstddef>           // for size_t
 #include <cstdint>           // for uint32_t, uint8_t
 #include <py2cpp/dict.hpp>   // for dict
 #include <py2cpp/range.hpp>  // for range, _iterator, iterable_wra...
 #include <py2cpp/set.hpp>    // for set
 #include <vector>            // for vector
-
-// using node_t = int;
-
-// struct PartInfo
-// {
-//     std::vector<std::uint8_t> part;
-//     py::set<node_t> extern_nets;
-// };
 
 /**
  * @brief Represents a netlist, which is implemented using a graph-like data structure.
@@ -47,7 +38,6 @@ template <typename graph_t> struct Netlist {
     size_t num_pads = 0U;
     size_t max_degree{};
     size_t max_net_degree{};
-    // std::uint8_t cost_model = 0;
     std::vector<unsigned int> module_weight;
     bool has_fixed_modules{};
     py::set<node_t> module_fixed;
@@ -100,14 +90,6 @@ template <typename graph_t> struct Netlist {
      * @return The number of nodes in the netlist graph.
      */
     auto number_of_nodes() const -> size_t { return this->gr.number_of_nodes(); }
-
-    // /**
-    //  * @brief
-    //  *
-    //  * @return index_t
-    //  */
-    // auto number_of_pins() const -> index_t { return
-    // this->gr.number_of_edges(); }
 
     /**
      * @brief Get the maximum degree of any node in the netlist.
@@ -175,17 +157,8 @@ Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t& modules, const nodeview_
       num_nets(nets.size()) {
     this->has_fixed_modules = (!this->module_fixed.empty());
 
-    // auto deg_cmp = [this](const node_t &v, const node_t &w) {
-    //     return this->gr.degree(v) < this->gr.degree(w);
-    // };
-    // const auto result1 = std::max_element(this->modules.begin(), this->modules.end(), deg_cmp);
-    // this->max_degree = this->gr.degree(*result1);
-    // const auto result2 = std::max_element(this->nets.begin(), this->nets.end(), deg_cmp);
-    // this->max_net_degree = this->gr.degree(*result2);
-
-    // For MacOS, an iterator requires satisfying the forward_iterator concept instead of the
-    // input_iterator concept for std::max_element(). The workaround is to implement the
-    // functionality directly without using std::max_element().
+    // Note: std::max_element() requires a forward_iterator on MacOS, but our iterator only
+    // satisfies input_iterator. The manual loop below replaces std::max_element().
 
     // Find max element in modules
     auto it1 = this->modules.begin();
@@ -228,9 +201,10 @@ Netlist<graph_t>::Netlist(graph_t gr, uint32_t numModules, uint32_t numNets)
 
 #include <xnetwork/classes/graph.hpp>  // for Graph, Graph<>::nodeview_t
 
-// using RngIter = decltype(py::range(1));
 using graph_t = xnetwork::SimpleGraph;
 using index_t = uint32_t;
+
+/// Concrete netlist type using an undirected SimpleGraph as the underlying graph.
 using SimpleNetlist = Netlist<graph_t>;
 
 /**

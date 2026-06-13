@@ -14,9 +14,6 @@
  * and other optimization tasks.
  */
 
-// #include <range/v3/algorithm/any_of.hpp>
-// #include <range/v3/algorithm/min_element.hpp>
-
 /**
  * @brief Solves the minimum weighted vertex cover problem using the primal-dual paradigm.
  *

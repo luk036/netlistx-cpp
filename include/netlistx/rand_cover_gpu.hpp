@@ -132,6 +132,10 @@ namespace netlistx {
     auto rand_vertex_cover_gpu(const Graph& grph, const WeightMap& weight, int num_vertices,
                                int num_edges, unsigned int seed = 42u, int num_trials = 1024)
         -> std::pair<std::vector<int>, float> {
+        if (num_vertices <= 0) {
+            return {std::vector<int>{}, 0.0f};
+        }
+
         const auto edges_flat = detail::make_flat_edges(grph, num_edges);
         const auto weights_flat = detail::make_flat_weights(grph, num_vertices, weight);
         const int num_words = (num_vertices + 31) / 32;

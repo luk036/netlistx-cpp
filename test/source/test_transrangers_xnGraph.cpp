@@ -8,10 +8,6 @@
 #include <vector>                      // for vector
 #include <xnetwork/classes/graph.hpp>  // for Graph, SimpleGraph
 
-// #if __cplusplus > 201703L
-// #    include <cppcoro/generator.hpp>  // for operator!=, generator
-// #endif
-
 /**
  * @brief
  *
@@ -46,7 +42,6 @@ template <typename Graph> static void do_case(const Graph& gra) {
 TEST_CASE("Test xnetwork::Graph") {
     constexpr auto num_nodes = 6;
     enum nodes { a1, a2, a3, n1, n2, n3 };
-    // const auto R = py::range<std::uint8_t>(0, num_nodes);
     auto gra = xnetwork::SimpleGraph{num_nodes};
     gra.add_edge(a1, n1);
     gra.add_edge(a1, n1);
@@ -62,12 +57,10 @@ TEST_CASE("Test xnetwork::Graph") {
  * @return Netlist
  */
 TEST_CASE("Test xnetwork::Graph (not simple graph)") {
-    // constexpr auto num_nodes = 6;
     enum nodes_name { a1, a2, a3, n1, n2, n3 };
 
     std::vector<uint8_t> nodes{a2, a3, n1, n3, n2};
 
-    // const auto R = py::range<std::uint8_t>(0, num_nodes);
     auto gra = xnetwork::Graph<std::vector<uint8_t>>{nodes};
     gra.add_edge(a2, n1);
     gra.add_edge(a3, n2);

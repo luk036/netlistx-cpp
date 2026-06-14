@@ -1,11 +1,11 @@
 // -*- coding: utf-8 -*-
 #include <doctest/doctest.h>  // for ResultBuilder, CHECK, TestCase
 
+#include <cstdint>                     // for uint32_t
 #include <netlistx/netlist.hpp>        // for Netlist, SimpleNetlist, graph_t
+#include <utility>                     // for pair
+#include <vector>                      // for vector
 #include <xnetwork/classes/graph.hpp>  // for SimpleGraph, Graph
-#include <cstdint>  // for uint32_t
-#include <utility>  // for pair
-#include <vector>   // for vector
 
 using namespace std;
 

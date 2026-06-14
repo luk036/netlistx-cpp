@@ -7,17 +7,16 @@
 #include <iostream>
 #include <netlistx/netlist.hpp>
 #include <netlistx/readwrite.hpp>
+#include <nlohmann/json.hpp>  // for json
 #include <py2cpp/range.hpp>
 #include <py2cpp/set.hpp>
+#include <set>  // for set
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <unordered_map>  // for unordered_map
 #include <vector>
 #include <xnetwork/classes/graph.hpp>
-
-#include <nlohmann/json.hpp>  // for json
-#include <set>                // for set
-#include <unordered_map>      // for unordered_map
 
 using namespace std;
 

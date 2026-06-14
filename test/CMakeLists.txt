@@ -62,7 +62,6 @@ if(CUDA_ENABLED)
       -I"${CMAKE_CURRENT_LIST_DIR}/../include/netlistx"
       -I"${CUDAToolkit_INCLUDE_DIRS}"
       -DHAS_CUDA
-      -DDOCTEST_CONFIG_USE_STD_HEADERS
       -O2
       -o
       "${CUDA_OBJ}"
@@ -106,7 +105,7 @@ if(NOT TEST_INSTALLED_VERSION)
     )
   elseif(MSVC)
     target_compile_options(NetlistX PUBLIC /W4 /wd4459 /wd4819 /wd4996 /wd5051)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
+    # target_compile_definitions(${PROJECT_NAME} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
   endif()
 endif()
 

@@ -9,9 +9,13 @@ set_languages("c++23")
 
 -- CUDA detection (optional)
 local has_cuda = false
-if os.getenv("CUDA_PATH") or os.getenv("CUDA_ROOT") then
-    has_cuda = true
-    print("[xmake] CUDA detected -- enabling GPU acceleration")
+local cuda_path = os.getenv("CUDA_PATH") or os.getenv("CUDA_ROOT")
+if cuda_path then
+    local nvcc = path.join(cuda_path, "bin", "nvcc.exe")
+    if os.isfile(nvcc) then
+        has_cuda = true
+        print("[xmake] CUDA detected -- enabling GPU acceleration")
+    end
 else
     print("[xmake] CUDA not found -- CPU-only mode")
 end
@@ -30,7 +34,7 @@ if is_plat("linux") then
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
-    add_cxflags("/EHsc /W4 /WX /wd4459 /wd4819 /wd4127 /wd4996 /wd5051", { force = true })
+    add_cxflags("/EHsc /W4 /WX /wd5285 /wd4459 /wd4819 /wd4127 /wd4996 /wd5051", { force = true })
     add_cxflags("/std:c++latest", { force = true })
 end
 

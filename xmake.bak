@@ -30,7 +30,7 @@ if is_plat("linux") then
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
-    add_cxflags("/EHsc /utf-8 /W4 /WX /wd5285", { force = true })
+    add_cxflags("/EHsc /utf-8 /W4 /WX", { force = true })
 end
 
 if is_mode("coverage") then

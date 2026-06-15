@@ -22,7 +22,7 @@
 
 extern "C" __global__ void pitt_kernel(const int* edges, int num_edges, const float* weights,
                                        int num_vertices, unsigned int* covers, float* costs,
-                                       unsigned long long* seeds, int num_trials) {
+                                       const unsigned long long* seeds, int num_trials) {
     const int tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid >= num_trials) return;
 
@@ -36,12 +36,12 @@ extern "C" __global__ void pitt_kernel(const int* edges, int num_edges, const fl
 
         const int u_word = u >> 5;
         const int v_word = v >> 5;
-        const unsigned int u_bit = 1u << (u & 31);
-        const unsigned int v_bit = 1u << (v & 31);
+        const unsigned int u_bit = 1U << (u & 31);
+        const unsigned int v_bit = 1U << (v & 31);
 
         if ((cover[u_word] & u_bit) == 0 && (cover[v_word] & v_bit) == 0) {
             seed = (seed * 1103515245ULL + 12345ULL) & 0x7FFFFFFFULL;
-            const float rand_val = static_cast<float>(seed) / 2147483648.0f;
+            const float rand_val = static_cast<float>(seed) / 2147483648.0F;
 
             const float w_u = weights[u];
             const float w_v = weights[v];
@@ -55,9 +55,9 @@ extern "C" __global__ void pitt_kernel(const int* edges, int num_edges, const fl
         }
     }
 
-    float cost = 0.0f;
+    float cost = 0.0F;
     for (int v = 0; v < num_vertices; ++v) {
-        if (cover[v >> 5] & (1u << (v & 31))) {
+        if ((cover[v >> 5] & (1U << (v & 31))) != 0u) {
             cost += weights[v];
         }
     }
@@ -110,7 +110,7 @@ extern "C" void run_gpu_trials_raw(const int* edges_flat, int num_edges, const f
                           static_cast<std::size_t>(num_trials) * sizeof(unsigned long long),
                           cudaMemcpyHostToDevice));
 
-    std::vector<unsigned int> covers_host(cover_bytes, 0u);
+    std::vector<unsigned int> covers_host(cover_bytes, 0U);
     CUDA_CHECK(cudaMemcpy(d_covers, covers_host.data(), cover_bytes * sizeof(unsigned int),
                           cudaMemcpyHostToDevice));
     CUDA_CHECK(cudaMemset(d_costs, 0, static_cast<std::size_t>(num_trials) * sizeof(float)));

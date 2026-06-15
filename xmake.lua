@@ -5,7 +5,7 @@ add_requires("spdlog", { alias = "spdlog" })
 add_requires("nlohmann_json", { alias = "nlohmann_json" })
 -- cppcoro unavailable via network; using hand-rolled Generator<T> instead
 
-set_languages("c++23")
+set_languages("c++20")
 
 -- CUDA detection (optional)
 local has_cuda = false
@@ -50,7 +50,7 @@ target("NetlistX")
     add_files("source/*.cpp")
     if has_cuda then
         add_files("source/*.cu")
-        set_languages("c++23")
+        set_languages("c++20")
         set_policy("build.cuda.devlink", true)
         add_defines("HAS_CUDA", { public = true })
         add_cuflags("--extended-lambda", "--gpu-architecture=compute_75", { force = true })

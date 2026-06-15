@@ -104,7 +104,7 @@ if(NOT TEST_INSTALLED_VERSION)
       NetlistX PUBLIC -Wall -Wpedantic -Wextra -Werror -Wno-deprecated-literal-operator
     )
   elseif(MSVC)
-    target_compile_options(NetlistX PUBLIC /W4 /wd4459 /wd4819 /wd4996 /wd5051)
+    target_compile_options(NetlistX PUBLIC /W4 /wd4819 /wd4996 /wd5051)
     # target_compile_definitions(${PROJECT_NAME} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
   endif()
 endif()

@@ -1,3 +1,8 @@
+/**
+ * @file cover.hpp
+ * @brief Primal-dual approximation algorithms for hypergraph covering
+ */
+
 #pragma once
 
 #include <algorithm>
@@ -11,16 +16,18 @@
 #include <vector>
 
 /**
- * @brief Implements a primal-dual approximation algorithm for covering problems.
+ * @brief Primal-dual approximation algorithm for covering problems
  *
- * @tparam ViolateFunc Type of the violate function/callable
- * @tparam WeightMap Type of the weight mapping
- * @tparam SolutionSet Type of the solution set
- * @param violate Callable that returns violate sets (edges/cycles not covered)
- * @param weight Weight function for vertices
- * @param soln Solution set (will be modified)
- * @return std::pair<SolutionSet, typename WeightMap::mapped_type> Solution set and total primal
- * cost
+ * Phase 1 selects vertices greedily using dual gap variables.
+ * Phase 2 applies reverse-delete post-processing to remove redundant vertices.
+ *
+ * @tparam ViolateFunc Callable returning violate sets (edges/cycles not covered)
+ * @tparam WeightMap Weight mapping type
+ * @tparam SolutionSet Solution set type
+ * @param[in] violate Callable returning sets of violating vertices
+ * @param[in] weight Weight function for vertices
+ * @param[in,out] soln Solution set, modified in place
+ * @return Pair of (solution set, total primal cost)
  */
 template <typename ViolateFunc, typename WeightMap, typename SolutionSet>
 auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)

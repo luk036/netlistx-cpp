@@ -15,21 +15,18 @@
  */
 
 /**
- * @brief Solves the minimum weighted vertex cover problem using the primal-dual paradigm.
+ * @brief Solve minimum weighted vertex cover via primal-dual approximation
  *
- * This function takes a hypergraph, a weight function, and a set of pre-covered vertices. It
- * computes the minimum weighted vertex cover by iterating over the hypergraph's nets and
- * selecting the vertex with the minimum weight gap to add to the cover set. The total primal
- * and dual costs are computed and returned.
+ * Iterates over hypergraph nets, selecting the vertex with the minimum weight gap
+ * to add to the cover set. Maintains dual variables for approximation guarantee.
  *
- * @tparam Gnl The type of the hypergraph.
- * @tparam C1 The type of the weight function.
- * @tparam C2 The type of the cover set.
- * @param hyprgraph The input hypergraph.
- * @param weight The weight function.
- * @param[in,out] coverset The set of pre-covered vertices, which will be updated with the
- *                         solution set.
- * @return The total primal cost of the minimum weighted vertex cover.
+ * @tparam Gnl Hypergraph type
+ * @tparam C1 Weight function type
+ * @tparam C2 Cover set type
+ * @param[in] hyprgraph The input hypergraph
+ * @param[in] weight Vertex weight function
+ * @param[in,out] coverset Pre-covered vertices; updated with the solution
+ * @return Total primal cost of the cover
  */
 template <typename Gnl, typename C1, typename C2>
 auto min_vertex_cover(const Gnl& hyprgraph, const C1& weight, C2& coverset) ->
@@ -61,46 +58,35 @@ auto min_vertex_cover(const Gnl& hyprgraph, const C1& weight, C2& coverset) ->
 }
 
 /**
- * @brief Solves the minimum weighted maximal matching problem using the primal-dual paradigm.
+ * @brief Solve minimum weighted maximal matching via primal-dual approximation
  *
- * This function implements a primal-dual approximation algorithm for finding a minimum weighted
- * maximal matching in a hypergraph. The algorithm iterates through all nets in the hypergraph
- * and greedily selects nets that do not share vertices with already selected nets (maintained
- * in the dependency set). For each candidate net, it considers alternative nets that share
- * vertices and selects the one with minimum gap value (modified weight).
+ * Iterates through all nets, greedily selecting nets that do not share vertices
+ * with already selected nets. For each candidate net, selects the one with minimum
+ * gap value (modified weight).
  *
- * The algorithm maintains:
- * - A gap function representing the dual variables
- * - A matchset containing the selected nets
- * - A dependency set containing vertices covered by selected nets
+ * Time complexity: O(|V| * |E|^2)
  *
- * Time complexity: O(|V| * |E|^2) where V is the set of vertices and E is the set of nets
- *
- * @tparam Gnl The type of the hypergraph.
- * @tparam C1 The type of the weight function (must support [] operator and mapped_type).
- * @tparam C2 The type of the matching set and dependency set.
- * @param hyprgraph The input hypergraph containing nets and their vertex connections.
- * @param weight The weight function assigning weights to nets.
- * @param[in,out] matchset The output set containing the selected nets in the matching.
- * @param[in,out] dep The output set containing vertices covered by the matching.
- * @return typename C1::mapped_type The total primal cost (sum of weights) of the matching.
+ * @tparam Gnl Hypergraph type
+ * @tparam C1 Weight function type
+ * @tparam C2 Match set / dependency set type
+ * @param[in] hyprgraph Input hypergraph
+ * @param[in] weight Weight function for nets
+ * @param[in,out] matchset Output set of selected nets
+ * @param[in,out] dep Output set of covered vertices
+ * @return Total primal cost (sum of weights) of the matching
  */
 template <typename Gnl, typename C1, typename C2>
 auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight, C2& matchset, C2& dep) ->
     typename C1::mapped_type;
 
 /**
- * @brief Convenience overload for min_maximal_matching that creates empty sets.
+ * @brief Convenience overload that creates empty matchset/dependency sets
  *
- * This overload creates empty matchset and dependency sets and calls the main
- * min_maximal_matching function.
- *
- * @tparam Gnl The type of the hypergraph.
- * @tparam C1 The type of the weight function.
- * @param hyprgraph The input hypergraph.
- * @param weight The weight function.
- * @return std::pair<py::set<typename Gnl::node_t>, typename C1::mapped_type> Pair containing the
- * matching set and total cost.
+ * @tparam Gnl Hypergraph type
+ * @tparam C1 Weight function type
+ * @param[in] hyprgraph Input hypergraph
+ * @param[in] weight Weight function
+ * @return Pair of (matching set, total cost)
  */
 template <typename Gnl, typename C1>
 auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight)

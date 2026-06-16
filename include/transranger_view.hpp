@@ -1,4 +1,8 @@
-/* Copyright 2021 Joaquin M Lopez Munoz.
+/**
+ * @file transranger_view.hpp
+ * @brief Range-v3 view adaptors for transrangers
+ *
+ * Copyright 2021 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -24,8 +28,16 @@ namespace transrangers {
 
     namespace detail::view {
 
+        /**
+         * @brief Sentinel type marking end of a ranger view
+         */
         struct sentinel {};
 
+        /**
+         * @brief Base class for ranger view iterators
+         * @tparam Iterator Derived iterator type (CRTP)
+         * @tparam Ranger The ranger type
+         */
         template <typename Iterator, typename Ranger> class iterator_base {
           public:
             using value_type = std::remove_cv_t<
@@ -33,6 +45,10 @@ namespace transrangers {
             using difference_type = std::ptrdiff_t;
 
             iterator_base() = default;
+            /**
+             * @brief Construct from a ranger (invalid until first ++)
+             * @param[in] rgr The ranger to wrap
+             */
             iterator_base(const Ranger& rgr) : rgr{rgr} {} /* invalid till first ++ */
             iterator_base(const iterator_base&) = default;
 
@@ -70,6 +86,10 @@ namespace transrangers {
             Iterator& final() { return static_cast<Iterator&>(*this); }
         };
 
+        /**
+         * @brief Input iterator wrapping a ranger
+         * @tparam Ranger The ranger type
+         */
         template <typename Ranger> class input_iterator
             : public iterator_base<input_iterator<Ranger>, Ranger> {
             using super = iterator_base<input_iterator, Ranger>;
@@ -88,6 +108,10 @@ namespace transrangers {
             }
         };
 
+        /**
+         * @brief Forward iterator wrapping a ranger
+         * @tparam Ranger The ranger type
+         */
         template <typename Ranger> class forward_iterator
             : public iterator_base<forward_iterator<Ranger>, Ranger> {
             using super = iterator_base<forward_iterator, Ranger>;
@@ -116,9 +140,18 @@ namespace transrangers {
             std::size_t n = 0;
         };
 
+        /**
+         * @brief Range-v3 view wrapping a ranger
+         * @tparam Ranger The ranger type
+         * @tparam Iterator Iterator type (input_iterator or forward_iterator)
+         */
         template <typename Ranger, typename Iterator> class view : public ranges::view_base {
           public:
             view() = default;
+            /**
+             * @brief Construct a view from a ranger
+             * @param[in] rgr The ranger to adapt as a view
+             */
             view(Ranger rgr) : rgr{std::move(rgr)} {}
 
             auto begin() { return ++Iterator{rgr}; } /* note ++ */
@@ -130,11 +163,23 @@ namespace transrangers {
 
     }  // namespace detail::view
 
+    /**
+     * @brief Create an input view from a ranger
+     * @tparam Ranger Ranger type
+     * @param[in] rgr The ranger to adapt
+     * @return InputRange view over the ranger elements
+     */
     template <typename Ranger> auto input_view(Ranger rgr) {
         using namespace detail::view;
         return view<Ranger, input_iterator<Ranger>>{std::move(rgr)};
     }
 
+    /**
+     * @brief Create a forward view from a ranger
+     * @tparam Ranger Ranger type
+     * @param[in] rgr The ranger to adapt
+     * @return ForwardRange view over the ranger elements
+     */
     template <typename Ranger> auto forward_view(Ranger rgr) {
         using namespace detail::view;
         return view<Ranger, forward_iterator<Ranger>>{std::move(rgr)};

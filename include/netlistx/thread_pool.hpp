@@ -32,11 +32,16 @@
 
 namespace netlistx {
 
+    /**
+     * @brief Fixed-size thread pool for parallel task execution
+     *
+     * Owns a fixed set of worker threads that process tasks from a shared queue.
+     */
     class thread_pool {
       public:
         /**
-         * @param num_threads  Number of worker threads.
-         *                     Defaults to hardware concurrency (min 1).
+         * @brief Construct a thread pool with the given number of worker threads
+         * @param[in] num_threads Number of worker threads; defaults to hardware concurrency (min 1)
          */
         explicit thread_pool(size_t num_threads = std::thread::hardware_concurrency())
             : stop_(false) {
@@ -66,11 +71,11 @@ namespace netlistx {
         thread_pool& operator=(const thread_pool&) = delete;
 
         /**
-         * Enqueue a callable for execution on the thread pool.
+         * @brief Enqueue a callable for execution on the thread pool
          *
-         * @tparam F  Callable type (invocable, returns T)
-         * @param task  Callable to execute
-         * @return  std::future<T> holding the result (or exception)
+         * @tparam F Callable type (invocable, returns T)
+         * @param[in] task Callable to execute
+         * @return std::future<T> holding the result (or exception)
          */
         template <typename F> auto enqueue(F&& task)
             -> std::future<std::invoke_result_t<std::decay_t<F>>> {

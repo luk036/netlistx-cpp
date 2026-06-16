@@ -1,3 +1,8 @@
+/**
+ * @file logger.hpp
+ * @brief Logging utilities for the netlistx library
+ */
+
 #pragma once
 
 #include <string>

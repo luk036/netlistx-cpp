@@ -1,3 +1,8 @@
+/**
+ * @file gen.hpp
+ * @brief Minimal C++20 coroutine Generator for lazy sequence generation
+ */
+
 #pragma once
 
 #include <coroutine>
@@ -8,10 +13,10 @@
 namespace py {
 
     /**
-     * @brief Minimal generator using C++20 coroutines.
+     * @brief Minimal C++20 coroutine generator (Python-style)
      *
-     * Models a Python-style generator that lazily yields values of type T.
-     * Used with co_yield inside a coroutine function.
+     * Lazily yields values of type T using co_yield.
+     * Models a Python generator with iterable interface.
      *
      * @tparam T Value type to yield
      */
@@ -68,8 +73,17 @@ namespace py {
             using difference_type = std::ptrdiff_t;
 
             iterator() noexcept = default;
+
+            /**
+             * @brief Construct an iterator from a coroutine handle
+             * @param[in] coro Coroutine handle to wrap
+             */
             explicit iterator(handle_type coro) noexcept : coro_(coro) {}
 
+            /**
+             * @brief Advance to the next yielded value
+             * @return iterator& Reference to this iterator
+             */
             iterator& operator++() {
                 coro_.resume();
                 if (coro_.done()) coro_ = {};
@@ -77,6 +91,10 @@ namespace py {
             }
             void operator++(int) { ++*this; }
 
+            /**
+             * @brief Dereference to get the current yielded value
+             * @return const T& Current value
+             */
             const T& operator*() const noexcept { return coro_.promise().current_value; }
             T& operator*() noexcept { return coro_.promise().current_value; }
 
@@ -84,6 +102,10 @@ namespace py {
             bool operator!=(const iterator& other) const noexcept { return !(*this == other); }
         };
 
+        /**
+         * @brief Get iterator to the first yielded value
+         * @return iterator Iterator to begin
+         */
         iterator begin() {
             if (!coro_) return iterator{};
             coro_.resume();
@@ -91,6 +113,10 @@ namespace py {
             return iterator{coro_};
         }
 
+        /**
+         * @brief Get past-the-end iterator
+         * @return iterator Sentinel iterator
+         */
         iterator end() noexcept { return iterator{}; }
     };
 

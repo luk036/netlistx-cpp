@@ -1,4 +1,6 @@
-/* Transrangers: an efficient, composable design pattern for range processing.
+/**
+ * @file transrangers.hpp
+ * @brief Efficient composable range processing library
  *
  * Copyright 2021 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
@@ -34,13 +36,30 @@
 
 namespace transrangers {
 
+    /**
+     * @brief Ranger class wrapping a cursor type and functor
+     * @tparam Cursor Iterator type for the ranger
+     * @tparam F Functor type for the ranger logic
+     */
     template <typename Cursor, typename F> struct ranger_class : F {
         using cursor = Cursor;
     };
 
+    /**
+     * @brief Create a ranger from a functor
+     * @tparam Cursor Iterator type
+     * @tparam F Functor type
+     * @param[in] f The functor implementing the ranger logic
+     * @return ranger_class<Cursor, F> A new ranger instance
+     */
     template <typename Cursor, typename F> auto ranger(F f) { return ranger_class<Cursor, F>{f}; }
 
-    // all, all_copy
+    /**
+     * @brief Create a ranger over all elements of a range
+     * @tparam Range Range type (lvalue reference or rvalue)
+     * @param[in] rng The range to iterate over
+     * @return A ranger over the range elements
+     */
     template <typename Range> auto all(Range&& rng) {
         using std::begin;
         using std::end;
@@ -58,6 +77,10 @@ namespace transrangers {
                                   });
     }
 
+    /**
+     * @brief Copy-based wrapper for temporary ranges
+     * @tparam Range Range type (rvalue reference)
+     */
     template <typename Range> struct all_copy {
         using ranger = decltype(all(std::declval<Range&>()));
         using cursor = typename ranger::cursor;
@@ -68,17 +91,36 @@ namespace transrangers {
         ranger rgr = all(rng);
     };
 
+    /**
+     * @brief Rvalue overload that returns an all_copy wrapper
+     * @tparam Range Range type
+     * @param[in] rng Rvalue reference to the range
+     * @return all_copy<Range> Copy-based wrapper for temporary ranges
+     */
     template <typename Range>
     typename std::enable_if<std::is_rvalue_reference<Range&&>::value, all_copy<Range>>::type all(
         Range&& rng) {
         return all_copy<Range>{std::move(rng)};
     }
 
-    // filter
+    /**
+     * @brief Box a predicate for use inside a ranger
+     * @tparam Pred Predicate type
+     * @param[in] pred The predicate to box
+     * @return A callable that applies the predicate
+     */
     template <typename Pred> auto pred_box(Pred pred) {
         return [=](auto&&... x) -> int { return pred(std::forward<decltype(x)>(x)...); };
     }
 
+    /**
+     * @brief Filter a ranger by a predicate
+     * @tparam Pred Predicate type
+     * @tparam Ranger Ranger type to filter
+     * @param[in] pred_ Predicate to filter elements
+     * @param[in] rgr Input ranger
+     * @return A ranger yielding only elements satisfying pred
+     */
     template <typename Pred, typename Ranger> auto filter(Pred pred_, Ranger rgr) {
         using cursor = typename Ranger::cursor;
 
@@ -105,7 +147,14 @@ namespace transrangers {
         Cursor p;
     };
 
-    // transform
+    /**
+     * @brief Transform elements of a ranger with a function
+     * @tparam F Transformation function type
+     * @tparam Ranger Input ranger type
+     * @param[in] f Transformation function
+     * @param[in] rgr Input ranger
+     * @return A ranger yielding f(x) for each element x
+     */
     template <typename F, typename Ranger> auto transform(F f, Ranger rgr) {
         using cursor = deref_fun<typename Ranger::cursor, F>;
 
@@ -114,7 +163,13 @@ namespace transrangers {
         });
     }
 
-    // take
+    /**
+     * @brief Take the first n elements from a ranger
+     * @tparam Ranger Ranger type
+     * @param[in] n Number of elements to take
+     * @param[in] rgr Input ranger
+     * @return A ranger yielding at most n elements
+     */
     template <typename Ranger> auto take(int n, Ranger rgr) {
         using cursor = typename Ranger::cursor;
 
@@ -130,7 +185,14 @@ namespace transrangers {
         });
     }
 
-    // concat
+    /**
+     * @brief Concatenate multiple rangers sequentially
+     * @tparam Ranger First ranger type
+     * @tparam Rangers Remaining ranger types
+     * @param[in] rgr First ranger
+     * @param[in] rgrs Remaining rangers
+     * @return A ranger yielding elements from all input rangers in sequence
+     */
     template <typename Ranger> auto concat(Ranger rgr) { return rgr; }
 
     template <typename Ranger, typename... Rangers> auto concat(Ranger rgr, Rangers... rgrs) {
@@ -145,7 +207,12 @@ namespace transrangers {
                                   });
     }
 
-    // unique
+    /**
+     * @brief Remove consecutive duplicates from a ranger
+     * @tparam Ranger Ranger type
+     * @param[in] rgr Input ranger
+     * @return A ranger yielding unique consecutive elements
+     */
     template <typename Ranger> auto unique(Ranger rgr) {
         using cursor = typename Ranger::cursor;
 
@@ -272,6 +339,14 @@ namespace transrangers {
     //   std::tuple<typename Ranger1::cursor, typename Ranger2::cursor> ps;
     // };
 
+    /**
+     * @brief Zip two rangers together, advancing in lockstep
+     * @tparam Ranger1 First ranger type
+     * @tparam Ranger2 Second ranger type
+     * @param[in] rgr1 First ranger
+     * @param[in] rgr2 Second ranger
+     * @return A ranger yielding tuples of (elem1, elem2)
+     */
     template <typename Ranger1, typename Ranger2> auto zip2(Ranger1 rgr1, Ranger2 rgr2) {
         using cursor = zip_cursor<Ranger1, Ranger2>;
 
@@ -292,7 +367,14 @@ namespace transrangers {
         });
     }
 
-    // accumulate
+    /**
+     * @brief Accumulate (fold) ranger elements using operator+
+     * @tparam Ranger Ranger type
+     * @tparam T Accumulator type
+     * @param[in] rgr Input ranger
+     * @param[in] init Initial value for accumulation
+     * @return T The accumulated result
+     */
     template <typename Ranger, typename T> T accumulate(Ranger rgr, T init) {
         rgr([&](const auto& p) TRANSRANGERS_HOT {
             init = std::move(init) + *p;

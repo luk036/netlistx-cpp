@@ -8,21 +8,12 @@
 #include <vector>            // for vector
 
 /**
- * @brief Represents a netlist, which is implemented using a graph-like data structure.
+ * @brief A netlist represented as a bipartite graph of modules and nets
  *
- * The `Netlist` struct contains various properties and data structures to represent the netlist,
- * including:
- * - `gr`: The underlying graph-like data structure used to represent the netlist.
- * - `modules`: A view of the module nodes in the graph.
- * - `nets`: A view of the net nodes in the graph.
- * - `num_modules`: The number of module nodes in the netlist.
- * - `num_nets`: The number of net nodes in the netlist.
- * - `num_pads`: The number of pad nodes in the netlist.
- * - `max_degree`: The maximum degree of any node in the netlist.
- * - `max_net_degree`: The maximum degree of any net node in the netlist.
- * - `module_weight`: A vector of weights for each module node.
- * - `has_fixed_modules`: A flag indicating whether the netlist has any fixed module nodes.
- * - `module_fixed`: A set of fixed module nodes.
+ * The Netlist struct contains a bipartite graph structure where module nodes and net nodes
+ * are connected by edges representing pins. Supports weighted modules and fixed module tracking.
+ *
+ * @tparam graph_t The underlying graph type (e.g. xnetwork::SimpleGraph)
  */
 template <typename graph_t> struct Netlist {
     using nodeview_t = typename graph_t::nodeview_t;
@@ -64,10 +55,16 @@ template <typename graph_t> struct Netlist {
      */
     Netlist(graph_t gr, uint32_t numModules, uint32_t numNets);
 
-    /// Returns an iterator to the beginning of the modules nodeview.
+    /**
+     * @brief Returns an iterator to the beginning of the modules nodeview
+     * @return Iterator to the first module node
+     */
     auto begin() const { return this->modules.begin(); }
 
-    /// Returns an iterator to the end of the modules nodeview.
+    /**
+     * @brief Returns an iterator to the end of the modules nodeview
+     * @return Iterator past the last module node
+     */
     auto end() const { return this->modules.end(); }
 
     /**
@@ -142,11 +139,11 @@ template <typename graph_t> struct Netlist {
 };
 
 /**
- * @brief Constructs a Netlist object from the given graph, module nodes, and net nodes.
+ * @brief Construct a Netlist from graph, module nodes, and net nodes
  *
- * The constructor initializes the Netlist object with the provided graph, modules, and nets. It
- * also calculates the maximum degree of the modules and nets, and sets flags indicating whether the
- * modules have fixed positions.
+ * @param[in] gr The graph representing the netlist
+ * @param[in] modules The module nodes in the graph
+ * @param[in] nets The net nodes in the graph
  */
 template <typename graph_t>
 Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t& modules, const nodeview_t& nets)
@@ -208,10 +205,10 @@ using index_t = uint32_t;
 using SimpleNetlist = Netlist<graph_t>;
 
 /**
- * @brief Snapshot of netlist state for backtracking/undo operations
+ * @brief Snapshot of netlist state for backtracking and undo operations
  *
- * This struct stores the external nets and module states at a particular point in time,
- * enabling rollback functionality for partitioning algorithms.
+ * Stores external nets and module states at a point in time for rollback
+ * in partitioning algorithms.
  *
  * @tparam Node The node type used in the netlist
  */

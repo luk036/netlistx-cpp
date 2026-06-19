@@ -188,9 +188,7 @@ namespace transrangers {
     /**
      * @brief Concatenate multiple rangers sequentially
      * @tparam Ranger First ranger type
-     * @tparam Rangers Remaining ranger types
      * @param[in] rgr First ranger
-     * @param[in] rgrs Remaining rangers
      * @return A ranger yielding elements from all input rangers in sequence
      */
     template <typename Ranger> auto concat(Ranger rgr) { return rgr; }

@@ -139,11 +139,8 @@ template <typename graph_t> struct Netlist {
 };
 
 /**
+ * @overload
  * @brief Construct a Netlist from graph, module nodes, and net nodes
- *
- * @param[in] gr The graph representing the netlist
- * @param[in] modules The module nodes in the graph
- * @param[in] nets The net nodes in the graph
  */
 template <typename graph_t>
 Netlist<graph_t>::Netlist(graph_t gr, const nodeview_t& modules, const nodeview_t& nets)

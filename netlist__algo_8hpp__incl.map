@@ -1,0 +1,9 @@
+<map id="netlistx/netlist_algo.hpp" name="netlistx/netlist_algo.hpp">
+<area shape="rect" id="Node000001" title="Netlist&#45;specific algorithms for hypergraph optimization." alt="" coords="87,5,265,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,91,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,33,82,74,80,69,154,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,79,237,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,31,179,65,173,65,173,31"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="261,79,321,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,28,262,69,259,74,193,33"/>
+</map>

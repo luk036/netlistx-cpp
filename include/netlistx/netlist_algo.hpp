@@ -20,6 +20,21 @@
  * Iterates over hypergraph nets, selecting the vertex with the minimum weight gap
  * to add to the cover set. Maintains dual variables for approximation guarantee.
  *
+ * @dot
+ *   digraph hypr_cover {
+ *     rankdir=LR; bgcolor="transparent";
+ *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+ *     init [label="Init gaps\n= weights", fillcolor="#a9cce3"];
+ *     nets [label="For each\nhyperedge"];
+ *     min_v [label="Find min-gap\nvertex in net"];
+ *     add [label="Add to\ncover set"];
+ *     sub [label="Subtract gap\nfrom all vertices"];
+ *     done [label="Cover!", fillcolor="#7fb3d8"];
+ *     init -> nets -> min_v -> add -> sub -> nets;
+ *     sub -> done [label="all nets\ncovered", color="#27ae60"];
+ *   }
+ * @enddot
+ *
  * @tparam Gnl Hypergraph type
  * @tparam C1 Weight function type
  * @tparam C2 Cover set type

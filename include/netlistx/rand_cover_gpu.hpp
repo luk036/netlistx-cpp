@@ -58,7 +58,33 @@ namespace netlistx {
 
 #ifndef HAS_CUDA
 
-        /** @brief CPU fallback: run a single Pitt trial. */
+        /** @brief CPU fallback: run a single Pitt trial.
+         *
+         * For each uncovered edge \f$(u, v)\f$, picks \f$u\f$ with probability:
+         * @f[
+         *     P(\text{pick } u) = \frac{w(v)}{w(u) + w(v)}
+         * @f]
+         *
+         * @dot
+         *   digraph pitt_threshold {
+         *     bgcolor="transparent";
+         *     rankdir=LR;
+         *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+         *     edgeUV [label="Edge\n(u, v)", fillcolor="#a9cce3"];
+         *     covered [label="Covered?", shape=diamond, fillcolor="#f9e79f"];
+         *     threshold [label="threshold =\nw_v/(w_u + w_v)"];
+         *     rand [label="rand_val <\nthreshold?", shape=diamond, fillcolor="#f9e79f"];
+         *     pickU [label="Pick u", fillcolor="#d5f5e3"];
+         *     pickV [label="Pick v", fillcolor="#fadbd8"];
+         *     edgeUV -> covered;
+         *     covered -> threshold [label="No", color="#e74c3c"];
+         *     covered -> edgeUV [label="Yes", style=dashed, color="#27ae60", constraint=false];
+         *     threshold -> rand;
+         *     rand -> pickU [label="Yes", color="#27ae60"];
+         *     rand -> pickV [label="No", color="#e74c3c"];
+         *   }
+         * @enddot
+         */
         inline void pitt_trial_cpu(const std::vector<int>& edges, int num_edges,
                                    const std::vector<float>& weights, int /*num_vertices*/,
                                    std::vector<unsigned int>& cover, int /*num_words*/,

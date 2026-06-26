@@ -21,6 +21,23 @@
  * Phase 1 selects vertices greedily using dual gap variables.
  * Phase 2 applies reverse-delete post-processing to remove redundant vertices.
  *
+ * @dot
+ *   digraph pd_cover_flow {
+ *     bgcolor="transparent";
+ *     rankdir=LR;
+ *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+ *     init [label="Init gap\n= weight", fillcolor="#a9cce3"];
+ *     violate [label="Get\nviolate set"];
+ *     min_v [label="Find min-gap\nvertex"];
+ *     add [label="Add to\nsolution"];
+ *     rd [label="Reverse-delete\npost-process", fillcolor="#f9e79f"];
+ *     done [label="Cover!", fillcolor="#7fb3d8"];
+ *     init -> violate -> min_v -> add -> violate;
+ *     add -> rd [style=dashed, color="#888", constraint=false];
+ *     rd -> done [color="#27ae60"];
+ *   }
+ * @enddot
+ *
  * @tparam ViolateFunc Callable returning violate sets (edges/cycles not covered)
  * @tparam WeightMap Weight mapping type
  * @tparam SolutionSet Solution set type
@@ -86,6 +103,22 @@ auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
 
 /**
  * @brief Performs minimum weighted hypergraph vertex cover using primal-dual approximation.
+ *
+ * @dot
+ *   digraph hyper_vc {
+ *     bgcolor="transparent";
+ *     rankdir=LR;
+ *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+ *     init [label="Init gaps\n= weights", fillcolor="#a9cce3"];
+ *     nets [label="For each\nuncovered net"];
+ *     min_v [label="Find min-gap\nvertex"];
+ *     add [label="Add to\ncover set"];
+ *     sub [label="Subtract gap\nfrom net vertices"];
+ *     done [label="Cover!", fillcolor="#7fb3d8"];
+ *     init -> nets -> min_v -> add -> sub -> nets;
+ *     sub -> done [label="all covered", color="#27ae60"];
+ *   }
+ * @enddot
  *
  * @tparam Hypergraph Hypergraph type
  * @tparam WeightMap Weight map type

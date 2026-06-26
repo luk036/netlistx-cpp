@@ -62,9 +62,27 @@ namespace detail {
  * @brief Single trial of Pitt's randomized hypergraph vertex cover.
  *
  * A hyperedge (net) can connect multiple vertices. For each uncovered net
- * {v1, ..., vk}, the algorithm picks vertex vi with probability inversely
- * proportional to its weight:
- *     P(pick vi) = (1/w(vi)) / sum(1/w(vj) for vj in net)
+ * \f$\{v_1, \dots, v_k\}\f$, the algorithm picks vertex \f$v_i\f$ with probability
+ * inversely proportional to its weight:
+ * @f[
+ *     P(\text{pick } v_i) = \frac{1/w(v_i)}{\sum_{j=1}^{k} 1/w(v_j)}
+ * @f]
+ *
+ * @dot
+ *   digraph rand_trial {
+ *     bgcolor="transparent";
+ *     rankdir=LR;
+ *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+ *     init [label="Init soln\n= coverset", fillcolor="#a9cce3"];
+ *     net_loop [label="For each\nuncovered net"];
+ *     pick [label="Pick vertex vi\nP ~ 1/w(vi)", fillcolor="#f9e79f"];
+ *     add [label="Add to\nsolution"];
+ *     rd [label="Reverse-delete\npost-process"];
+ *     done [label="Best cover\nfound!", fillcolor="#7fb3d8"];
+ *     init -> net_loop -> pick -> add -> net_loop;
+ *     add -> rd -> done;
+ *   }
+ * @enddot
  *
  * @tparam Hypergraph Hypergraph type (requires: nets, gr[net] -> vertices)
  * @tparam WeightMap Weight map type

@@ -70,11 +70,10 @@ int main() {
         auto r2 = measure("SAX", f.path, read_yosys_json_sax, iters);
 
         cout << left << setw(34) << f.label << setw(12) << "DOM" << setw(10) << r1.min_ms
-             << setw(10) << r1.max_ms << setw(10) << r1.mean_ms << setw(10) << r1.modules
-             << r1.nets << '\n';
-        cout << left << setw(34) << "" << setw(12) << "SAX" << setw(10) << r2.min_ms
-             << setw(10) << r2.max_ms << setw(10) << r2.mean_ms << setw(10) << r2.modules
-             << r2.nets << '\n';
+             << setw(10) << r1.max_ms << setw(10) << r1.mean_ms << setw(10) << r1.modules << r1.nets
+             << '\n';
+        cout << left << setw(34) << "" << setw(12) << "SAX" << setw(10) << r2.min_ms << setw(10)
+             << r2.max_ms << setw(10) << r2.mean_ms << setw(10) << r2.modules << r2.nets << '\n';
 
         double ratio = r1.mean_ms / r2.mean_ms;
         cout << left << setw(34) << "" << setw(12) << (ratio > 1.0 ? "SAX wins" : "DOM wins")

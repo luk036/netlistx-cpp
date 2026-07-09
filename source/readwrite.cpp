@@ -433,12 +433,12 @@ struct YosysSaxHandler {
                 cell_edges.emplace_back(it->second, uval);
             }
             all_net_ids.insert(uval);
-        } else if (p.find(".ports.") != std::string::npos && p.find(".bits") != std::string::npos &&
-                   in_array) {
+        } else if (p.find(".ports.") != std::string::npos && p.find(".bits") != std::string::npos
+                   && in_array) {
             all_net_ids.insert(uval);
             port_nets[current_port].insert(uval);
-        } else if (p.find(".netnames.") != std::string::npos && p.find(".bits") != std::string::npos &&
-                   in_array) {
+        } else if (p.find(".netnames.") != std::string::npos && p.find(".bits") != std::string::npos
+                   && in_array) {
             all_net_ids.insert(uval);
         }
         return true;

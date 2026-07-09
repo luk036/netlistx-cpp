@@ -374,8 +374,235 @@ auto read_yosys_json(const std::string_view filename) -> SimpleNetlist {
 }
 
 /**
- * @brief Map file extension to InputFormat based on suffix matching.
+ * @brief SAX event handler for streaming Yosys JSON parsing.
+ *
+ * Implements the nlohmann::json SAX interface to parse Yosys netlist
+ * JSON as a stream of events. Tracks a path stack to determine the
+ * current JSON context and collects cell names, port names, net IDs,
+ * and connectivity data incrementally.
+ *
+ * Only processes the first module in the file (matching read_yosys_json).
  */
+struct YosysSaxHandler {
+    std::vector<std::string> path_stack;  ///< current path through the JSON tree
+    std::string key_stack;                ///< most recent key
+
+    // Collected data
+    std::vector<std::string> cell_names;
+    std::unordered_map<std::string, uint32_t> cell_idx;
+    std::set<uint32_t> all_net_ids;
+    std::vector<std::string> port_names;
+    std::unordered_map<std::string, std::set<uint32_t>> port_nets;
+    std::vector<std::pair<uint32_t, uint32_t>> cell_edges;
+
+    // State tracking
+    std::string current_cell;
+    std::string current_port;
+    std::string first_module;
+    bool found_first_module = false;
+    bool in_array = false;
+
+    /// Build dot-separated path string from the path stack.
+    [[nodiscard]] auto path() const -> std::string {
+        std::string result;
+        for (const auto& seg : path_stack) {
+            if (!result.empty()) {
+                result += '.';
+            }
+            result += seg;
+        }
+        return result;
+    }
+
+    // ── SAX callbacks ──────────────────────────────────────────────
+
+    bool null() { return true; }
+    bool boolean(bool /*val*/) { return true; }
+    bool binary(nlohmann::json::binary_t& /*val*/) { return true; }
+
+    bool number_integer(std::int64_t val) {
+        if (val < 0) {
+            return true;  // negative net IDs (e.g. -1 = VCC) are skipped
+        }
+        auto uval = static_cast<uint32_t>(val);
+        auto p = path();
+
+        if (p.find(".connections.") != std::string::npos && in_array) {
+            auto it = cell_idx.find(current_cell);
+            if (it != cell_idx.end()) {
+                cell_edges.emplace_back(it->second, uval);
+            }
+            all_net_ids.insert(uval);
+        } else if (p.find(".ports.") != std::string::npos && p.find(".bits") != std::string::npos &&
+                   in_array) {
+            all_net_ids.insert(uval);
+            port_nets[current_port].insert(uval);
+        } else if (p.find(".netnames.") != std::string::npos && p.find(".bits") != std::string::npos &&
+                   in_array) {
+            all_net_ids.insert(uval);
+        }
+        return true;
+    }
+
+    bool number_unsigned(std::uint64_t val) {
+        return number_integer(static_cast<std::int64_t>(val));
+    }
+
+    bool number_float(double /*val*/, const std::string& /*s*/) { return true; }
+
+    bool string(std::string& /*val*/) { return true; }
+
+    bool start_object(std::size_t /*elements*/) {
+        if (!key_stack.empty()) {
+            path_stack.push_back(key_stack);
+
+            // Detect module boundary: entering a module object inside "modules"
+            if (path_stack.size() == 2 && path_stack[0] == "modules") {
+                if (!found_first_module) {
+                    first_module = key_stack;
+                    found_first_module = true;
+                } else if (key_stack != first_module) {
+                    return false;  // stop — we only want the first module
+                }
+            }
+        }
+        return true;
+    }
+
+    bool end_object() {
+        if (!path_stack.empty()) {
+            path_stack.pop_back();
+        }
+        // Detect exit from the first module — stop parsing
+        if (found_first_module && path_stack.size() == 1 && path_stack[0] == "modules") {
+            return false;
+        }
+        return true;
+    }
+
+    bool start_array(std::size_t /*elements*/) {
+        in_array = true;
+        if (!key_stack.empty()) {
+            path_stack.push_back(key_stack);
+        }
+        return true;
+    }
+
+    bool end_array() {
+        in_array = false;
+        if (!path_stack.empty()) {
+            path_stack.pop_back();
+        }
+        return true;
+    }
+
+    bool key(std::string& val) {
+        key_stack = val;
+        auto p = path();
+
+        // Track current cell when entering a key under cells
+        if (p == "modules." + first_module + ".cells") {
+            current_cell = val;
+            if (cell_idx.find(current_cell) == cell_idx.end()) {
+                cell_idx[current_cell] = static_cast<uint32_t>(cell_names.size());
+                cell_names.push_back(current_cell);
+            }
+        }
+        // Track current port when entering a key under ports
+        if (p == "modules." + first_module + ".ports") {
+            current_port = val;
+            if (port_nets.find(current_port) == port_nets.end()) {
+                port_nets[current_port] = {};
+                port_names.push_back(current_port);
+            }
+        }
+        return true;
+    }
+
+    bool parse_error(std::size_t /*position*/, const std::string& /*last_token*/,
+                     const nlohmann::detail::exception& /*ex*/) {
+        return false;
+    }
+};
+
+/**
+ * @brief Read a Yosys JSON file using SAX-style streaming parsing.
+ *
+ * Uses nlohmann/json's built-in SAX interface to process the file as
+ * a stream of parser events without building the full JSON DOM in memory.
+ *
+ * Only the first module in the file is processed.
+ *
+ * @param filename Path to Yosys JSON netlist file
+ * @return SimpleNetlist object representing the circuit
+ */
+auto read_yosys_json_sax(const std::string_view filename) -> SimpleNetlist {
+    auto file = std::ifstream{std::string(filename)};
+    if (file.fail()) {
+        std::cerr << "Error: Can't open file " << filename << ".\n";
+        std::exit(1);
+    }
+
+    YosysSaxHandler handler;
+    auto ok = nlohmann::json::sax_parse(file, &handler);
+    // SAX handler returns false to stop after the first module — that's expected.
+    (void)ok;
+
+    // ── Phase 2: build the netlist from collected data ────────────
+
+    auto num_cells = static_cast<uint32_t>(handler.cell_names.size());
+    auto num_ports = static_cast<uint32_t>(handler.port_names.size());
+
+    // Build sorted net list and net_id → node mapping
+    std::vector<uint32_t> nets_list(handler.all_net_ids.begin(), handler.all_net_ids.end());
+    auto num_nets = static_cast<uint32_t>(nets_list.size());
+    auto net_start = num_cells + num_ports;
+
+    std::unordered_map<uint32_t, uint32_t> net_to_node;
+    for (uint32_t i = 0; i < num_nets; ++i) {
+        net_to_node[nets_list[i]] = net_start + i;
+    }
+
+    auto total_nodes = net_start + num_nets;
+    xnetwork::SimpleGraph g(total_nodes);
+
+    // Edges: cells → nets
+    for (const auto& [cid, raw_net_id] : handler.cell_edges) {
+        auto it = net_to_node.find(raw_net_id);
+        if (it != net_to_node.end()) {
+            g.add_edge(cid, it->second);
+        }
+    }
+
+    // Edges: ports → nets
+    auto port_start = num_cells;
+    for (uint32_t i = 0; i < num_ports; ++i) {
+        auto port_node = port_start + i;
+        for (auto net_id : handler.port_nets[handler.port_names[i]]) {
+            auto it = net_to_node.find(net_id);
+            if (it != net_to_node.end()) {
+                g.add_edge(port_node, it->second);
+            }
+        }
+    }
+
+    auto hyprgraph = SimpleNetlist{std::move(g), num_cells + num_ports, num_nets};
+    hyprgraph.num_pads = num_ports;
+
+    // Module weights: cells=1, ports=0
+    hyprgraph.module_weight.assign(num_cells + num_ports, 0);
+    for (uint32_t i = 0; i < num_cells; ++i) {
+        hyprgraph.module_weight[i] = 1;
+    }
+
+    // Mark port nodes as fixed
+    for (uint32_t i = 0; i < num_ports; ++i) {
+        hyprgraph.module_fixed.insert(port_start + i);
+    }
+    hyprgraph.has_fixed_modules = (num_ports > 0);
+
+    return hyprgraph;
+}
 auto detect_input_format(const string& filename) -> InputFormat {
     auto n = filename.size();
     if (n >= 4 && filename.substr(n - 4) == ".net") {

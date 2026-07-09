@@ -76,6 +76,20 @@ target("test_netlistx")
 	end
 	add_tests("default")
 
+target("bench_yosys")
+    set_kind("binary")
+    add_deps("NetlistX")
+    add_includedirs("include", { public = true })
+    add_includedirs("../py2cpp/include", { public = true })
+    add_includedirs("../xnetwork-cpp/include", { public = true })
+    add_files("bench/source/*.cpp")
+    add_packages("fmt", "spdlog", "nlohmann_json")
+	if is_plat("linux") then
+		set_rundir("./build/linux/")
+	elseif is_plat("windows") then
+		set_rundir("./build/windows/")
+	end
+
 -- Check if rapidcheck was built by CMake (check both build and build_test directories)
 local build_dirs = { "build", "build_test" }
 local rapidcheck_dir = nil

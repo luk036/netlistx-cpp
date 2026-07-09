@@ -35,6 +35,9 @@ enum class OutputFormat {
  * Parses Yosys synthesis output JSON and constructs a bipartite graph
  * where cells and I/O ports are module nodes, and wires are net nodes.
  *
+ * Uses nlohmann/json's DOM-style parser (json::parse). For the SAX
+ * streaming alternative, see read_yosys_json_sax().
+ *
  * String-valued net IDs (constants like "0", "1") are skipped.
  * I/O port nodes are assigned weight 0 and marked as fixed.
  *
@@ -42,6 +45,22 @@ enum class OutputFormat {
  * @return SimpleNetlist object representing the circuit
  */
 auto read_yosys_json(std::string_view filename) -> SimpleNetlist;
+
+/**
+ * @brief Read a Yosys JSON file using SAX-style streaming parsing.
+ *
+ * Uses nlohmann/json's built-in SAX interface (@c json::sax_parse) to
+ * process the file as a stream of parser events without building the
+ * full JSON DOM in memory. This is the C++ equivalent of the JSON SAX
+ * model - suitable for large netlists where memory footprint matters.
+ *
+ * Only the first module in the Yosys JSON is processed (matching the
+ * behaviour of read_yosys_json()).
+ *
+ * @param filename Path to Yosys JSON file
+ * @return SimpleNetlist object representing the circuit
+ */
+auto read_yosys_json_sax(std::string_view filename) -> SimpleNetlist;
 
 /**
  * @brief Write a SimpleNetlist to a JSON file.

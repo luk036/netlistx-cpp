@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(
   NetlistX
-  VERSION 1.1.5
+  VERSION 1.1.6
   LANGUAGES CXX
 )
 

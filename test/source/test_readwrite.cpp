@@ -22,6 +22,36 @@ TEST_CASE("Test Read Yosys JSON") {
     CHECK_EQ(hyprgraph.get_module_weight(4), 0);  // port y
 }
 
+TEST_CASE("Test Read Yosys JSON SAX") {
+    auto hyprgraph = read_yosys_json_sax("../../testcases/yosys_and2.json");
+
+    CHECK_EQ(hyprgraph.number_of_modules(), 5);
+    CHECK_EQ(hyprgraph.number_of_nets(), 4);
+    CHECK_EQ(hyprgraph.num_pads, 3);
+    CHECK(hyprgraph.has_fixed_modules);
+
+    CHECK_EQ(hyprgraph.get_module_weight(0), 1);
+    CHECK_EQ(hyprgraph.get_module_weight(1), 1);
+    CHECK_EQ(hyprgraph.get_module_weight(2), 0);
+    CHECK_EQ(hyprgraph.get_module_weight(3), 0);
+    CHECK_EQ(hyprgraph.get_module_weight(4), 0);
+}
+
+TEST_CASE("Test Read Yosys JSON DOM vs SAX identical") {
+    auto dom = read_yosys_json("../../testcases/yosys_and2.json");
+    auto sax = read_yosys_json_sax("../../testcases/yosys_and2.json");
+
+    CHECK_EQ(dom.number_of_modules(), sax.number_of_modules());
+    CHECK_EQ(dom.number_of_nets(), sax.number_of_nets());
+    CHECK_EQ(dom.num_pads, sax.num_pads);
+    CHECK_EQ(dom.has_fixed_modules, sax.has_fixed_modules);
+
+    for (size_t i = 0; i < dom.number_of_modules(); ++i) {
+        CHECK_EQ(dom.get_module_weight(static_cast<uint32_t>(i)),
+                 sax.get_module_weight(static_cast<uint32_t>(i)));
+    }
+}
+
 TEST_CASE("Test Read Dwarf") {
     auto hyprgraph = readNetD("../../testcases/dwarf1.netD");
     readAre(hyprgraph, "../../testcases/dwarf1.are");

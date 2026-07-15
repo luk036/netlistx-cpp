@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.5;  VERSION ${PROJECT_VERSION}</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.6;  VERSION ${PROJECT_VERSION}</span>
    </div>
   </td>
  </tr>
@@ -325,7 +325,15 @@ template&lt;typename Graph , typename WeightMap &gt; </div>
 </div><div class="memdoc">
 
 <p>CPU fallback: run a single Pitt trial. </p>
-
+<p>For each uncovered edge \((u, v)\), picks \(u\) with probability:  </p><p class="formulaDsp">
+\[
+    P(\text{pick } u) = \frac{w(v)}{w(u) + w(v)}
+\]
+</p>
+<div class="dotgraph">
+<img src="dot_inline_dotgraph_5.png" alt="dot_inline_dotgraph_5.png" border="0" usemap="#dot_inline_dotgraph_5.map"/>
+</div>
+ 
 </div>
 </div>
 </div><!-- contents -->

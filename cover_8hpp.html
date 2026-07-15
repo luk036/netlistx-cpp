@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.5;  VERSION ${PROJECT_VERSION}</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.6;  VERSION ${PROJECT_VERSION}</span>
    </div>
   </td>
  </tr>
@@ -233,6 +233,9 @@ template&lt;typename Hypergraph , typename WeightMap , typename CoverSet &gt; </
 </div><div class="memdoc">
 
 <p>Performs minimum weighted hypergraph vertex cover using primal-dual approximation. </p>
+<div class="dotgraph">
+<img src="dot_inline_dotgraph_1.png" alt="dot_inline_dotgraph_1.png" border="0" usemap="#dot_inline_dotgraph_1.map"/>
+</div>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Hypergraph</td><td>Hypergraph type </td></tr>
@@ -289,6 +292,9 @@ template&lt;typename ViolateFunc , typename WeightMap , typename SolutionSet &gt
 
 <p>Primal-dual approximation algorithm for covering problems. </p>
 <p>Phase 1 selects vertices greedily using dual gap variables. Phase 2 applies reverse-delete post-processing to remove redundant vertices.</p>
+<div class="dotgraph">
+<img src="dot_inline_dotgraph_2.png" alt="dot_inline_dotgraph_2.png" border="0" usemap="#dot_inline_dotgraph_2.map"/>
+</div>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">ViolateFunc</td><td>Callable returning violate sets (edges/cycles not covered) </td></tr>

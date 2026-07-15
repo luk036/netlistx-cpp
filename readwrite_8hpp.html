@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.5;  VERSION ${PROJECT_VERSION}</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.6;  VERSION ${PROJECT_VERSION}</span>
    </div>
   </td>
  </tr>
@@ -151,6 +151,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3d25aa64661c3298529deb1680e93805" id="r_a3d25aa64661c3298529deb1680e93805"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8hpp.html#a3d25aa64661c3298529deb1680e93805">read_yosys_json</a> (std::string_view filename) -&gt; <a class="el" href="netlist_8hpp.html#ab3f2eb4e24c39f06df0bf3f6df4ab4ad">SimpleNetlist</a></td></tr>
 <tr class="memdesc:a3d25aa64661c3298529deb1680e93805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a Yosys JSON file and convert it to a SimpleNetlist object.  <br /></td></tr>
 <tr class="separator:a3d25aa64661c3298529deb1680e93805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2feb6918305a32bb936f7758881819aa" id="r_a2feb6918305a32bb936f7758881819aa"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8hpp.html#a2feb6918305a32bb936f7758881819aa">read_yosys_json_sax</a> (std::string_view filename) -&gt; <a class="el" href="netlist_8hpp.html#ab3f2eb4e24c39f06df0bf3f6df4ab4ad">SimpleNetlist</a></td></tr>
+<tr class="memdesc:a2feb6918305a32bb936f7758881819aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a Yosys JSON file using SAX-style streaming parsing.  <br /></td></tr>
+<tr class="separator:a2feb6918305a32bb936f7758881819aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c045a6aca04ecd38dbf64e426f47196" id="r_a8c045a6aca04ecd38dbf64e426f47196"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8hpp.html#a8c045a6aca04ecd38dbf64e426f47196">writeJSON</a> (std::string_view jsonFileName, const <a class="el" href="netlist_8hpp.html#ab3f2eb4e24c39f06df0bf3f6df4ab4ad">SimpleNetlist</a> &amp;hyprgraph)</td></tr>
 <tr class="memdesc:a8c045a6aca04ecd38dbf64e426f47196"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a SimpleNetlist to a JSON file.  <br /></td></tr>
 <tr class="separator:a8c045a6aca04ecd38dbf64e426f47196"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -454,7 +457,37 @@ Functions</h2></td></tr>
 
 <p>Read a Yosys JSON file and convert it to a SimpleNetlist object. </p>
 <p>Parses Yosys synthesis output JSON and constructs a bipartite graph where cells and I/O ports are module nodes, and wires are net nodes.</p>
+<p>Uses nlohmann/json's DOM-style parser (json::parse). For the SAX streaming alternative, see <a class="el" href="readwrite_8hpp.html#a2feb6918305a32bb936f7758881819aa" title="Read a Yosys JSON file using SAX-style streaming parsing.">read_yosys_json_sax()</a>.</p>
 <p>String-valued net IDs (constants like "0", "1") are skipped. I/O port nodes are assigned weight 0 and marked as fixed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Path to Yosys JSON file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>SimpleNetlist object representing the circuit </dd></dl>
+
+</div>
+</div>
+<a id="a2feb6918305a32bb936f7758881819aa" name="a2feb6918305a32bb936f7758881819aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2feb6918305a32bb936f7758881819aa">&#9670;&#160;</a></span>read_yosys_json_sax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto read_yosys_json_sax </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td> -&gt;  <a class="el" href="netlist_8hpp.html#ab3f2eb4e24c39f06df0bf3f6df4ab4ad">SimpleNetlist</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read a Yosys JSON file using SAX-style streaming parsing. </p>
+<p>Uses nlohmann/json's built-in SAX interface (<code>json::sax_parse</code>) to process the file as a stream of parser events without building the full JSON DOM in memory. This is the C++ equivalent of the JSON SAX model - suitable for large netlists where memory footprint matters.</p>
+<p>Only the first module in the Yosys JSON is processed (matching the behaviour of <a class="el" href="readwrite_8hpp.html#a3d25aa64661c3298529deb1680e93805" title="Read a Yosys JSON file and convert it to a SimpleNetlist object.">read_yosys_json()</a>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Path to Yosys JSON file </td></tr>

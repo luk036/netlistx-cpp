@@ -11,8 +11,9 @@ var searchData=
   ['read_5fjson_5fformat_8',['read_json_format',['../readwrite_8hpp.html#a6ce8c769c7040f4e80db8b794b1810f4',1,'readwrite.hpp']]],
   ['read_5fnetd_5fformat_9',['read_netD_format',['../readwrite_8hpp.html#ad084c49dd2cd053445452282162aed1b',1,'readwrite.hpp']]],
   ['read_5fyosys_5fjson_10',['read_yosys_json',['../readwrite_8hpp.html#a3d25aa64661c3298529deb1680e93805',1,'readwrite.hpp']]],
-  ['readare_11',['readAre',['../readwrite_8hpp.html#af11973267caeb898e218c74b7887a331',1,'readwrite.hpp']]],
-  ['readnetd_12',['readNetD',['../readwrite_8hpp.html#ad3a59ff1608402fe48d39678803f3641',1,'readwrite.hpp']]],
-  ['return_5fvoid_13',['return_void',['../structpy_1_1Generator_1_1promise__type.html#ae3608e94cb224ab6cec15cdd02953fd0',1,'py::Generator::promise_type']]],
-  ['reverse_5fdelete_5fcover_14',['reverse_delete_cover',['../namespacedetail.html#a7ee17782e964142da0d84781aa3dd53c',1,'detail']]]
+  ['read_5fyosys_5fjson_5fsax_11',['read_yosys_json_sax',['../readwrite_8hpp.html#a2feb6918305a32bb936f7758881819aa',1,'readwrite.hpp']]],
+  ['readare_12',['readAre',['../readwrite_8hpp.html#af11973267caeb898e218c74b7887a331',1,'readwrite.hpp']]],
+  ['readnetd_13',['readNetD',['../readwrite_8hpp.html#ad3a59ff1608402fe48d39678803f3641',1,'readwrite.hpp']]],
+  ['return_5fvoid_14',['return_void',['../structpy_1_1Generator_1_1promise__type.html#ae3608e94cb224ab6cec15cdd02953fd0',1,'py::Generator::promise_type']]],
+  ['reverse_5fdelete_5fcover_15',['reverse_delete_cover',['../namespacedetail.html#a7ee17782e964142da0d84781aa3dd53c',1,'detail']]]
 ];

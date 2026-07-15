@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.5;  VERSION ${PROJECT_VERSION}</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.6;  VERSION ${PROJECT_VERSION}</span>
    </div>
   </td>
  </tr>
@@ -311,7 +311,14 @@ template&lt;typename Hypergraph , typename WeightMap , typename RNG &gt; </div>
 </div><div class="memdoc">
 
 <p>Single trial of Pitt's randomized hypergraph vertex cover. </p>
-<p>A hyperedge (net) can connect multiple vertices. For each uncovered net {v1, ..., vk}, the algorithm picks vertex vi with probability inversely proportional to its weight: P(pick vi) = (1/w(vi)) / sum(1/w(vj) for vj in net)</p>
+<p>A hyperedge (net) can connect multiple vertices. For each uncovered net \(\{v_1, \dots, v_k\}\), the algorithm picks vertex \(v_i\) with probability inversely proportional to its weight:  </p><p class="formulaDsp">
+\[
+    P(\text{pick } v_i) = \frac{1/w(v_i)}{\sum_{j=1}^{k} 1/w(v_j)}
+\]
+</p>
+<div class="dotgraph">
+<img src="dot_inline_dotgraph_4.png" alt="dot_inline_dotgraph_4.png" border="0" usemap="#dot_inline_dotgraph_4.map"/>
+</div>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Hypergraph</td><td>Hypergraph type (requires: nets, gr[net] -&gt; vertices) </td></tr>

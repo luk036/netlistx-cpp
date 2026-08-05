@@ -14,46 +14,52 @@ netlistx-cpp is a C++ library for netlist/graph representation and algorithms. I
 ### Standard Build (CMake)
 
 ```bash
-# Build all targets (recommended for development)
-cmake -S all -B build
+cmake -B build
 cmake --build build
-
-# Build test only
-cmake -S test -B build/test && cmake --build build/test
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests via ctest
-CTEST_OUTPUT_ON_FAILURE=1 cmake --build build/test --target test
+ctest --test-dir build --output-on-failure
 
 # Run test executable directly
-./build/test/NetlistXTests
+./build/NetlistXTests
 
 # Run a single test case (doctest)
-./build/test/NetlistXTests -tc="Test Netlist"
-./build/test/NetlistXTests -tc="Test min_vertex_cover dwarf"
+./build/NetlistXTests -tc="Test Netlist"
+./build/NetlistXTests -tc="Test min_vertex_cover dwarf"
+```
+
+### Run Standalone
+
+```bash
+cmake -B build
+cmake --build build
+./build/NetlistX --help
 ```
 
 ### Code Formatting
 
 ```bash
 # Check/Apply formatting
-cmake --build build/test --target format      # check
-cmake --build build/test --target fix-format # apply
+cmake --build build --target format      # check
+cmake --build build --target fix-format # apply
 ```
 
-Requires: `clang-format==14.0.6`, `cmake-format==0.6.11`, `pyyaml`
+Requires: `clang-format==18.1.2`, `cmake-format==0.6.13`, `pyyaml`
 
 ### Additional Tools
 
 ```bash
-# Sanitizers: Address, Memory, Undefined, Thread, Leak
-cmake -S all -B build -DUSE_SANITIZER=Address
+# clang-tidy static analysis
+cmake -B build -DNETLISTX_ENABLE_CLANG_TIDY=ON
+cmake --build build --target clang-tidy
 
-# Static analyzers: clang-tidy, iwyu, cppcheck
-cmake -S all -B build -DUSE_STATIC_ANALYZER=clang-tidy
+# Coverage report (GCC/Clang only)
+cmake -B build -DNETLISTX_ENABLE_COVERAGE=ON
+cmake --build build --target coverage
 ```
 
 ## Code Style Guidelines

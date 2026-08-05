@@ -3,16 +3,15 @@
 #include <cstdint>
 #include <iomanip>
 #include <iostream>
+#include <netlistx/cover.hpp>  // min_hyper_vertex_cover (over hypergraph)
+#include <netlistx/netlist.hpp>
+#include <netlistx/netlist_algo.hpp>
+#include <netlistx/readwrite.hpp>  // read_yosys_json, read_yosys_json_sax
 #include <random>
 #include <string>
 #include <vector>
-
-#include <netlistx/netlist.hpp>
-#include <netlistx/netlist_algo.hpp>
-#include <netlistx/cover.hpp>         // min_hyper_vertex_cover (over hypergraph)
-#include <netlistx/readwrite.hpp>     // read_yosys_json, read_yosys_json_sax
-#include <xnetwork/graph_algo.hpp>    // min_vertex_cover_fast, min_maximal_independent_set
 #include <xnetwork/classes/graph.hpp>
+#include <xnetwork/graph_algo.hpp>  // min_vertex_cover_fast, min_maximal_independent_set
 
 using namespace std;
 using Clock = chrono::high_resolution_clock;
@@ -45,7 +44,10 @@ auto bench_vertex_cover_fast_line(int iterations) {
         auto [sol, cost] = min_vertex_cover_fast(ugraph, weight, coverset);
         auto end = Clock::now();
         times.push_back(Duration(end - start).count());
-        if (i == 0) { result_size = sol.size(); result_cost = cost; }
+        if (i == 0) {
+            result_size = sol.size();
+            result_cost = cost;
+        }
     }
 
     sort(times.begin(), times.end());
@@ -55,8 +57,8 @@ auto bench_vertex_cover_fast_line(int iterations) {
 
     cout << "min_vertex_cover_fast (line graph, unit weights):\n";
     cout << "  Cover set size: " << result_size << ", cost: " << result_cost << "\n";
-    cout << "  Min: " << times.front() << " ms, Max: " << times.back()
-         << " ms, Mean: " << mean << " ms\n";
+    cout << "  Min: " << times.front() << " ms, Max: " << times.back() << " ms, Mean: " << mean
+         << " ms\n";
 
     return mean;
 }
@@ -94,8 +96,8 @@ auto bench_hyper_vertex_cover_inverter(int iterations) {
     double mean = sum / iterations;
 
     cout << "min_hyper_vertex_cover (inverter netlist, unit weights):\n";
-    cout << "  Min: " << times.front() << " ms, Max: " << times.back()
-         << " ms, Mean: " << mean << " ms\n";
+    cout << "  Min: " << times.front() << " ms, Max: " << times.back() << " ms, Mean: " << mean
+         << " ms\n";
 
     return mean;
 }
@@ -133,8 +135,8 @@ auto bench_maximal_matching_inverter(int iterations) {
     double mean = sum / iterations;
 
     cout << "min_maximal_matching (inverter netlist, unit weights):\n";
-    cout << "  Min: " << times.front() << " ms, Max: " << times.back()
-         << " ms, Mean: " << mean << " ms\n";
+    cout << "  Min: " << times.front() << " ms, Max: " << times.back() << " ms, Mean: " << mean
+         << " ms\n";
 
     return mean;
 }
@@ -187,7 +189,10 @@ int main() {
     cout << "\n";
 
     cout << "=== Yosys JSON Parsing ===\n";
-    struct { string path; string label; } files[] = {
+    struct {
+        string path;
+        string label;
+    } files[] = {
         {"../../testcases/yosys_and2.json", "yosys_and2.json (tiny)"},
         {"../../yosys_testcases/sphere_netlist.json", "sphere_netlist.json (482 KB)"},
         {"../../yosys_testcases/sphere3hopf_netlist_simple.json",
@@ -197,8 +202,7 @@ int main() {
     for (auto& f : files) {
         auto dom = bench_yosys_dom(f.path, 50);
         auto sax = bench_yosys_sax(f.path, 50);
-        cout << left << setw(40) << f.label
-             << "DOM: " << setw(10) << dom << " ms"
+        cout << left << setw(40) << f.label << "DOM: " << setw(10) << dom << " ms"
              << " SAX: " << setw(10) << sax << " ms"
              << " Speedup: " << (dom / sax) << "x\n";
     }

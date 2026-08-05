@@ -1,58 +1,30 @@
-/**
- * @file main.cpp
- * @brief Standalone executable entry point for NetlistX.
- *
- * Provides a CLI tool with --help, --version, --name, and --lang options.
- * Currently serves as a scaffold for demonstration purposes.
- */
-
-#include <netlistx/greeter.h>
+#include <netlistx/readwrite.hpp>
 #include <netlistx/version.h>
 
 #include <cxxopts.hpp>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 
 auto main(int argc, char** argv) -> int {
-    const std::unordered_map<std::string, netlistx::LanguageCode> languages{
-        {"en", netlistx::LanguageCode::EN},
-        {"de", netlistx::LanguageCode::DE},
-        {"es", netlistx::LanguageCode::ES},
-        {"fr", netlistx::LanguageCode::FR},
-    };
+    cxxopts::Options options("NetlistX", "Netlist hypergraph reader demo");
+    options.add_options()("h,help", "Print usage")("v,version", "Print version")(
+        "f,file", "Netlist file to read", cxxopts::value<std::string>()->default_value("testcases/dwarf1.netD")
+    );
 
-    cxxopts::Options options(*argv, "A program to welcome the world!");
-
-    std::string language;
-    std::string name;
-
-    // clang-format off
-  options.add_options()
-    ("h,help", "Show help")
-    ("v,version", "Print the current version number")
-    ("n,name", "Name to greet", cxxopts::value(name)->default_value("World"))
-    ("l,lang", "Language code to use", cxxopts::value(language)->default_value("en"))
-  ;
-    // clang-format on
-
-    auto result = options.parse(argc, argv);
-
-    if (result["help"].as<bool>()) {
+    const auto result = options.parse(argc, argv);
+    if (result.count("help") > 0) {
         std::cout << options.help() << '\n';
         return 0;
     }
-
-    if (result["version"].as<bool>()) {
+    if (result.count("version") > 0) {
         std::cout << "NetlistX, version " << NETLISTX_VERSION << '\n';
         return 0;
     }
 
-    auto langIt = languages.find(language);
-    if (langIt == languages.end()) {
-        std::cerr << "unknown language code: " << language << '\n';
-        return 1;
-    }
+    const auto filename = result["file"].as<std::string>();
+    const auto hyprgraph = read_hypergraph(filename);
+    std::cout << "NetlistX: " << filename << " -> " << hyprgraph.number_of_modules() << " modules, "
+              << hyprgraph.number_of_nets() << " nets\n";
 
     return 0;
 }

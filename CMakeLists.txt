@@ -53,17 +53,16 @@ endif()
 # Dependencies
 # ---------------------------------------------------------------------------
 
-# Download CPM.cmake for reproducible dependency management
-# see https://github.com/cpm-cmake/CPM.cmake for more info
+# Download CPM.cmake for reproducible dependency management see
+# https://github.com/cpm-cmake/CPM.cmake for more info
 set(CPM_DOWNLOAD_VERSION 0.38.5)
 set(CPM_HASH_SUM "192aa0ccdc57dfe75bd9e4b176bf7fb5692fd2b3e3f7b09c74856fc39572b31c")
 set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 if(NOT (EXISTS ${CPM_DOWNLOAD_LOCATION}))
   message(STATUS "Downloading CPM.cmake to ${CPM_DOWNLOAD_LOCATION}")
-  file(
-    DOWNLOAD https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
-             ${CPM_DOWNLOAD_LOCATION}
-    EXPECTED_HASH SHA256=${CPM_HASH_SUM}
+  file(DOWNLOAD
+       https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
+       ${CPM_DOWNLOAD_LOCATION} EXPECTED_HASH SHA256=${CPM_HASH_SUM}
   )
 endif()
 include(${CPM_DOWNLOAD_LOCATION})
@@ -133,9 +132,8 @@ CPMAddPackage(
   OPTIONS "JSON_BuildTests OFF" "JSON_Install ON"
 )
 
-set(SPECIFIC_LIBS
-    XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog
-    nlohmann_json::nlohmann_json
+set(SPECIFIC_LIBS XNetwork::XNetwork Py2Cpp::Py2Cpp Threads::Threads fmt::fmt spdlog::spdlog
+                  nlohmann_json::nlohmann_json
 )
 
 # ---------------------------------------------------------------------------
@@ -144,8 +142,7 @@ set(SPECIFIC_LIBS
 
 # Note: globbing sources is considered bad practice as CMake's generators may not detect new files
 # automatically. Keep that in mind when changing files, or explicitly mention them here.
-file(GLOB_RECURSE headers CONFIGURE_DEPENDS
-     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
      "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
 )
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
@@ -218,8 +215,8 @@ if(NETLISTX_BUILD_STANDALONE)
   add_executable(NetlistXStandalone ${NETLISTX_STANDALONE_SOURCES})
   set_target_properties(NetlistXStandalone PROPERTIES OUTPUT_NAME "NetlistX" CXX_STANDARD 20)
   target_include_directories(NetlistXStandalone SYSTEM PRIVATE ${CXXOPTS_INCLUDE_DIRS})
-  target_link_libraries(NetlistXStandalone PRIVATE NetlistX::NetlistX cxxopts::cxxopts
-                                                   ${SPECIFIC_LIBS}
+  target_link_libraries(
+    NetlistXStandalone PRIVATE NetlistX::NetlistX cxxopts::cxxopts ${SPECIFIC_LIBS}
   )
   target_enable_warnings(NetlistXStandalone)
 endif()
@@ -257,8 +254,8 @@ if(NETLISTX_BUILD_TESTS)
 
   file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "test/source/*.cpp")
   add_executable(NetlistXTests ${TEST_SOURCES})
-  target_link_libraries(NetlistXTests PRIVATE doctest::doctest NetlistX::NetlistX ${SPECIFIC_LIBS}
-                                              rapidcheck
+  target_link_libraries(
+    NetlistXTests PRIVATE doctest::doctest NetlistX::NetlistX ${SPECIFIC_LIBS} rapidcheck
   )
   target_include_directories(NetlistXTests PRIVATE ${rapidcheck_SOURCE_DIR}/include)
   target_compile_definitions(NetlistXTests PRIVATE RAPIDCHECK_H)
@@ -286,8 +283,14 @@ if(NETLISTX_BUILD_TESTS)
     )
 
     if(MSVC)
-      list(APPEND NVCC_FLAGS -allow-unsupported-compiler -Xcompiler="/EHsc" -Xcompiler="/wd4819"
-           -Xcompiler="/O2" "-Xcompiler=/MD$<$<CONFIG:Debug>:d>"
+      list(
+        APPEND
+        NVCC_FLAGS
+        -allow-unsupported-compiler
+        -Xcompiler="/EHsc"
+        -Xcompiler="/wd4819"
+        -Xcompiler="/O2"
+        "-Xcompiler=/MD$<$<CONFIG:Debug>:d>"
       )
     endif()
 
@@ -308,8 +311,8 @@ if(NETLISTX_BUILD_TESTS)
   # <build>/test where ../../ resolves to the project root.
   file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/test")
   add_test(NAME NetlistXAllTests COMMAND NetlistXTests)
-  set_tests_properties(NetlistXAllTests PROPERTIES WORKING_DIRECTORY
-                                                   "${CMAKE_CURRENT_BINARY_DIR}/test"
+  set_tests_properties(
+    NetlistXAllTests PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/test"
   )
 endif()
 
@@ -335,8 +338,7 @@ if(NETLISTX_ENABLE_CLANG_TIDY)
   if(CLANG_TIDY)
     add_custom_target(
       clang-tidy
-      COMMAND ${CLANG_TIDY} --extra-arg=-std=c++20
-              --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}/include
+      COMMAND ${CLANG_TIDY} --extra-arg=-std=c++20 --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}/include
               ${CMAKE_CURRENT_SOURCE_DIR}/include/netlistx/*.hpp
       COMMENT "Running clang-tidy static analysis"
     )
@@ -403,13 +405,15 @@ if(NETLISTX_ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleCl
       coverage
       COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
       COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/coverage
-      COMMAND ${GCOVR_PATH} --root ${PROJECT_SOURCE_DIR} --html-details
-              ${CMAKE_BINARY_DIR}/coverage/index.html --exclude test/ --exclude build/
-              ${extra_gcovr_args}
+      COMMAND
+        ${GCOVR_PATH} --root ${PROJECT_SOURCE_DIR} --html-details
+        ${CMAKE_BINARY_DIR}/coverage/index.html --exclude test/ --exclude build/ ${extra_gcovr_args}
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
       COMMENT "Generating coverage report in ${CMAKE_BINARY_DIR}/coverage/index.html"
     )
   else()
-    message(WARNING "gcovr not found - coverage target unavailable. Install with: pip install gcovr")
+    message(
+      WARNING "gcovr not found - coverage target unavailable. Install with: pip install gcovr"
+    )
   endif()
 endif()

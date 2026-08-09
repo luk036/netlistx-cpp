@@ -34,8 +34,9 @@ if is_plat("linux") then
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include/c++/v1", {public = true})
 	-- add_sysincludedirs(os.getenv("PREFIX") .. "/include", {public = true})
 elseif is_plat("windows") then
+    -- NOTE: keep standard level in sync with set_languages() above;
+    -- an explicit /std:c++latest here would override /std:c++20 (warning D9025)
     add_cxflags("/EHsc /utf-8 /W4 /WX /wd4702", { force = true })
-    add_cxflags("/std:c++latest", { force = true })
 end
 
 if is_mode("coverage") then
@@ -54,6 +55,7 @@ target("NetlistX")
         set_policy("build.cuda.devlink", true)
         add_defines("HAS_CUDA", { public = true })
         add_cuflags("--extended-lambda", "--gpu-architecture=compute_75", { force = true })
+        add_cuflags("-Xcompiler=/utf-8", { force = true })
         add_links("cudart")
         print("[xmake] NetlistX: GPU acceleration enabled (CUDA)")
     else

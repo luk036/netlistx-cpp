@@ -321,12 +321,39 @@ endif()
 # ---------------------------------------------------------------------------
 
 if(NETLISTX_BUILD_BENCHMARKS)
+  # nanobench is a header-only benchmarking library
+  set(NANOBENCH_VERSION 4.3.11)
+  set(NANOBENCH_DIR "${CMAKE_BINARY_DIR}/_deps/nanobench")
+  set(NANOBENCH_HEADER "${NANOBENCH_DIR}/nanobench.h")
+
+  if(NOT EXISTS "${NANOBENCH_HEADER}")
+    file(MAKE_DIRECTORY "${NANOBENCH_DIR}")
+    file(
+      DOWNLOAD
+      "https://raw.githubusercontent.com/martinus/nanobench/v${NANOBENCH_VERSION}/src/include/nanobench.h"
+      "${NANOBENCH_HEADER}"
+      STATUS download_status
+    )
+    list(GET download_status 0 status_code)
+    if(NOT status_code EQUAL 0)
+      message(FATAL_ERROR "Failed to download nanobench (status ${status_code})")
+    endif()
+  endif()
+
+  add_library(nanobench INTERFACE)
+  target_include_directories(nanobench SYSTEM INTERFACE "${NANOBENCH_DIR}")
+
   file(GLOB NETLISTX_BENCH_SOURCES CONFIGURE_DEPENDS "bench/source/*.cpp")
-  add_executable(NetlistXBench ${NETLISTX_BENCH_SOURCES})
-  target_link_libraries(NetlistXBench PRIVATE NetlistX::NetlistX ${SPECIFIC_LIBS})
-  set_target_properties(NetlistXBench PROPERTIES CXX_STANDARD 20)
-  target_enable_warnings(NetlistXBench)
-  add_test(NAME NetlistXBench COMMAND NetlistXBench)
+  foreach(ONE_BENCH_CPP ${NETLISTX_BENCH_SOURCES})
+    get_filename_component(ONE_BENCH_EXEC ${ONE_BENCH_CPP} NAME_WE)
+    set(TARGET_NAME Bench_${ONE_BENCH_EXEC})
+
+    add_executable(${TARGET_NAME} ${ONE_BENCH_CPP})
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${ONE_BENCH_EXEC} CXX_STANDARD 20)
+    target_link_libraries(${TARGET_NAME} PRIVATE nanobench NetlistX::NetlistX ${SPECIFIC_LIBS})
+    target_enable_warnings(${TARGET_NAME})
+    add_test(NAME ${ONE_BENCH_EXEC} COMMAND ${TARGET_NAME})
+  endforeach()
 endif()
 
 # ---------------------------------------------------------------------------

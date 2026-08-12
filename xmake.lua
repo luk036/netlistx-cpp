@@ -3,6 +3,7 @@ add_requires("fmt", { alias = "fmt" })
 add_requires("doctest", { alias = "doctest" })
 add_requires("spdlog", { alias = "spdlog" })
 add_requires("nlohmann_json", { alias = "nlohmann_json" })
+add_requires("nanobench", { alias = "nanobench" })
 -- cppcoro unavailable via network; using hand-rolled Generator<T> instead
 
 set_languages("c++20")
@@ -85,7 +86,7 @@ target("bench_yosys")
     add_includedirs("../py2cpp/include", { public = true })
     add_includedirs("../xnetwork-cpp/include", { public = true })
     add_files("bench/source/bench_yosys.cpp")
-    add_packages("fmt", "spdlog", "nlohmann_json")
+    add_packages("fmt", "spdlog", "nlohmann_json", "nanobench")
 	if is_plat("linux") then
 		set_rundir("./build/linux/")
 	elseif is_plat("windows") then
@@ -100,7 +101,7 @@ target("bench_cross")
     add_includedirs("../xnetwork-cpp/include", { public = true })
     add_files("bench/source/bench_cross.cpp")
 	add_files("../xnetwork-cpp/source/*.cpp")
-    add_packages("fmt", "spdlog", "nlohmann_json")
+    add_packages("fmt", "spdlog", "nlohmann_json", "nanobench")
 	if is_plat("linux") then
 		set_rundir("./build/linux/")
 	elseif is_plat("windows") then

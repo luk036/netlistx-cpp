@@ -9,8 +9,8 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
-#include <netlistx/logger.hpp>
 #include <memory>
+#include <netlistx/logger.hpp>
 
 namespace netlistx {
 

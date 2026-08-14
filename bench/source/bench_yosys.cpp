@@ -21,11 +21,7 @@ int main() {
     };
 
     ankerl::nanobench::Bench bench;
-    bench.title("Yosys JSON parsing")
-        .unit("op")
-        .warmup(100)
-        .epochs(50)
-        .minEpochIterations(10);
+    bench.title("Yosys JSON parsing").unit("op").warmup(100).epochs(50).minEpochIterations(10);
 
     for (auto& f : files) {
         auto netlist = read_yosys_json(f.path);

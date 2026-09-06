@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 project(
   NetlistX
-  VERSION 1.1.7
+  VERSION 1.1.8
   LANGUAGES CXX
 )
 
@@ -119,7 +119,7 @@ endif()
 # Py2Cpp provides the dict/set containers used across the public headers.
 CPMAddPackage(
   NAME Py2Cpp
-  GIT_TAG v1.6.4
+  GIT_TAG v1.6.5
   GITHUB_REPOSITORY luk036/py2cpp
   OPTIONS "PY2CPP_BUILD_TESTS OFF" "PY2CPP_BUILD_STANDALONE OFF"
 )
@@ -131,7 +131,7 @@ if(MSVC)
 endif()
 CPMAddPackage(
   NAME XNetwork
-  GIT_TAG v1.7.7
+  GIT_TAG v1.7.8
   GITHUB_REPOSITORY luk036/xnetwork-cpp
   OPTIONS "XNETWORK_BUILD_TESTS OFF" "XNETWORK_BUILD_STANDALONE OFF"
 )

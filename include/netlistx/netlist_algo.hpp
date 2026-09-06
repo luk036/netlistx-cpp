@@ -69,6 +69,7 @@ auto min_vertex_cover(const Gnl& hyprgraph, const C1& weight, C2& coverset) ->
     }
 
     assert(total_dual_cost <= total_primal_cost);
+    assert(total_primal_cost <= 2 * total_dual_cost);
     return total_primal_cost;
 }
 

@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.7</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
    </div>
   </td>
  </tr>
@@ -230,7 +230,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="foldopen" id="foldopen00205" data-start="{" data-end="}">
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="namespacetransrangers.html#acdab078d02d74b9a958590c9ca483007">  205</a></span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Ranger&gt; <span class="keyword">auto</span> <a class="code hl_function" href="namespacetransrangers.html#acdab078d02d74b9a958590c9ca483007">enumerate</a>(Ranger rgr) {</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="namespacetransrangers.html#ad89c3d136acf2f491fc0b1864f1b0d84">transform</a>(</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            [index = std::size_t(0)](<span class="keyword">auto</span>&amp;&amp; value) <a class="code hl_define" href="transrangers_8hpp.html#ac3827a36b5dc996a5b7d7cfde122b001">TRANSRANGERS_HOT_MUTABLE</a> {</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            [index = std::size_t{0}](<span class="keyword">auto</span>&amp;&amp; value) <a class="code hl_define" href="transrangers_8hpp.html#ac3827a36b5dc996a5b7d7cfde122b001">TRANSRANGERS_HOT_MUTABLE</a> {</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                <span class="keyword">auto</span> old = index;</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>                index += 1;</div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                <span class="keywordflow">return</span> std::make_pair(old, std::move(value));</div>

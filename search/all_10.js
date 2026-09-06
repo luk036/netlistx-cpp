@@ -19,7 +19,7 @@ var searchData=
   ['readme_2emd_16',['README.md',['../README_8md.html',1,'']]],
   ['readnetd_17',['readNetD',['../readwrite_8hpp.html#ad3a59ff1608402fe48d39678803f3641',1,'readwrite.hpp']]],
   ['readwrite_2ehpp_18',['readwrite.hpp',['../readwrite_8hpp.html',1,'']]],
-  ['related_20projects_20and_20alternatives_19',['Related projects and alternatives',['../index.html#autotoc_md14',1,'']]],
+  ['related_20projects_20and_20alternatives_19',['Related projects and alternatives',['../index.html#autotoc_md11',1,'']]],
   ['return_5fvoid_20',['return_void',['../structpy_1_1Generator_1_1promise__type.html#ae3608e94cb224ab6cec15cdd02953fd0',1,'py::Generator::promise_type']]],
   ['reverse_5fdelete_5fcover_21',['reverse_delete_cover',['../namespacedetail.html#a7ee17782e964142da0d84781aa3dd53c',1,'detail']]],
   ['rgr_22',['rgr',['../classtransrangers_1_1detail_1_1view_1_1iterator__base.html#a9311b27f739809e3e99072f7bd3b1a72',1,'transrangers::detail::view::iterator_base::rgr'],['../structtransrangers_1_1all__copy.html#ac171b950418dce8df61a331488d7805a',1,'transrangers::all_copy::rgr'],['../structtransrangers_1_1skip__first__copy.html#a82daa38cea0932421b22fd3fbbcd3d1a',1,'transrangers::skip_first_copy::rgr'],['../structtransrangers_1_1skip__last__copy.html#a3abc59196620113f86c55619223eeba5',1,'transrangers::skip_last_copy::rgr'],['../structtransrangers_1_1skip__both__copy.html#a2cb9a14358f9cc28384ee42ef52ddfed',1,'transrangers::skip_both_copy::rgr']]],

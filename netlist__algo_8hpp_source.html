@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.7</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
    </div>
   </td>
  </tr>
@@ -121,17 +121,18 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    assert(total_dual_cost &lt;= total_primal_cost);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">return</span> total_primal_cost;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    assert(total_primal_cost &lt;= 2 * total_dual_cost);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordflow">return</span> total_primal_cost;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
 </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">   94</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight, C2&amp; matchset, C2&amp; dep) -&gt;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keyword">typename</span> C1::mapped_type;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1&gt;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#a578d3c1f864ec53522645cb5ee67a8b9">  107</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight)</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    -&gt; std::pair&lt;py::set&lt;typename Gnl::node_t&gt;, <span class="keyword">typename</span> C1::mapped_type&gt;;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">   95</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight, C2&amp; matchset, C2&amp; dep) -&gt;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keyword">typename</span> C1::mapped_type;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1&gt;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#a578d3c1f864ec53522645cb5ee67a8b9">  108</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight)</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    -&gt; std::pair&lt;py::set&lt;typename Gnl::node_t&gt;, <span class="keyword">typename</span> C1::mapped_type&gt;;</div>
 <div class="ttc" id="anetlist__algo_8hpp_html_ab7a107e448023c70274f364eb740eaf7"><div class="ttname"><a href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a></div><div class="ttdeci">auto min_maximal_matching(const Gnl &amp;hyprgraph, const C1 &amp;weight, C2 &amp;matchset, C2 &amp;dep) -&gt; typename C1::mapped_type</div><div class="ttdoc">Solve minimum weighted maximal matching via primal-dual approximation.</div></div>
 <div class="ttc" id="anetlist__algo_8hpp_html_ac1a9656eaa4587c865377731f84b15ba"><div class="ttname"><a href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">min_vertex_cover</a></div><div class="ttdeci">auto min_vertex_cover(const Gnl &amp;hyprgraph, const C1 &amp;weight, C2 &amp;coverset) -&gt; typename C1::mapped_type</div><div class="ttdoc">Solve minimum weighted vertex cover via primal-dual approximation.</div><div class="ttdef"><b>Definition</b> netlist_algo.hpp:47</div></div>
 </div><!-- fragment --></div><!-- contents -->

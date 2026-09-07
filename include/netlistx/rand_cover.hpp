@@ -23,40 +23,13 @@
 #include <algorithm>
 #include <cassert>
 #include <future>
+#include <netlistx/detail/cover_util.hpp>
 #include <netlistx/thread_pool.hpp>
 #include <optional>
 #include <py2cpp/set.hpp>
 #include <random>
 #include <utility>
 #include <vector>
-
-namespace detail {
-
-    /**
-     * @brief Reverse-delete post-processing step.
-     *
-     * Iterates through vertices in reverse addition order.  For each vertex,
-     * temporarily removes it; if the cover remains valid, the removal is
-     * kept (vertex was redundant).  Otherwise the vertex is restored.
-     *
-     * @tparam Node Vertex type
-     * @tparam Validator Callable that returns true if current cover is valid
-     * @param soln Mutable cover set (modified in place)
-     * @param added_order Vertices in order they were added
-     * @param is_valid Validation callable
-     */
-    template <typename Node, typename Validator>
-    void reverse_delete_cover(py::set<Node>& soln, const std::vector<Node>& added_order,
-                              Validator&& is_valid) {
-        for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
-            soln.erase(*it);
-            if (!std::forward<Validator>(is_valid)()) {
-                soln.insert(*it);
-            }
-        }
-    }
-
-}  // namespace detail
 
 /**
  * @brief Single trial of Pitt's randomized hypergraph vertex cover.
@@ -105,20 +78,13 @@ auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph, const WeightMap&
     std::uniform_real_distribution<double> dist(0.0, 1.0);
 
     for (const auto& net : hyprgraph.nets) {
-        // Copy vertices to a vector for random access
-        std::vector<node_t> vertices(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end());
-
-        // Skip nets already covered
-        bool covered = false;
-        for (const auto& v : vertices) {
-            if (soln.contains(v)) {
-                covered = true;
-                break;
-            }
-        }
-        if (covered || vertices.empty()) {
+        // Skip nets that are empty or already covered.
+        if (hyprgraph.gr[net].empty() || netlistx::detail::net_is_covered(hyprgraph, net, soln)) {
             continue;
         }
+
+        // Copy vertices to a vector for random access
+        std::vector<node_t> vertices(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end());
 
         // Generalized Pitt rule: P(pick vi) ~ 1/w(vi)
         double total_inv{};
@@ -146,22 +112,8 @@ auto rand_hyper_vertex_cover_trial(const Hypergraph& hyprgraph, const WeightMap&
     }
 
     // Phase 2: Reverse-Delete Post-Processing
-    auto is_covered = [&]() -> bool {
-        for (const auto& net : hyprgraph.nets) {
-            bool net_covered = false;
-            for (const auto& v : hyprgraph.gr[net]) {
-                if (soln.contains(v)) {
-                    net_covered = true;
-                    break;
-                }
-            }
-            if (!net_covered && !hyprgraph.gr[net].empty()) {
-                return false;
-            }
-        }
-        return true;
-    };
-    detail::reverse_delete_cover(soln, added_order, is_covered);
+    netlistx::detail::reverse_delete(
+        soln, added_order, [&]() { return netlistx::detail::all_nets_covered(hyprgraph, soln); });
 
     CostType total_cost{};
     for (const auto& v : soln) {

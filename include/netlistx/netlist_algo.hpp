@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <netlistx/detail/cover_util.hpp>
 #include <py2cpp/set.hpp>
 #include <utility>
 
@@ -47,12 +48,11 @@ template <typename Gnl, typename C1, typename C2>
 auto min_vertex_cover(const Gnl& hyprgraph, const C1& weight, C2& coverset) ->
     typename C1::mapped_type {
     using T = typename C1::mapped_type;
-    auto in_coverset = [&](const auto& v) { return coverset.contains(v); };
     [[maybe_unused]] auto total_dual_cost = T(0);
     auto total_primal_cost = T(0);
     auto gap = weight;
     for (const auto& net : hyprgraph.nets) {
-        if (std::any_of(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(), in_coverset)) {
+        if (netlistx::detail::net_is_covered(hyprgraph, net, coverset)) {
             continue;
         }
 

@@ -9,6 +9,8 @@
 #include <string>
 #include <xnetwork/classes/graph.hpp>
 
+#include "netlist_builder.hpp"
+
 namespace netlistx::detail {
 
     void fail(const std::string& msg, const int code) {
@@ -84,9 +86,7 @@ namespace netlistx::detail {
             g.add_edge(source, target);
         }
 
-        auto hyprgraph = SimpleNetlist{std::move(g), num_modules, num_nets};
-        hyprgraph.num_pads = num_pads;
-        return hyprgraph;
+        return make_netlist(std::move(g), num_modules, num_nets, num_pads);
     }
 
     // ── DIMACS ─────────────────────────────────────────────────────────────
@@ -197,9 +197,7 @@ namespace netlistx::detail {
             fail("Error: number of pins is not " + std::to_string(numPins) + ".\n");
         }
 
-        auto hyprgraph = SimpleNetlist{std::move(g), numModules, numNets};
-        hyprgraph.num_pads = numModules - padOffset - 1;
-        return hyprgraph;
+        return make_netlist(std::move(g), numModules, numNets, numModules - padOffset - 1);
     }
 
     // ── Factory ────────────────────────────────────────────────────────────

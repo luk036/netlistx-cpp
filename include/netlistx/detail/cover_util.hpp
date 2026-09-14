@@ -82,4 +82,30 @@ namespace netlistx::detail {
         }
     }
 
+    /**
+     * @brief Reverse-delete using a per-node redundancy predicate.
+     *
+     * Unlike reverse_delete(), which re-validates the whole solution, this
+     * variant only inspects the candidate node, allowing an O(deg) test
+     * instead of an O(E) rescan.
+     *
+     * @tparam Node Vertex type
+     * @tparam SolutionSet Cover set supporting erase()/insert()
+     * @tparam RedundantFunc Callable ``bool(node)``: true iff removing @p node
+     *         keeps the solution valid
+     * @param[in,out] soln Mutable cover set (modified in place)
+     * @param[in] added_order Vertices in the order they were added
+     * @param[in] is_redundant Per-node redundancy predicate
+     */
+    template <typename Node, typename SolutionSet, typename RedundantFunc>
+    void reverse_delete_by(SolutionSet& soln, const std::vector<Node>& added_order,
+                           RedundantFunc&& is_redundant) {
+        for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
+            soln.erase(*it);
+            if (!std::forward<RedundantFunc>(is_redundant)(*it)) {
+                soln.insert(*it);
+            }
+        }
+    }
+
 }  // namespace netlistx::detail

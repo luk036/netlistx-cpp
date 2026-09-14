@@ -42,14 +42,18 @@
  * @tparam ViolateFunc Callable returning violate sets (edges/cycles not covered)
  * @tparam WeightMap Weight mapping type
  * @tparam SolutionSet Solution set type
+ * @tparam RedundantFunc Callable ``bool(node)``: true iff removing @p node keeps
+ *   the solution valid. Lets callers supply a cheap local test instead of
+ *   re-scanning every violation.
  * @param[in] violate Callable returning sets of violating vertices
  * @param[in] weight Weight function for vertices
  * @param[in,out] soln Solution set, modified in place
+ * @param[in] redundant Fast per-node redundancy predicate
  * @return Pair of (solution set, total primal cost)
  */
-template <typename ViolateFunc, typename WeightMap, typename SolutionSet>
-auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
-    -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
+template <typename ViolateFunc, typename WeightMap, typename SolutionSet, typename RedundantFunc>
+auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln,
+              RedundantFunc redundant) -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
     using CostType = typename WeightMap::mapped_type;
     using NodeType = typename SolutionSet::value_type;
 
@@ -79,15 +83,7 @@ auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
     }
 
     // Phase 2: Reverse-Delete Post-Processing
-    auto is_valid = [&]() -> bool {
-        for (auto&& check_set : violate()) {
-            if (!check_set.empty()) {
-                return false;
-            }
-        }
-        return true;
-    };
-    netlistx::detail::reverse_delete(soln, added_order, is_valid);
+    netlistx::detail::reverse_delete_by(soln, added_order, redundant);
 
     CostType final_prml_cost = 0;
     for (const auto& vtx : soln) {
@@ -96,6 +92,24 @@ auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
 
     assert(total_dual_cost <= final_prml_cost);
     return std::make_pair(soln, final_prml_cost);
+}
+
+/**
+ * @brief Overload that validates each removal by re-running the violator.
+ *
+ * Slower than the explicit-predicate overload but works for any problem where
+ * a cheap local redundancy test is not available.
+ */
+template <typename ViolateFunc, typename WeightMap, typename SolutionSet>
+auto pd_cover(ViolateFunc violate, WeightMap& weight,
+              SolutionSet& soln) -> std::pair<SolutionSet, typename WeightMap::mapped_type> {
+    auto redundant = [&](const auto& /*vtx*/) -> bool {
+        for (auto&& check_set : violate()) {
+            if (!check_set.empty()) return false;
+        }
+        return true;
+    };
+    return pd_cover(violate, weight, soln, redundant);
 }
 
 /**
@@ -144,7 +158,18 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
         }
     };
 
-    return pd_cover(violate_netlist, weight, coverset);
+    // Removing a vertex can only expose nets incident to it, so redundancy is
+    // a check over gr[v] instead of a rescan of every net.
+    auto redundant = [&hyprgraph, &coverset](const node_t& v) -> bool {
+        for (const auto& net : hyprgraph.gr[v]) {
+            if (!netlistx::detail::net_is_covered(hyprgraph, net, coverset)) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    return pd_cover(violate_netlist, weight, coverset, redundant);
 }
 
 /**

@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.9</span>
    </div>
   </td>
  </tr>
@@ -88,6 +88,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ac739e22d1699b61544a70916a49a02b6" id="r_ac739e22d1699b61544a70916a49a02b6"><td class="memTemplParams" colspan="2">template&lt;typename Hypergraph , typename Net , typename SolutionSet &gt; </td></tr>
+<tr class="memitem:ac739e22d1699b61544a70916a49a02b6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenetlistx_1_1detail.html#ac739e22d1699b61544a70916a49a02b6">net_is_covered</a> (const Hypergraph &amp;hyprgraph, const Net &amp;net, const SolutionSet &amp;soln) -&gt; bool</td></tr>
+<tr class="memdesc:ac739e22d1699b61544a70916a49a02b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if some vertex of a net is already in the solution set.  <br /></td></tr>
+<tr class="separator:ac739e22d1699b61544a70916a49a02b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab789df4c924a206a0623279f4461a649" id="r_ab789df4c924a206a0623279f4461a649"><td class="memTemplParams" colspan="2">template&lt;typename Hypergraph , typename SolutionSet &gt; </td></tr>
+<tr class="memitem:ab789df4c924a206a0623279f4461a649"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenetlistx_1_1detail.html#ab789df4c924a206a0623279f4461a649">all_nets_covered</a> (const Hypergraph &amp;hyprgraph, const SolutionSet &amp;soln) -&gt; bool</td></tr>
+<tr class="memdesc:ab789df4c924a206a0623279f4461a649"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if every non-empty net has a vertex in the solution set.  <br /></td></tr>
+<tr class="separator:ab789df4c924a206a0623279f4461a649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a3d25482e757179538304bc52e670bd" id="r_a4a3d25482e757179538304bc52e670bd"><td class="memTemplParams" colspan="2">template&lt;typename Node , typename SolutionSet , typename Validator &gt; </td></tr>
+<tr class="memitem:a4a3d25482e757179538304bc52e670bd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenetlistx_1_1detail.html#a4a3d25482e757179538304bc52e670bd">reverse_delete</a> (SolutionSet &amp;soln, const std::vector&lt; Node &gt; &amp;added_order, Validator &amp;&amp;is_valid)</td></tr>
+<tr class="memdesc:a4a3d25482e757179538304bc52e670bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse-delete post-processing for a covering solution.  <br /></td></tr>
+<tr class="separator:a4a3d25482e757179538304bc52e670bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7be658d519e04d8e18ad3376bc80332b" id="r_a7be658d519e04d8e18ad3376bc80332b"><td class="memTemplParams" colspan="2">template&lt;typename Graph &gt; </td></tr>
 <tr class="memitem:a7be658d519e04d8e18ad3376bc80332b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenetlistx_1_1detail.html#a7be658d519e04d8e18ad3376bc80332b">make_flat_edges</a> (const Graph &amp;grph, int num_edges) -&gt; std::vector&lt; int &gt;</td></tr>
 <tr class="memdesc:a7be658d519e04d8e18ad3376bc80332b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a graph's adjacency to a flat edge array for GPU processing.  <br /></td></tr>
@@ -108,6 +120,54 @@ Functions</h2></td></tr>
 <tr class="separator:adf7f6a15277097c7b30238ecf25bfd39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ab789df4c924a206a0623279f4461a649" name="ab789df4c924a206a0623279f4461a649"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab789df4c924a206a0623279f4461a649">&#9670;&#160;</a></span>all_nets_covered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Hypergraph , typename SolutionSet &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto netlistx::detail::all_nets_covered </td>
+          <td>(</td>
+          <td class="paramtype">const Hypergraph &amp;&#160;</td>
+          <td class="paramname"><em>hyprgraph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SolutionSet &amp;&#160;</td>
+          <td class="paramname"><em>soln</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>True if every non-empty net has a vertex in the solution set. </p>
+<p>Empty nets are considered covered (they contain no vertex to cover).</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Hypergraph</td><td>Graph-like type exposing nets and gr[net] adjacency ranges </td></tr>
+    <tr><td class="paramname">SolutionSet</td><td>Cover set with a contains() query </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hyprgraph</td><td>The hypergraph </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">soln</td><td>The cover set to test against </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the solution covers all non-empty nets </dd></dl>
+
+</div>
+</div>
 <a id="a45e2e9d1075c67c84cdc589c20f07752" name="a45e2e9d1075c67c84cdc589c20f07752"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45e2e9d1075c67c84cdc589c20f07752">&#9670;&#160;</a></span>compute_cost()</h2>
 
@@ -260,6 +320,61 @@ template&lt;typename Graph , typename WeightMap &gt; </div>
 
 </div>
 </div>
+<a id="ac739e22d1699b61544a70916a49a02b6" name="ac739e22d1699b61544a70916a49a02b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac739e22d1699b61544a70916a49a02b6">&#9670;&#160;</a></span>net_is_covered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Hypergraph , typename Net , typename SolutionSet &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto netlistx::detail::net_is_covered </td>
+          <td>(</td>
+          <td class="paramtype">const Hypergraph &amp;&#160;</td>
+          <td class="paramname"><em>hyprgraph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Net &amp;&#160;</td>
+          <td class="paramname"><em>net</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SolutionSet &amp;&#160;</td>
+          <td class="paramname"><em>soln</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>True if some vertex of a net is already in the solution set. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Hypergraph</td><td>Graph-like type exposing gr[net] adjacency ranges </td></tr>
+    <tr><td class="paramname">Net</td><td>Net (hyperedge) id type </td></tr>
+    <tr><td class="paramname">SolutionSet</td><td>Cover set with a contains() query </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hyprgraph</td><td>The hypergraph </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>The net to test </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">soln</td><td>The cover set to test against </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if at least one vertex of the net belongs to <code>soln</code> </dd></dl>
+
+</div>
+</div>
 <a id="a5f7e64d2d9a1a15d981d93c96d93e52d" name="a5f7e64d2d9a1a15d981d93c96d93e52d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f7e64d2d9a1a15d981d93c96d93e52d">&#9670;&#160;</a></span>pitt_trial_cpu()</h2>
 
@@ -334,6 +449,61 @@ template&lt;typename Graph , typename WeightMap &gt; </div>
 <img src="dot_inline_dotgraph_5.png" alt="dot_inline_dotgraph_5.png" border="0" usemap="#dot_inline_dotgraph_5.map"/>
 </div>
  
+</div>
+</div>
+<a id="a4a3d25482e757179538304bc52e670bd" name="a4a3d25482e757179538304bc52e670bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a3d25482e757179538304bc52e670bd">&#9670;&#160;</a></span>reverse_delete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Node , typename SolutionSet , typename Validator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void netlistx::detail::reverse_delete </td>
+          <td>(</td>
+          <td class="paramtype">SolutionSet &amp;&#160;</td>
+          <td class="paramname"><em>soln</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; Node &gt; &amp;&#160;</td>
+          <td class="paramname"><em>added_order</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Validator &amp;&amp;&#160;</td>
+          <td class="paramname"><em>is_valid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reverse-delete post-processing for a covering solution. </p>
+<p>Iterates the vertices in reverse insertion order, temporarily removing each one and keeping the removal only while the solution remains valid.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Node</td><td>Vertex type </td></tr>
+    <tr><td class="paramname">SolutionSet</td><td>Cover set supporting erase()/insert() </td></tr>
+    <tr><td class="paramname">Validator</td><td>Callable returning true if the current solution is valid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">soln</td><td>Mutable cover set (modified in place) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">added_order</td><td>Vertices in the order they were added </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">is_valid</td><td>Validation callable, invoked after each removal </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 </div><!-- contents -->

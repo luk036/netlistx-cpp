@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.9</span>
    </div>
   </td>
  </tr>
@@ -101,8 +101,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacenetlistx.html">netlistx</a> {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="}">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="namespacenetlistx_1_1detail.html">   33</a></span>    <span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedetail.html">detail</a> {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">namespace </span>detail {</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
 <div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="namespacenetlistx_1_1detail.html#a7be658d519e04d8e18ad3376bc80332b">   36</a></span>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Graph&gt; <span class="keyword">auto</span> <a class="code hl_function" href="namespacenetlistx_1_1detail.html#a7be658d519e04d8e18ad3376bc80332b">make_flat_edges</a>(<span class="keyword">const</span> Graph&amp; grph, <span class="keywordtype">int</span> num_edges)</div>
@@ -194,7 +193,6 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#endif  </span><span class="comment">// !HAS_CUDA</span></div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    }  <span class="comment">// namespace detail</span></div>
-</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">#ifdef HAS_CUDA</span></div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
@@ -290,13 +288,12 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="preprocessor">#endif  </span><span class="comment">// HAS_CUDA</span></div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>}  <span class="comment">// namespace netlistx</span></div>
-<div class="ttc" id="anamespacedetail_html"><div class="ttname"><a href="namespacedetail.html">detail</a></div><div class="ttdef"><b>Definition</b> rand_cover.hpp:33</div></div>
 <div class="ttc" id="anamespacenetlistx_1_1detail_html_a45e2e9d1075c67c84cdc589c20f07752"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#a45e2e9d1075c67c84cdc589c20f07752">netlistx::detail::compute_cost</a></div><div class="ttdeci">float compute_cost(const std::vector&lt; unsigned int &gt; &amp;cover, const std::vector&lt; float &gt; &amp;weights, int)</div><div class="ttdoc">Compute cost from bitmask cover.</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:119</div></div>
 <div class="ttc" id="anamespacenetlistx_1_1detail_html_a5f7e64d2d9a1a15d981d93c96d93e52d"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#a5f7e64d2d9a1a15d981d93c96d93e52d">netlistx::detail::pitt_trial_cpu</a></div><div class="ttdeci">void pitt_trial_cpu(const std::vector&lt; int &gt; &amp;edges, int num_edges, const std::vector&lt; float &gt; &amp;weights, int, std::vector&lt; unsigned int &gt; &amp;cover, int, unsigned long long seed)</div><div class="ttdoc">CPU fallback: run a single Pitt trial.</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:88</div></div>
 <div class="ttc" id="anamespacenetlistx_1_1detail_html_a7be658d519e04d8e18ad3376bc80332b"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#a7be658d519e04d8e18ad3376bc80332b">netlistx::detail::make_flat_edges</a></div><div class="ttdeci">auto make_flat_edges(const Graph &amp;grph, int num_edges) -&gt; std::vector&lt; int &gt;</div><div class="ttdoc">Convert a graph's adjacency to a flat edge array for GPU processing.</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:36</div></div>
 <div class="ttc" id="anamespacenetlistx_1_1detail_html_a8b573211a62f85e9685ebd708da418c0"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#a8b573211a62f85e9685ebd708da418c0">netlistx::detail::make_flat_weights</a></div><div class="ttdeci">auto make_flat_weights(const Graph &amp;, int num_vertices, const WeightMap &amp;weight) -&gt; std::vector&lt; float &gt;</div><div class="ttdoc">Extract weights as a flat float array, mapping node names to indices.</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:49</div></div>
 <div class="ttc" id="anamespacenetlistx_1_1detail_html_adf7f6a15277097c7b30238ecf25bfd39"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#adf7f6a15277097c7b30238ecf25bfd39">netlistx::detail::extract_cover_set</a></div><div class="ttdeci">auto extract_cover_set(const std::vector&lt; unsigned int &gt; &amp;cover, const std::vector&lt; Node &gt; &amp;vertices, int) -&gt; std::vector&lt; Node &gt;</div><div class="ttdoc">Extract vertex set from bitmask.</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:131</div></div>
-<div class="ttc" id="anamespacenetlistx_html"><div class="ttname"><a href="namespacenetlistx.html">netlistx</a></div><div class="ttdef"><b>Definition</b> logger.hpp:10</div></div>
+<div class="ttc" id="anamespacenetlistx_html"><div class="ttname"><a href="namespacenetlistx.html">netlistx</a></div><div class="ttdef"><b>Definition</b> cover_util.hpp:16</div></div>
 <div class="ttc" id="anamespacenetlistx_html_adc0088ae2909bfb6142f88f8067a38ef"><div class="ttname"><a href="namespacenetlistx.html#adc0088ae2909bfb6142f88f8067a38ef">netlistx::rand_vertex_cover_gpu</a></div><div class="ttdeci">auto rand_vertex_cover_gpu(const Graph &amp;grph, const WeightMap &amp;weight, int num_vertices, int num_edges, unsigned int seed=42u, int num_trials=1024) -&gt; std::pair&lt; std::vector&lt; int &gt;, float &gt;</div><div class="ttdef"><b>Definition</b> rand_cover_gpu.hpp:198</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

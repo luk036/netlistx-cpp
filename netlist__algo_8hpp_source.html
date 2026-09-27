@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.9</span>
    </div>
   </td>
  </tr>
@@ -91,20 +91,20 @@ $(document).ready(function() { init_codefold(0); });
 <a href="netlist__algo_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;py2cpp/set.hpp&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
-<div class="foldopen" id="foldopen00047" data-start="{" data-end="}">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">   47</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">min_vertex_cover</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight, C2&amp; coverset) -&gt;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">typename</span> C1::mapped_type {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">using </span>T = <span class="keyword">typename</span> C1::mapped_type;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">auto</span> in_coverset = [&amp;](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; v) { <span class="keywordflow">return</span> coverset.contains(v); };</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;<a class="code" href="cover__util_8hpp.html">netlistx/detail/cover_util.hpp</a>&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;py2cpp/set.hpp&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">   48</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">min_vertex_cover</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight, C2&amp; coverset) -&gt;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">typename</span> C1::mapped_type {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">using </span>T = <span class="keyword">typename</span> C1::mapped_type;</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    [[maybe_unused]] <span class="keyword">auto</span> total_dual_cost = T(0);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">auto</span> total_primal_cost = T(0);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">auto</span> gap = weight;</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; net : hyprgraph.nets) {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">if</span> (std::any_of(hyprgraph.gr[net].begin(), hyprgraph.gr[net].end(), in_coverset)) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="namespacenetlistx_1_1detail.html#ac739e22d1699b61544a70916a49a02b6">netlistx::detail::net_is_covered</a>(hyprgraph, net, coverset)) {</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        }</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
@@ -133,8 +133,10 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Gnl, <span class="keyword">typename</span> C1&gt;</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="netlist__algo_8hpp.html#a578d3c1f864ec53522645cb5ee67a8b9">  108</a></span><span class="keyword">auto</span> <a class="code hl_function" href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a>(<span class="keyword">const</span> Gnl&amp; hyprgraph, <span class="keyword">const</span> C1&amp; weight)</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    -&gt; std::pair&lt;py::set&lt;typename Gnl::node_t&gt;, <span class="keyword">typename</span> C1::mapped_type&gt;;</div>
+<div class="ttc" id="acover__util_8hpp_html"><div class="ttname"><a href="cover__util_8hpp.html">cover_util.hpp</a></div><div class="ttdoc">Internal helpers shared by the hypergraph covering algorithms.</div></div>
+<div class="ttc" id="anamespacenetlistx_1_1detail_html_ac739e22d1699b61544a70916a49a02b6"><div class="ttname"><a href="namespacenetlistx_1_1detail.html#ac739e22d1699b61544a70916a49a02b6">netlistx::detail::net_is_covered</a></div><div class="ttdeci">auto net_is_covered(const Hypergraph &amp;hyprgraph, const Net &amp;net, const SolutionSet &amp;soln) -&gt; bool</div><div class="ttdoc">True if some vertex of a net is already in the solution set.</div><div class="ttdef"><b>Definition</b> cover_util.hpp:30</div></div>
 <div class="ttc" id="anetlist__algo_8hpp_html_ab7a107e448023c70274f364eb740eaf7"><div class="ttname"><a href="netlist__algo_8hpp.html#ab7a107e448023c70274f364eb740eaf7">min_maximal_matching</a></div><div class="ttdeci">auto min_maximal_matching(const Gnl &amp;hyprgraph, const C1 &amp;weight, C2 &amp;matchset, C2 &amp;dep) -&gt; typename C1::mapped_type</div><div class="ttdoc">Solve minimum weighted maximal matching via primal-dual approximation.</div></div>
-<div class="ttc" id="anetlist__algo_8hpp_html_ac1a9656eaa4587c865377731f84b15ba"><div class="ttname"><a href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">min_vertex_cover</a></div><div class="ttdeci">auto min_vertex_cover(const Gnl &amp;hyprgraph, const C1 &amp;weight, C2 &amp;coverset) -&gt; typename C1::mapped_type</div><div class="ttdoc">Solve minimum weighted vertex cover via primal-dual approximation.</div><div class="ttdef"><b>Definition</b> netlist_algo.hpp:47</div></div>
+<div class="ttc" id="anetlist__algo_8hpp_html_ac1a9656eaa4587c865377731f84b15ba"><div class="ttname"><a href="netlist__algo_8hpp.html#ac1a9656eaa4587c865377731f84b15ba">min_vertex_cover</a></div><div class="ttdeci">auto min_vertex_cover(const Gnl &amp;hyprgraph, const C1 &amp;weight, C2 &amp;coverset) -&gt; typename C1::mapped_type</div><div class="ttdoc">Solve minimum weighted vertex cover via primal-dual approximation.</div><div class="ttdef"><b>Definition</b> netlist_algo.hpp:48</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

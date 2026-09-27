@@ -1,0 +1,9 @@
+<map id="netlistx/detail/cover_util.hpp" name="netlistx/detail/cover_util.hpp">
+<area shape="rect" id="Node000001" title="Internal helpers shared by the hypergraph covering algorithms." alt="" coords="181,5,333,45"/>
+<area shape="rect" id="Node000002" href="$cover_8hpp.html" title="Primal&#45;dual approximation algorithms for hypergraph covering." alt="" coords="5,93,144,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,53,103,96,101,91,200,48"/>
+<area shape="rect" id="Node000003" href="$netlist__algo_8hpp.html" title="Netlist&#45;specific algorithms for hypergraph optimization." alt="" coords="168,93,347,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,59,260,93,255,93,255,59"/>
+<area shape="rect" id="Node000004" href="$rand__cover_8hpp.html" title="Randomized Approximation Algorithm for Minimum Weighted Vertex Cover." alt="" coords="371,93,546,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,48,430,91,428,96,317,53"/>
+</map>

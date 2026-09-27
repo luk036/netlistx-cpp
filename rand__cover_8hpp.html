@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.9</span>
    </div>
   </td>
  </tr>
@@ -81,7 +81,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">rand_cover.hpp File Reference</div></div>
 </div><!--header-->
@@ -92,6 +91,7 @@ $(function() {
 <div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &lt;future&gt;</code><br />
+<code>#include &lt;<a class="el" href="cover__util_8hpp_source.html">netlistx/detail/cover_util.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="thread__pool_8hpp_source.html">netlistx/thread_pool.hpp</a>&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;py2cpp/set.hpp&gt;</code><br />
@@ -103,57 +103,52 @@ Include dependency graph for rand_cover.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="rand__cover_8hpp__incl.png" border="0" usemap="#anetlistx_2rand__cover_8hpp" alt=""/></div>
 <map name="anetlistx_2rand__cover_8hpp" id="anetlistx_2rand__cover_8hpp">
-<area shape="rect" title="Randomized Approximation Algorithm for Minimum Weighted Vertex Cover." alt="" coords="543,5,718,31"/>
-<area shape="rect" title=" " alt="" coords="159,79,244,104"/>
-<area shape="poly" title=" " alt="" coords="552,33,258,81,257,76,551,28"/>
-<area shape="rect" title=" " alt="" coords="268,79,337,104"/>
-<area shape="poly" title=" " alt="" coords="579,33,351,82,350,77,577,28"/>
-<area shape="rect" title=" " alt="" coords="5,152,67,177"/>
-<area shape="poly" title=" " alt="" coords="573,33,491,53,401,81,376,94,350,106,277,126,218,135,157,142,80,155,79,149,157,136,217,130,276,121,348,102,374,89,399,76,489,48,572,28"/>
-<area shape="rect" href="thread__pool_8hpp.html" title=" " alt="" coords="413,79,593,104"/>
-<area shape="poly" title=" " alt="" coords="611,33,537,74,535,69,609,28"/>
-<area shape="rect" title=" " alt="" coords="851,152,911,177"/>
-<area shape="poly" title=" " alt="" coords="633,31,639,66,646,86,658,102,678,119,698,130,738,139,783,142,838,149,838,154,782,147,737,144,696,135,675,124,654,106,641,88,633,68,628,31"/>
-<area shape="rect" title=" " alt="" coords="668,79,743,104"/>
-<area shape="poly" title=" " alt="" coords="644,29,685,67,681,71,641,33"/>
-<area shape="rect" title=" " alt="" coords="767,79,889,104"/>
-<area shape="poly" title=" " alt="" coords="663,28,784,71,782,76,661,33"/>
-<area shape="rect" title=" " alt="" coords="913,79,985,104"/>
-<area shape="poly" title=" " alt="" coords="684,28,900,76,899,81,683,33"/>
-<area shape="rect" title=" " alt="" coords="1010,79,1073,104"/>
-<area shape="poly" title=" " alt="" coords="715,28,844,48,997,76,996,81,843,53,714,33"/>
-<area shape="poly" title=" " alt="" coords="413,105,261,124,81,155,80,149,260,119,412,99"/>
-<area shape="rect" title=" " alt="" coords="91,152,234,177"/>
-<area shape="poly" title=" " alt="" coords="449,107,231,152,230,147,447,101"/>
-<area shape="rect" title=" " alt="" coords="258,152,345,177"/>
-<area shape="poly" title=" " alt="" coords="471,107,348,150,346,145,469,102"/>
-<area shape="rect" title=" " alt="" coords="369,152,447,177"/>
-<area shape="poly" title=" " alt="" coords="489,106,436,146,433,141,486,102"/>
-<area shape="rect" title=" " alt="" coords="471,152,535,177"/>
-<area shape="poly" title=" " alt="" coords="505,104,505,138,500,138,500,104"/>
-<area shape="rect" title=" " alt="" coords="559,152,622,177"/>
-<area shape="poly" title=" " alt="" coords="518,102,567,141,564,145,515,106"/>
-<area shape="rect" title=" " alt="" coords="647,152,711,177"/>
-<area shape="poly" title=" " alt="" coords="532,102,638,144,636,149,530,106"/>
-<area shape="rect" title=" " alt="" coords="735,152,827,177"/>
-<area shape="poly" title=" " alt="" coords="548,101,724,146,722,151,547,107"/>
-<area shape="poly" title=" " alt="" coords="580,101,698,121,838,149,837,154,697,126,579,107"/>
+<area shape="rect" title="Randomized Approximation Algorithm for Minimum Weighted Vertex Cover." alt="" coords="354,5,529,31"/>
+<area shape="rect" title=" " alt="" coords="5,86,91,111"/>
+<area shape="poly" title=" " alt="" coords="355,33,235,53,103,81,93,84,91,79,102,76,234,48,355,28"/>
+<area shape="rect" title=" " alt="" coords="115,86,184,111"/>
+<area shape="poly" title=" " alt="" coords="390,33,203,81,194,84,192,79,202,76,389,28"/>
+<area shape="rect" title=" " alt="" coords="188,167,249,192"/>
+<area shape="poly" title=" " alt="" coords="387,33,334,51,308,65,284,81,267,98,252,117,231,155,226,153,248,114,263,94,281,77,306,60,332,46,385,28"/>
+<area shape="rect" href="cover__util_8hpp.html" title="Internal helpers shared by the hypergraph covering algorithms." alt="" coords="309,79,461,119"/>
+<area shape="poly" title=" " alt="" coords="435,32,409,69,405,66,431,29"/>
+<area shape="rect" title=" " alt="" coords="274,167,334,192"/>
+<area shape="poly" title=" " alt="" coords="373,33,332,51,314,64,300,80,292,97,291,116,297,153,292,154,285,116,287,96,295,77,310,60,329,46,370,28"/>
+<area shape="rect" title=" " alt="" coords="358,167,421,192"/>
+<area shape="poly" title=" " alt="" coords="453,29,465,47,476,70,481,95,476,120,456,145,431,162,428,158,452,141,471,118,476,95,471,72,460,50,448,32"/>
+<area shape="rect" href="thread__pool_8hpp.html" title=" " alt="" coords="537,86,717,111"/>
+<area shape="poly" title=" " alt="" coords="469,28,588,78,586,83,467,33"/>
+<area shape="rect" title=" " alt="" coords="741,86,816,111"/>
+<area shape="poly" title=" " alt="" coords="513,28,616,48,730,76,739,79,737,84,729,81,615,53,512,33"/>
+<area shape="rect" title=" " alt="" coords="841,86,962,111"/>
+<area shape="poly" title=" " alt="" coords="529,28,670,48,829,76,847,80,846,85,827,81,669,53,529,33"/>
+<area shape="rect" title=" " alt="" coords="987,86,1059,111"/>
+<area shape="poly" title=" " alt="" coords="529,19,734,35,855,52,975,76,985,79,984,84,974,81,855,57,734,41,529,25"/>
+<area shape="poly" title=" " alt="" coords="367,121,328,159,324,155,364,117"/>
+<area shape="poly" title=" " alt="" coords="389,119,391,153,385,153,384,119"/>
+<area shape="poly" title=" " alt="" coords="555,114,424,137,263,169,262,164,423,132,554,109"/>
+<area shape="poly" title=" " alt="" coords="577,114,348,169,347,164,576,109"/>
+<area shape="rect" title=" " alt="" coords="927,167,1070,192"/>
+<area shape="poly" title=" " alt="" coords="681,109,932,161,931,166,680,114"/>
+<area shape="rect" title=" " alt="" coords="1094,167,1181,192"/>
+<area shape="poly" title=" " alt="" coords="687,109,730,116,904,139,1081,164,1080,169,903,144,729,121,686,114"/>
+<area shape="rect" title=" " alt="" coords="445,167,523,192"/>
+<area shape="poly" title=" " alt="" coords="607,114,518,162,516,158,604,109"/>
+<area shape="rect" title=" " alt="" coords="547,167,611,192"/>
+<area shape="poly" title=" " alt="" coords="622,113,595,156,591,154,617,110"/>
+<area shape="rect" title=" " alt="" coords="635,167,698,192"/>
+<area shape="poly" title=" " alt="" coords="635,110,657,153,652,156,630,113"/>
+<area shape="rect" title=" " alt="" coords="723,167,787,192"/>
+<area shape="poly" title=" " alt="" coords="647,109,726,157,723,162,644,114"/>
+<area shape="rect" title=" " alt="" coords="811,167,903,192"/>
+<area shape="poly" title=" " alt="" coords="661,109,812,160,810,165,659,114"/>
 </map>
 </div>
 </div>
 <p><a href="rand__cover_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacedetail" id="r_namespacedetail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedetail.html">detail</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7ee17782e964142da0d84781aa3dd53c" id="r_a7ee17782e964142da0d84781aa3dd53c"><td class="memTemplParams" colspan="2">template&lt;typename Node , typename Validator &gt; </td></tr>
-<tr class="memitem:a7ee17782e964142da0d84781aa3dd53c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacedetail.html#a7ee17782e964142da0d84781aa3dd53c">detail::reverse_delete_cover</a> (py::set&lt; Node &gt; &amp;soln, const std::vector&lt; Node &gt; &amp;added_order, Validator &amp;&amp;is_valid)</td></tr>
-<tr class="memdesc:a7ee17782e964142da0d84781aa3dd53c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse-delete post-processing step.  <br /></td></tr>
-<tr class="separator:a7ee17782e964142da0d84781aa3dd53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6dfe5389db9e5af637588bca4081f7d" id="r_ac6dfe5389db9e5af637588bca4081f7d"><td class="memTemplParams" colspan="2">template&lt;typename Hypergraph , typename WeightMap , typename RNG &gt; </td></tr>
 <tr class="memitem:ac6dfe5389db9e5af637588bca4081f7d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="rand__cover_8hpp.html#ac6dfe5389db9e5af637588bca4081f7d">rand_hyper_vertex_cover_trial</a> (const Hypergraph &amp;hyprgraph, const WeightMap &amp;weight, const py::set&lt; typename Hypergraph::node_t &gt; &amp;coverset, RNG &amp;rng) -&gt; std::pair&lt; py::set&lt; typename Hypergraph::node_t &gt;, typename WeightMap::mapped_type &gt;</td></tr>
 <tr class="memdesc:ac6dfe5389db9e5af637588bca4081f7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single trial of Pitt's randomized hypergraph vertex cover.  <br /></td></tr>

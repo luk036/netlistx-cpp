@@ -8,11 +8,12 @@ var searchData=
   ['all_5',['all',['../namespacetransrangers.html#ac6149b1a82329f72e376a549ac656969',1,'transrangers::all(Range &amp;&amp;rng)'],['../namespacetransrangers.html#a8015cf25fea784e399390230e6ceb304',1,'transrangers::all(Range &amp;&amp;rng)']]],
   ['all_5fadaption_6',['all_adaption',['../structtransrangers_1_1all__adaption.html',1,'transrangers']]],
   ['all_5fcopy_7',['all_copy',['../structtransrangers_1_1all__copy.html',1,'transrangers']]],
-  ['alternatives_8',['Related projects and alternatives',['../index.html#autotoc_md11',1,'']]],
-  ['analysis_9',['Static analysis',['../index.html#autotoc_md9',1,'']]],
-  ['and_20alternatives_10',['Related projects and alternatives',['../index.html#autotoc_md11',1,'']]],
-  ['and_20run_20test_20suite_11',['Build and run test suite',['../index.html#autotoc_md5',1,'']]],
-  ['and_20run_20the_20standalone_20target_12',['Build and run the standalone target',['../index.html#autotoc_md4',1,'']]],
-  ['at_20once_13',['Build everything at once',['../index.html#autotoc_md8',1,'']]],
-  ['auto_5fdetect_14',['auto_detect',['../readwrite_8hpp.html#a7a1886da996cfe677c935435eff2adeba60db33599fbe80f2d536ce9ffb5f2377',1,'readwrite.hpp']]]
+  ['all_5fnets_5fcovered_8',['all_nets_covered',['../namespacenetlistx_1_1detail.html#ab789df4c924a206a0623279f4461a649',1,'netlistx::detail']]],
+  ['alternatives_9',['Related projects and alternatives',['../index.html#autotoc_md11',1,'']]],
+  ['analysis_10',['Static analysis',['../index.html#autotoc_md9',1,'']]],
+  ['and_20alternatives_11',['Related projects and alternatives',['../index.html#autotoc_md11',1,'']]],
+  ['and_20run_20test_20suite_12',['Build and run test suite',['../index.html#autotoc_md5',1,'']]],
+  ['and_20run_20the_20standalone_20target_13',['Build and run the standalone target',['../index.html#autotoc_md4',1,'']]],
+  ['at_20once_14',['Build everything at once',['../index.html#autotoc_md8',1,'']]],
+  ['auto_5fdetect_15',['auto_detect',['../readwrite_8hpp.html#a7a1886da996cfe677c935435eff2adeba60db33599fbe80f2d536ce9ffb5f2377',1,'readwrite.hpp']]]
 ];

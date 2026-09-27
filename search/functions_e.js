@@ -15,5 +15,5 @@ var searchData=
   ['readare_12',['readAre',['../readwrite_8hpp.html#af11973267caeb898e218c74b7887a331',1,'readwrite.hpp']]],
   ['readnetd_13',['readNetD',['../readwrite_8hpp.html#ad3a59ff1608402fe48d39678803f3641',1,'readwrite.hpp']]],
   ['return_5fvoid_14',['return_void',['../structpy_1_1Generator_1_1promise__type.html#ae3608e94cb224ab6cec15cdd02953fd0',1,'py::Generator::promise_type']]],
-  ['reverse_5fdelete_5fcover_15',['reverse_delete_cover',['../namespacedetail.html#a7ee17782e964142da0d84781aa3dd53c',1,'detail']]]
+  ['reverse_5fdelete_15',['reverse_delete',['../namespacenetlistx_1_1detail.html#a4a3d25482e757179538304bc52e670bd',1,'netlistx::detail']]]
 ];

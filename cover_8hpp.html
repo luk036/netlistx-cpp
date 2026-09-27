@@ -28,7 +28,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.8</span>
+   <div id="projectname">NetlistX<span id="projectnumber">&#160;1.1.9</span>
    </div>
   </td>
  </tr>
@@ -91,6 +91,7 @@ $(function() {
 <div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &lt;deque&gt;</code><br />
+<code>#include &lt;<a class="el" href="cover__util_8hpp_source.html">netlistx/detail/cover_util.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="gen_8hpp_source.html">netlistx/gen.hpp</a>&gt;</code><br />
 <code>#include &lt;py2cpp/dict.hpp&gt;</code><br />
 <code>#include &lt;py2cpp/set.hpp&gt;</code><br />
@@ -102,32 +103,36 @@ Include dependency graph for cover.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="cover_8hpp__incl.png" border="0" usemap="#anetlistx_2cover_8hpp" alt=""/></div>
 <map name="anetlistx_2cover_8hpp" id="anetlistx_2cover_8hpp">
-<area shape="rect" title="Primal&#45;dual approximation algorithms for hypergraph covering." alt="" coords="391,5,529,31"/>
-<area shape="rect" title=" " alt="" coords="5,79,91,104"/>
-<area shape="poly" title=" " alt="" coords="391,33,105,81,104,76,390,27"/>
-<area shape="rect" title=" " alt="" coords="115,79,184,104"/>
-<area shape="poly" title=" " alt="" coords="409,33,199,81,197,76,408,28"/>
-<area shape="rect" title=" " alt="" coords="209,79,271,104"/>
-<area shape="poly" title=" " alt="" coords="425,33,285,78,284,73,424,28"/>
-<area shape="rect" href="gen_8hpp.html" title="Minimal C++20 coroutine Generator for lazy sequence generation." alt="" coords="295,79,422,104"/>
-<area shape="poly" title=" " alt="" coords="445,33,388,73,385,68,442,28"/>
-<area shape="rect" title=" " alt="" coords="430,152,490,177"/>
-<area shape="poly" title=" " alt="" coords="463,31,463,138,457,138,457,31"/>
-<area shape="rect" title=" " alt="" coords="497,79,623,104"/>
-<area shape="poly" title=" " alt="" coords="478,29,534,68,531,73,475,33"/>
-<area shape="rect" title=" " alt="" coords="647,79,769,104"/>
-<area shape="poly" title=" " alt="" coords="501,28,655,72,654,77,499,33"/>
-<area shape="rect" title=" " alt="" coords="793,79,855,104"/>
-<area shape="poly" title=" " alt="" coords="530,28,644,48,780,76,779,81,643,53,529,33"/>
-<area shape="rect" title=" " alt="" coords="879,79,942,104"/>
-<area shape="poly" title=" " alt="" coords="530,24,681,44,866,76,865,81,680,49,529,30"/>
-<area shape="rect" title=" " alt="" coords="117,152,200,177"/>
-<area shape="poly" title=" " alt="" coords="327,107,205,150,204,145,326,102"/>
-<area shape="rect" title=" " alt="" coords="225,152,311,177"/>
-<area shape="poly" title=" " alt="" coords="346,106,295,145,292,141,342,102"/>
-<area shape="rect" title=" " alt="" coords="335,152,406,177"/>
-<area shape="poly" title=" " alt="" coords="363,104,369,138,364,139,358,105"/>
-<area shape="poly" title=" " alt="" coords="376,102,434,142,431,146,373,106"/>
+<area shape="rect" title="Primal&#45;dual approximation algorithms for hypergraph covering." alt="" coords="447,5,585,31"/>
+<area shape="rect" title=" " alt="" coords="5,86,91,111"/>
+<area shape="poly" title=" " alt="" coords="447,28,289,47,195,62,103,81,92,84,91,79,102,76,195,57,288,42,446,23"/>
+<area shape="rect" title=" " alt="" coords="115,86,184,111"/>
+<area shape="poly" title=" " alt="" coords="447,31,329,50,197,81,189,84,187,79,195,76,328,45,446,26"/>
+<area shape="rect" title=" " alt="" coords="209,86,271,111"/>
+<area shape="poly" title=" " alt="" coords="461,33,377,54,283,81,278,83,276,78,282,76,375,48,460,28"/>
+<area shape="rect" href="cover__util_8hpp.html" title="Internal helpers shared by the hypergraph covering algorithms." alt="" coords="497,79,649,119"/>
+<area shape="poly" title=" " alt="" coords="527,29,554,66,549,69,522,32"/>
+<area shape="rect" title=" " alt="" coords="475,167,535,192"/>
+<area shape="poly" title=" " alt="" coords="510,32,498,54,488,79,486,98,487,118,497,153,492,154,482,118,480,98,483,78,493,51,506,30"/>
+<area shape="rect" title=" " alt="" coords="630,167,693,192"/>
+<area shape="poly" title=" " alt="" coords="587,28,629,46,648,60,664,77,672,96,675,116,671,153,666,153,670,116,667,97,659,80,644,64,626,50,585,33"/>
+<area shape="rect" href="gen_8hpp.html" title="Minimal C++20 coroutine Generator for lazy sequence generation." alt="" coords="295,86,422,111"/>
+<area shape="poly" title=" " alt="" coords="494,33,395,82,393,78,492,28"/>
+<area shape="rect" title=" " alt="" coords="724,86,849,111"/>
+<area shape="poly" title=" " alt="" coords="556,28,735,80,733,85,555,33"/>
+<area shape="rect" title=" " alt="" coords="874,86,995,111"/>
+<area shape="poly" title=" " alt="" coords="586,27,715,48,862,76,880,80,879,85,861,81,714,53,585,32"/>
+<area shape="rect" title=" " alt="" coords="1019,86,1082,111"/>
+<area shape="poly" title=" " alt="" coords="586,19,672,24,778,34,894,51,1009,76,1016,79,1015,84,1007,81,893,56,778,39,671,29,586,24"/>
+<area shape="poly" title=" " alt="" coords="559,121,526,158,522,154,555,117"/>
+<area shape="poly" title=" " alt="" coords="596,117,640,155,636,159,593,121"/>
+<area shape="poly" title=" " alt="" coords="382,109,473,158,470,162,379,114"/>
+<area shape="rect" title=" " alt="" coords="163,167,245,192"/>
+<area shape="poly" title=" " alt="" coords="337,114,240,163,238,158,335,109"/>
+<area shape="rect" title=" " alt="" coords="270,167,357,192"/>
+<area shape="poly" title=" " alt="" coords="354,113,329,156,325,153,350,110"/>
+<area shape="rect" title=" " alt="" coords="381,167,451,192"/>
+<area shape="poly" title=" " alt="" coords="369,110,402,154,397,157,365,113"/>
 </map>
 </div>
 </div>

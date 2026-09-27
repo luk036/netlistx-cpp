@@ -3,6 +3,7 @@
 #include <netlistx/netlist.hpp>
 #include <netlistx/readwrite.hpp>
 #include <nlohmann/json.hpp>
+#include <py2cpp/set.hpp>
 #include <set>
 #include <string>
 #include <string_view>
@@ -11,6 +12,7 @@
 #include <vector>
 #include <xnetwork/classes/graph.hpp>
 
+#include "netlist_builder.hpp"
 #include "reader.hpp"
 
 using namespace std;
@@ -75,22 +77,21 @@ namespace {
             }
         }
 
-        auto hyprgraph = SimpleNetlist{std::move(g), num_cells + num_ports, num_nets};
-        hyprgraph.num_pads = num_ports;
-
         // Module weights: cells=1, ports=0
-        hyprgraph.module_weight.assign(num_cells + num_ports, 0);
+        auto module_weight = std::vector<unsigned int>(num_cells + num_ports, 0U);
         for (uint32_t i = 0; i < num_cells; ++i) {
-            hyprgraph.module_weight[i] = 1;
+            module_weight[i] = 1U;
         }
 
         // Mark port nodes as fixed
+        py::set<uint32_t> module_fixed;
         for (uint32_t i = 0; i < num_ports; ++i) {
-            hyprgraph.module_fixed.insert(port_start + i);
+            module_fixed.insert(port_start + i);
         }
-        hyprgraph.has_fixed_modules = (num_ports > 0);
 
-        return hyprgraph;
+        return netlistx::detail::make_netlist(std::move(g), num_cells + num_ports, num_nets,
+                                              num_ports, std::move(module_weight),
+                                              std::move(module_fixed));
     }
 
 }  // namespace

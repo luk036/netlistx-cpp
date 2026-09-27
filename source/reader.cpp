@@ -9,6 +9,8 @@
 #include <string>
 #include <xnetwork/classes/graph.hpp>
 
+#include "netlist_builder.hpp"
+
 namespace netlistx::detail {
 
     void fail(const std::string& msg, const int code) {
@@ -46,6 +48,8 @@ namespace netlistx::detail {
         std::getline(file, line);
 
         uint32_t net_idx = 0;
+        auto zero_based = false;
+        std::vector<std::vector<uint32_t>> pins(num_nets);
         for (; net_idx < num_nets && std::getline(file, line); ++net_idx) {
             if (line.empty() || line[0] == 'c') {
                 --net_idx;
@@ -54,8 +58,17 @@ namespace netlistx::detail {
             std::istringstream iss(line);
             uint32_t v = 0;
             while (iss >> v) {
-                if (v < num_modules) {
-                    g.add_edge(v, num_modules + net_idx);
+                pins[net_idx].push_back(v);
+                zero_based = zero_based || (v == 0);
+            }
+        }
+
+        const uint32_t base = zero_based ? 0 : 1;
+        for (uint32_t i = 0; i < num_nets; ++i) {
+            for (auto v : pins[i]) {
+                const auto module = v - base;
+                if (module < num_modules) {
+                    g.add_edge(module, num_modules + i);
                 }
             }
         }
@@ -84,9 +97,7 @@ namespace netlistx::detail {
             g.add_edge(source, target);
         }
 
-        auto hyprgraph = SimpleNetlist{std::move(g), num_modules, num_nets};
-        hyprgraph.num_pads = num_pads;
-        return hyprgraph;
+        return make_netlist(std::move(g), num_modules, num_nets, num_pads);
     }
 
     // ── DIMACS ─────────────────────────────────────────────────────────────
@@ -197,9 +208,7 @@ namespace netlistx::detail {
             fail("Error: number of pins is not " + std::to_string(numPins) + ".\n");
         }
 
-        auto hyprgraph = SimpleNetlist{std::move(g), numModules, numNets};
-        hyprgraph.num_pads = numModules - padOffset - 1;
-        return hyprgraph;
+        return make_netlist(std::move(g), numModules, numNets, numModules - padOffset - 1);
     }
 
     // ── Factory ────────────────────────────────────────────────────────────

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cassert>
 #include <deque>
+#include <netlistx/detail/cover_util.hpp>
 #include <netlistx/gen.hpp>
 #include <py2cpp/dict.hpp>
 #include <py2cpp/set.hpp>
@@ -78,19 +79,15 @@ auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln)
     }
 
     // Phase 2: Reverse-Delete Post-Processing
-    for (auto it = added_order.rbegin(); it != added_order.rend(); ++it) {
-        soln.erase(*it);
-        bool is_redundant = true;
+    auto is_valid = [&]() -> bool {
         for (auto&& check_set : violate()) {
             if (!check_set.empty()) {
-                is_redundant = false;
-                break;
+                return false;
             }
         }
-        if (!is_redundant) {
-            soln.insert(*it);
-        }
-    }
+        return true;
+    };
+    netlistx::detail::reverse_delete(soln, added_order, is_valid);
 
     CostType final_prml_cost = 0;
     for (const auto& vtx : soln) {
@@ -136,21 +133,14 @@ auto min_hyper_vertex_cover(const Hypergraph& hyprgraph, WeightMap& weight, Cove
     // Lambda function that generates violate nets (uncovered nets)
     auto violate_netlist = [&]() -> py::Generator<std::vector<node_t>> {
         for (const auto& net : hyprgraph.nets) {
-            bool covered = false;
+            if (netlistx::detail::net_is_covered(hyprgraph, net, coverset)) {
+                continue;
+            }
+            std::vector<node_t> net_vertices;
             for (const auto& vtx : hyprgraph.gr[net]) {
-                if (coverset.contains(vtx)) {
-                    covered = true;
-                    break;
-                }
+                net_vertices.emplace_back(vtx);
             }
-
-            if (!covered) {
-                std::vector<node_t> net_vertices;
-                for (const auto& vtx : hyprgraph.gr[net]) {
-                    net_vertices.emplace_back(vtx);
-                }
-                co_yield std::move(net_vertices);
-            }
+            co_yield std::move(net_vertices);
         }
     };
 

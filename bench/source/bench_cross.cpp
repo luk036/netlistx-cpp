@@ -59,7 +59,7 @@ auto bench_hyper_vertex_cover_inverter(ankerl::nanobench::Bench& bench) {
     ugraph.add_edge(4, 0);  // n1-a0
     ugraph.add_edge(4, 2);  // n1-p2
 
-    auto netlist = SimpleNetlist(ugraph, 3u, 2u);
+    auto netlist = SimpleNetlist(ugraph, 3U, 2U);
 
     py::dict<uint32_t, int> weight;
     for (uint32_t i = 0; i < 3; ++i) weight[i] = 1;
@@ -83,7 +83,7 @@ auto bench_maximal_matching_inverter(ankerl::nanobench::Bench& bench) {
     ugraph.add_edge(4, 0);
     ugraph.add_edge(4, 2);
 
-    auto netlist = SimpleNetlist(ugraph, 3u, 2u);
+    auto netlist = SimpleNetlist(ugraph, 3U, 2U);
 
     py::dict<uint32_t, unsigned int> weight;
     for (uint32_t i = 3; i < 5; ++i) weight[i] = 1;

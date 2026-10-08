@@ -9,9 +9,9 @@
 // Implementation of min_maximal_matching using a primal-dual approximation.
 // Uses dep_count[] for O(1) dependency checks instead of O(deg(net)) scans.
 template <typename Gnl, typename C1, typename C2>
-auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight, C2& matchset, C2& dep) ->
-    typename C1::mapped_type {
-    using T = typename C1::mapped_type;
+auto min_maximal_matching(const Gnl& hyprgraph, const C1& weight, C2& matchset, C2& dep)
+    -> C1::mapped_type {
+    using T = C1::mapped_type;
 
     // dep_count[net] > 0  iff  at least one vertex of net is in dep.
     // Replaces the O(deg(net2)) std::any_of scan with an O(1) dict lookup.

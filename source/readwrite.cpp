@@ -431,7 +431,7 @@ struct YosysSaxHandler {
         // Track current cell when entering a key under cells
         if (p == "modules." + first_module + ".cells") {
             current_cell = val;
-            if (cell_idx.find(current_cell) == cell_idx.end()) {
+            if (!cell_idx.contains(current_cell)) {
                 cell_idx[current_cell] = static_cast<uint32_t>(cell_names.size());
                 cell_names.push_back(current_cell);
             }
@@ -439,7 +439,7 @@ struct YosysSaxHandler {
         // Track current port when entering a key under ports
         if (p == "modules." + first_module + ".ports") {
             current_port = val;
-            if (port_nets.find(current_port) == port_nets.end()) {
+            if (!port_nets.contains(current_port)) {
                 port_nets[current_port] = {};
                 port_names.push_back(current_port);
             }

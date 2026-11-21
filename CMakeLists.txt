@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 project(
   NetlistX
-  VERSION 1.1.10
+  VERSION 1.1.11
   LANGUAGES CXX
 )
 
@@ -119,7 +119,7 @@ endif()
 # Py2Cpp provides the dict/set containers used across the public headers.
 CPMAddPackage(
   NAME Py2Cpp
-  GIT_TAG v1.6.6
+  GIT_TAG v1.6.7
   GITHUB_REPOSITORY luk036/py2cpp
   OPTIONS "PY2CPP_BUILD_TESTS OFF" "PY2CPP_BUILD_STANDALONE OFF"
 )
@@ -131,7 +131,7 @@ if(MSVC)
 endif()
 CPMAddPackage(
   NAME XNetwork
-  GIT_TAG v1.7.9
+  GIT_TAG v1.7.10
   GITHUB_REPOSITORY luk036/xnetwork-cpp
   OPTIONS "XNETWORK_BUILD_TESTS OFF" "XNETWORK_BUILD_STANDALONE OFF"
 )
@@ -239,6 +239,20 @@ if(NETLISTX_BUILD_STANDALONE)
     NetlistXStandalone PRIVATE NetlistX::NetlistX cxxopts::cxxopts ${SPECIFIC_LIBS}
   )
   target_enable_warnings(NetlistXStandalone)
+endif()
+
+# ---------------------------------------------------------------------------
+# ISPD98 covering benchmark (self-contained; no external benchmark library)
+# ---------------------------------------------------------------------------
+
+option(NETLISTX_BUILD_ISPD98_BENCH "Build the ISPD98 covering benchmark driver" ON)
+if(NETLISTX_BUILD_ISPD98_BENCH)
+  add_executable(NetlistXBenchISPD98 bench_ispd98/source/bench_ispd98.cpp)
+  set_target_properties(
+    NetlistXBenchISPD98 PROPERTIES OUTPUT_NAME "bench_ispd98" CXX_STANDARD 20
+  )
+  target_link_libraries(NetlistXBenchISPD98 PRIVATE NetlistX::NetlistX ${SPECIFIC_LIBS})
+  target_enable_warnings(NetlistXBenchISPD98)
 endif()
 
 # ---------------------------------------------------------------------------

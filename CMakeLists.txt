@@ -242,6 +242,20 @@ if(NETLISTX_BUILD_STANDALONE)
 endif()
 
 # ---------------------------------------------------------------------------
+# ISPD98 covering benchmark (self-contained; no external benchmark library)
+# ---------------------------------------------------------------------------
+
+option(NETLISTX_BUILD_ISPD98_BENCH "Build the ISPD98 covering benchmark driver" ON)
+if(NETLISTX_BUILD_ISPD98_BENCH)
+  add_executable(NetlistXBenchISPD98 bench_ispd98/source/bench_ispd98.cpp)
+  set_target_properties(
+    NetlistXBenchISPD98 PROPERTIES OUTPUT_NAME "bench_ispd98" CXX_STANDARD 20
+  )
+  target_link_libraries(NetlistXBenchISPD98 PRIVATE NetlistX::NetlistX ${SPECIFIC_LIBS})
+  target_enable_warnings(NetlistXBenchISPD98)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 

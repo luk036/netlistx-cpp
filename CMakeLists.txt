@@ -447,7 +447,7 @@ if(NETLISTX_ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleCl
       target_compile_options(${COVERAGE_TARGET} PRIVATE -O0 -g -fprofile-arcs -ftest-coverage)
     endif()
   endforeach()
-  foreach(COVERAGE_EXEC NetlistXTests NetlistXStandalone)
+  foreach(COVERAGE_EXEC NetlistXTests NetlistXStandalone NetlistXBenchISPD98)
     if(TARGET ${COVERAGE_EXEC})
       target_link_options(${COVERAGE_EXEC} PRIVATE -fprofile-arcs -ftest-coverage)
     endif()

@@ -5,5 +5,6 @@ var searchData=
   ['detect_5finput_5fformat_2',['detect_input_format',['../readwrite_8hpp.html#a9a37d462ad6379563f31a2bf5ea62b00',1,'readwrite.hpp']]],
   ['difference_5ftype_3',['difference_type',['../classpy_1_1Generator_1_1iterator.html#ad8001ebff4057777d4c61187eed535bc',1,'py::Generator::iterator::difference_type'],['../classtransrangers_1_1detail_1_1view_1_1iterator__base.html#a0b0e8c3da8f8dcec035129e788c1e25c',1,'transrangers::detail::view::iterator_base::difference_type']]],
   ['dimacs_4',['dimacs',['../readwrite_8hpp.html#a7a1886da996cfe677c935435eff2adeba14e3c8e3d84517fe50c7b34051be54c2',1,'readwrite.hpp']]],
-  ['documentation_5',['documentation',['../index.html#autotoc_md7',1,'Build the documentation'],['../about.html#doc',1,'netlistx-cpp Documentation']]]
+  ['documentation_5',['netlistx-cpp Documentation',['../about.html#doc',1,'']]],
+  ['documentation_6',['Build the documentation',['../index.html#autotoc_md7',1,'']]]
 ];
